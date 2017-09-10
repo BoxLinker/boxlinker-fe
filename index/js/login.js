@@ -46,7 +46,7 @@
         success(ret) {
           switch (ret.status) {
             case 0: // ok
-              window.href = boxlinker.settings.directURL.consoleURL;
+              location.href = boxlinker.settings.directURL.consoleURL;
               break;
             case 1: // 用户名或密码错误
               $alert.show();

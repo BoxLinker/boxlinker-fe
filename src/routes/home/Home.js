@@ -7,7 +7,7 @@ class Home extends React.Component {
   render() {
     return (
       <div className={s.root}>
-        <div className={s.container} />
+        <div className={s.container}>网站建设中</div>
       </div>
     );
   }

@@ -3,8 +3,8 @@
     window.boxlinker = {};
   }
 
-  const prefix = 'http://localhost:8080';
-  const consoleURL = 'login.html';
+  const prefix = 'https://api.boxlinker.com';
+  const consoleURL = 'https://console.boxlinker.com';
   boxlinker.settings = {
     api: {
       login: `${prefix}/v1/user/auth/login`,
