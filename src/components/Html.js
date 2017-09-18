@@ -36,6 +36,18 @@ class Html extends React.Component {
           </title>
           <meta name="description" content={description} />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="stylesheet" href="plugins/pace/pace.min.css" />
+          <link
+            rel="stylesheet"
+            href="plugins/font-awesome-4.7.0/css/font-awesome.min.css"
+          />
+          <link rel="stylesheet" href="plugins/pace/pace.min.css" />
+          <link
+            rel="stylesheet"
+            href="plugins/bootstrap-select/bootstrap-select.css"
+          />
+          <link rel="stylesheet" href="css/bootstrap.min.css" />
+          <link rel="stylesheet" href="css/nifty.min.css" />
           {scripts.map(script =>
             <link key={script} rel="preload" href={script} as="script" />,
           )}
@@ -50,6 +62,11 @@ class Html extends React.Component {
         </head>
         <body>
           <div id="app" dangerouslySetInnerHTML={{ __html: children }} />
+          <script src="plugins/pace/pace.min.js" />
+          <script src="js/jquery.min.js" />
+          <script src="js/bootstrap.min.js" />
+          <script src="js/nifty.min.js" />
+          <script src="plugins/bootstrap-select/bootstrap-select.js" />
           <script
             dangerouslySetInnerHTML={{ __html: `window.App=${serialize(app)}` }}
           />

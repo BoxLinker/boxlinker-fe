@@ -5,7 +5,7 @@ import HomeContainer from './HomeContainer';
 async function action() {
   return {
     chunks: ['home'],
-    title: 'React Starter Kit',
+    title: '控制台',
     component: (
       <Layout>
         <HomeContainer />

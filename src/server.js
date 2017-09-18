@@ -8,6 +8,7 @@ import App from 'components/App';
 import Html from 'components/Html';
 import PrettyError from 'pretty-error';
 import nodeFetch from 'node-fetch';
+import { EventEmitter } from 'events';
 
 import config from './config';
 import router from './router';
@@ -17,6 +18,7 @@ import errorPageStyle from './routes/error/ErrorPage.css';
 import createFetch from './createFetch';
 import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
+import { getUserInfo } from './actions/user';
 
 const app = express();
 
@@ -31,7 +33,7 @@ app.get('*', async (req, res, next) => {
 
     const fetch = createFetch(nodeFetch, {
       baseUrl: config.api.serverUrl,
-      cookie: req.headers.cookie,
+      cookie: req.cookies['X-Access-Token'],
     });
 
     const initialState = {};
@@ -47,8 +49,15 @@ app.get('*', async (req, res, next) => {
         value: Date.now(),
       }),
     );
+    await store.dispatch(getUserInfo(fetch));
+    const user = store.getState().userInfo;
+    if (!user || !user.id) {
+      res.redirect(config.redirect.loginUrl);
+      return;
+    }
 
     const context = {
+      event: new EventEmitter(),
       // Enables critical path CSS rendering
       // https://github.com/kriasoft/isomorphic-style-loader
       insertCss: (...styles) => {
@@ -88,6 +97,7 @@ app.get('*', async (req, res, next) => {
     data.scripts.push(assets.client.js);
     data.app = {
       apiUrl: config.api.clientUrl,
+      state: context.store.getState(),
     };
 
     const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);
@@ -108,13 +118,13 @@ app.use((err, req, res, next) => {
   const html = ReactDOM.renderToStaticMarkup(
     <Html
       title="Internal Server Error"
-      description={err.message}
+      description={err.msg}
       styles={[{ id: 'css', cssText: errorPageStyle._getCss() }]} // eslint-disable-line no-underscore-dangle
     >
       {ReactDOM.renderToString(<ErrorPageWithoutStyle error={err} />)}
     </Html>,
   );
-  res.status(err.status || 500);
+  res.status(500);
   res.send(`<!doctype html>${html}`);
 });
 

@@ -17,26 +17,34 @@ function createFetch(fetch: Fetch, { baseUrl, cookie }: Options) {
   // NOTE: Tweak the default options to suite your application needs
   const defaults = {
     method: 'POST', // handy with GraphQL backends
-    mode: baseUrl ? 'cors' : 'same-origin',
-    credentials: baseUrl ? 'include' : 'same-origin',
+    // mode: baseUrl ? 'cors' : 'same-origin',
+    // credentials: baseUrl ? 'include' : 'same-origin',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      ...(cookie ? { Cookie: cookie } : null),
+      ...(cookie ? { 'X-Access-Token': cookie } : null),
     },
   };
 
   return (url: string, options: any) =>
-    url.startsWith('/graphql') || url.startsWith('/api')
-      ? fetch(`${baseUrl}${url}`, {
-          ...defaults,
-          ...options,
-          headers: {
-            ...defaults.headers,
-            ...(options && options.headers),
-          },
-        })
-      : fetch(url, options);
+    new Promise((resolve, reject) => {
+      fetch(`${baseUrl}${url}`, {
+        ...defaults,
+        ...options,
+        headers: {
+          ...defaults.headers,
+          ...(options && options.headers),
+        },
+      })
+        .then(res => res.json())
+        .then(json => {
+          if (json.status === 0) {
+            resolve(json);
+          } else {
+            reject(json);
+          }
+        });
+    });
 }
 
 export default createFetch;

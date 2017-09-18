@@ -1,0 +1,32 @@
+
+@import '../../components/variables.css';
+
+.root {
+  position: fixed;
+  top: 0;
+  left: 75px;
+  right: 75px;
+  color: #5e5e5e;
+  background-color: #fff;
+  z-index: 99999;
+  margin: 0 auto;
+  width: 80%;
+  min-width: 320px;
+  max-height: 600px;
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
+  transition: all 300ms ease-in-out;
+  display: none;
+  transform: translate3d(0, -100%, 0);
+
+  &_show {
+    display: block;
+  }
+
+  &_in {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.body {
+  padding: 10px;
+}

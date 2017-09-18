@@ -138,11 +138,18 @@
                     	<div class="header-form animation" data-animation="animation-fade-in-right">
                         	<h4><i class="ion ion-android-create"></i> 注册 Boxlinker</h4>
                             <form id="reg-form" method="post" action="#" class="affa-form-signup">
-                            	<div class="submit-status"></div> <!-- submit status -->
-                                <!--<div class="row">-->
-                                	<!--<div class="col-md-6"><input type="text" name="name" placeholder="用户名"></div>-->
-                                    <!--<div class="col-md-6"><input type="text" name="email" placeholder="邮箱"></div>-->
-                                <!--</div>-->
+                            	<div class="submit-status">
+                                    <span class="success">
+                                        <div class="spinner">
+                                          <div class="rect1"></div>
+                                          <div class="rect2"></div>
+                                          <div class="rect3"></div>
+                                          <div class="rect4"></div>
+                                          <div class="rect5"></div>
+                                        </div>
+                                        <b style="display: none;">注册成功!</b>
+                                    </span>
+                                </div>
                                 <div class="form-group">
                                     <p class="control-label">用户名</p>
                                     <input type="text" name="name" style="margin-bottom:0;" placeholder="至少 6 位字母数字组合，字母开头">
@@ -158,11 +165,6 @@
                                     <input type="password" name="password" style="margin-bottom:0;" placeholder="至少 6 位密码">
                                     <div class="form-alert-tip"></div>
                                 </div>
-                                <!--<input type="text" name="name" placeholder="手机号">-->
-                                <!--<div style="display: flex;">-->
-                                    <!--<input type="text" style="border-top-right-radius: 0;border-bottom-right-radius: 0;" name="email" placeholder="验证码">-->
-                                    <!--<img style="background-color: #eee;" src="" height="52" width="300"/>-->
-                                <!--</div>-->
                                 <p class="btn-section">
                                     <button type="submit" class="btn btn-lg btn-block" name="submit">注册</button>
                                 </p>
@@ -286,6 +288,7 @@
 	<script type="text/javascript" src="js/script.js"></script>
 
     <script type="text/javascript" src="js/promise-6.1.0.js"></script>
+    <script type="text/javascript" src="config/config.js"></script>
     <script type="text/javascript" src="js/form.js"></script>
     <script type="text/javascript" src="js/reg.js"></script>
 </body>

@@ -12,7 +12,7 @@ const isAnalyze =
   process.argv.includes('--analyze') || process.argv.includes('--analyse');
 
 const reScript = /\.jsx?$/;
-const reStyle = /\.(css|less|scss|sss)$/;
+const reStyle = /\.(css|less|scss|sss|pcss)$/;
 const reImage = /\.(bmp|gif|jpe?g|png|svg)$/;
 const staticAssetName = isDebug
   ? '[path][name].[ext]?[hash:8]'
@@ -35,6 +35,9 @@ const config = {
   resolve: {
     // 允许 import Button from 'components/Button' 方式的加载
     modules: ['node_modules', 'src'],
+    alias: {
+      'boxlinker-ui': path.resolve(__dirname, '../../boxlinker-ui'),
+    },
   },
 
   module: {
@@ -127,6 +130,16 @@ const config = {
               // CSS Nano http://cssnano.co/options/
               minimize: !isDebug,
               discardComments: { removeAll: true },
+            },
+          },
+
+          // Apply PostCSS plugins including autoprefixer
+          {
+            loader: 'postcss-loader',
+            options: {
+              config: {
+                path: './tools/postcss.config.js',
+              },
             },
           },
         ],

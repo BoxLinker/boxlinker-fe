@@ -1562,7 +1562,7 @@ ul.list-icon li .ion {
   margin-bottom:5px;
 }
 #footer .widget ul li:last-child { margin-bottom:0px; }
-#footer .widget .footer-logo { margin-bottom:20px; }
+#footer .widget .footer-logo { width: 240px; margin-bottom:20px; }
 
 #footer .widget .footer-logo img {
   max-width:100%;

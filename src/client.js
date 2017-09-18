@@ -3,6 +3,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import deepForceUpdate from 'react-deep-force-update';
 import queryString from 'query-string';
+import { EventEmitter } from 'events';
+import Cookies from 'universal-cookie';
 // import { createPath } from 'history/PathUtils';
 import App from './components/App';
 import createFetch from './createFetch';
@@ -13,9 +15,12 @@ import configureStore from './store/configureStore';
 
 /* eslint-disable global-require */
 
+const cookies = new Cookies();
+
 // Global (context) variables that can be easily accessed from any React component
 // https://facebook.github.io/react/docs/context.html
 const context = {
+  event: new EventEmitter(),
   store: configureStore(window.App.state, { history }),
   // Enables critical path CSS rendering
   // https://github.com/kriasoft/isomorphic-style-loader
@@ -29,6 +34,7 @@ const context = {
   // Universal HTTP client
   fetch: createFetch(self.fetch, {
     baseUrl: window.App.apiUrl,
+    cookie: cookies.get('X-Access-Token'),
   }),
 };
 

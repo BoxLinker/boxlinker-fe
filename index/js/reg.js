@@ -57,7 +57,8 @@
       },
     },
   });
-
+  var $status = $('.submit-status');
+  var $statusSpan = $('.submit-status > span');
   new Form({
     $el: $form,
     elements: [nameEle, emailEle, passEle],
@@ -69,24 +70,34 @@
       };
 
       console.log('form data:> ', data);
-
+      $status.show();
+      $status.find('.spinner').show();
       $.ajax({
         type: 'POST',
         url: boxlinker.settings.api.reg,
         data: JSON.stringify(data),
         dataType: 'json',
         success(ret) {
+          $status.find('.spinner').hide();
           switch (ret.status) {
             case 0: // ok
-              alert('ok');
+              $statusSpan.removeClass('success error').addClass('success').find('b').text('注册成功，验证邮件已发送到您的邮箱：'+$email.val()+' ，请您到邮箱中完成验证。').show();
               break;
             case 100: // username exists
+              $statusSpan.removeClass('success error').addClass('error').find('b').text('用户 '+ $name.val() + ' 已经存在。').show();
               break;
             case 101: // email exists
+              $statusSpan.removeClass('success error').addClass('error').find('b').text('邮箱 '+ $email.val() + ' 已经存在。').show();
               break;
           }
+          if (ret.status != 0) {
+            setTimeout(function(){
+              $status.hide();
+            }, 2000);
+          }
         },
-        error() {},
+        error() {
+        },
       });
     },
   });
