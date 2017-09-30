@@ -17,8 +17,9 @@ import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
 import errorPageStyle from './routes/error/ErrorPage.css';
 import createFetch from './createFetch';
 import configureStore from './store/configureStore';
-import { setRuntimeVariable } from './actions/runtime';
-import { getUserInfo } from './actions/user';
+// import { setRuntimeVariable } from './actions/runtime';
+// import { getUserInfo } from './actions/user';
+import { runtime } from './actions';
 
 const app = express();
 
@@ -43,19 +44,21 @@ app.get('*', async (req, res, next) => {
       // I should not use `history` on server.. but how I do redirection? follow universal-router
     });
 
-    store.dispatch(
-      setRuntimeVariable({
-        name: 'initialNow',
-        value: Date.now(),
-      }),
-    );
-    await store.dispatch(getUserInfo(fetch));
-    const user = store.getState().userInfo;
-    if (!user || !user.id) {
-      res.redirect(config.redirect.loginUrl);
-      return;
-    }
+    store.dispatch(runtime());
+    // store.dispatch(
+    //   runtime({
+    //     name: 'initialNow',
+    //     value: Date.now(),
+    //   }),
+    // );
 
+    // await store.dispatch(getUserInfo(fetch));
+    // const user = store.getState().userInfo;
+    // if (!user || !user.id) {
+    //   res.redirect(config.redirect.loginUrl);
+    //   return;
+    // }
+    // store.dispatch(appActions.app.services.query());
     const context = {
       event: new EventEmitter(),
       // Enables critical path CSS rendering

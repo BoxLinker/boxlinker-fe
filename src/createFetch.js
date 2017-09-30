@@ -36,7 +36,15 @@ function createFetch(fetch: Fetch, { baseUrl, cookie }: Options) {
           ...(options && options.headers),
         },
       })
-        .then(res => res.json())
+        .then(res => {
+          if (res.status === 200) {
+            return res.json();
+          }
+          return {
+            name: res.status,
+            description: res.statusText,
+          };
+        })
         .then(json => {
           if (json.status === 0) {
             resolve(json);

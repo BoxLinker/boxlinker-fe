@@ -114,6 +114,7 @@
     "react-select-plus": "^1.0.0-rc.5",
     "react-select2-wrapper": "^1.0.4-beta5",
     "react-test-renderer": "^15.6.1",
+    "redux-actions": "^2.2.1",
     "rimraf": "^2.6.1",
     "select2": "^4.0.3",
     "sinon": "^2.3.5",
