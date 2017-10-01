@@ -91,7 +91,7 @@ class Header extends React.Component {
               <img
                 src="img/logo-icon.png"
                 alt="Boxlinker Logo"
-                className="brand-icon"
+                className={`brand-icon ${s.brandIcon}`}
               />
               <div className="brand-title">
                 <span className="brand-text">BoxLinker</span>
