@@ -19,7 +19,7 @@ import createFetch from './createFetch';
 import configureStore from './store/configureStore';
 // import { setRuntimeVariable } from './actions/runtime';
 // import { getUserInfo } from './actions/user';
-import { runtime } from './actions';
+import { runtime, userinfo } from './actions';
 
 const app = express();
 
@@ -45,14 +45,12 @@ app.get('*', async (req, res, next) => {
     });
 
     store.dispatch(runtime('initialNow', Date.now()));
-
-    // await store.dispatch(getUserInfo(fetch));
-    // const user = store.getState().userInfo;
-    // if (!user || !user.id) {
-    //   res.redirect(config.redirect.loginUrl);
-    //   return;
-    // }
-    // store.dispatch(appActions.app.services.query());
+    await store.dispatch(userinfo(fetch));
+    const user = store.getState().userinfo;
+    if (!user || !user.id) {
+      res.redirect(config.redirect.loginUrl);
+      return;
+    }
     const context = {
       event: new EventEmitter(),
       // Enables critical path CSS rendering

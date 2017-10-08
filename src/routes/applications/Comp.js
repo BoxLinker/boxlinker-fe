@@ -1,11 +1,26 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './index.css';
 
 /* eslint-disable no-script-url */
 class Comp extends React.Component {
+  static contextTypes = {
+    fetch: PropTypes.func,
+  };
+  static propTypes = {
+    loadServices: PropTypes.func,
+    services: PropTypes.arrayOf(PropTypes.object),
+  };
+  static defaultProps = {
+    loadServices: () => {},
+    services: [],
+  };
+  componentDidMount() {
+    this.props.loadServices(this.context.fetch);
+  }
   render() {
+    this._ = this.props.services;
     return (
       <div className={s.root}>
         <div className={s.container}>
@@ -30,9 +45,9 @@ class Comp extends React.Component {
                     <td>64M</td>
                     <td>
                       <div className="btn-group dropdown">
-                        <button className="btn btn-primary">开启</button>
+                        <button className="btn btn-sm btn-primary">开启</button>
                         <button
-                          className="btn btn-primary dropdown-toggle dropdown-toggle-icon"
+                          className="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-icon"
                           data-toggle="dropdown"
                         >
                           <i className="dropdown-caret" />
@@ -51,9 +66,9 @@ class Comp extends React.Component {
                     <td>64M</td>
                     <td>
                       <div className="btn-group dropdown">
-                        <button className="btn btn-primary">开启</button>
+                        <button className="btn btn-sm btn-primary">开启</button>
                         <button
-                          className="btn btn-primary dropdown-toggle dropdown-toggle-icon"
+                          className="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-icon"
                           data-toggle="dropdown"
                         >
                           <i className="dropdown-caret" />

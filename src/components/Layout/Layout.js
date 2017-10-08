@@ -12,6 +12,7 @@ import Header from '../Header';
 import MainNav from '../MainNav';
 import Content from '../Content';
 import NewSet from '../NewSet';
+import Notification from '../Notification';
 
 class Layout extends React.Component {
   static propTypes = {
@@ -35,6 +36,7 @@ class Layout extends React.Component {
           </Content>
         </div>
         <NewSet />
+        <Notification />
       </div>
     );
   }

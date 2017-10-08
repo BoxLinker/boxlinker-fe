@@ -19,11 +19,18 @@ class Comp extends React.Component {
   showNewSet = () => {
     this.context.event.emit('app.new.toggle');
   };
+  showNotification = () => {
+    this.context.event.emit('app.notification', {
+      msg: '这是一条 notification ~~~~',
+      type: 'success',
+    });
+  };
   render() {
     return (
       <div className={s.root}>
         <div className={s.container}>
           <button onClick={this.showNewSet}>New Set</button>
+          <button onClick={this.showNotification}>showNotification</button>
         </div>
       </div>
     );

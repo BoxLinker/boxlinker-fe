@@ -4,8 +4,9 @@ import cx from 'classnames';
 /* eslint-disable import/no-unresolved, import/extensions */
 import { Form, FormElement, Select } from 'boxlinker-ui';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import { URL_SEARCH_IMAGE } from '../../constants';
+import { URL_SEARCH_IMAGE, API } from '../../constants';
 import s from './AppForm.pcss';
+import AppFormPorts from './AppFormPorts';
 
 const hardwareConfiguration = [
   {
@@ -26,9 +27,35 @@ const hardwareConfiguration = [
   },
 ];
 
+const getImageURIByID = (id, images) => {
+  for (let i = 0; i < images.length; i += 1) {
+    const image = images[i];
+    if (image.id === id) {
+      return `index.boxlinker.com/${image.namespace}/${image.name}:${image.tag}`;
+    }
+  }
+  return '';
+};
+
+const getMemoryByID = (id, config) => {
+  for (let i = 0; i < config.length; i += 1) {
+    const item = config[i];
+    if (item.value === id) {
+      return item.label;
+    }
+  }
+  return config[0].label;
+};
+
+const getPortLineData = item => ({
+  id: `${Math.ceil(Math.random() * 10000000)}`,
+  ...item,
+});
+
 class AppForm extends React.Component {
   static contextTypes = {
     fetch: PropTypes.func.isRequired,
+    event: PropTypes.object,
   };
   constructor(props) {
     super(props);
@@ -50,6 +77,14 @@ class AppForm extends React.Component {
       appHardwareConfigure: 1,
       appHardwareConfigureErrMsg: '',
       searchedImages: [],
+      appPorts: [
+        {
+          id: '12312312',
+          port: 80,
+          path: '/',
+        },
+      ],
+      appPortsErrMsg: '',
     };
   }
   onSearchImageItemClick(item) {
@@ -78,7 +113,39 @@ class AppForm extends React.Component {
     this.refAppHardwareConfigure.validate();
   }
   onSubmit(data, err) {
-    this._ = [data, err];
+    if (err) {
+      return;
+    }
+    const { searchedImages } = this.state;
+    const ports = data.appPorts.map(item => {
+      const { port, path } = item;
+      const protocol = 'TCP';
+      const name = `tcp${port}`;
+      return {
+        name,
+        port,
+        path,
+        protocol,
+      };
+    });
+    const pData = {
+      name: data.appName,
+      image: getImageURIByID(data.appImage, searchedImages),
+      cpu: '200m',
+      memory: getMemoryByID(data.appHardwareConfigure, hardwareConfiguration),
+      ports,
+    };
+    this.context
+      .fetch(API.SERVICE.CREATE, {
+        method: 'POST',
+        body: JSON.stringify(pData),
+      })
+      .then(() => {
+        this.context.event.emit('app.notification', {
+          msg: `服务 ${pData.name} 创建成功!`,
+          type: 'success',
+        });
+      });
   }
   onElementChange(e) {
     const v = e.target.value;
@@ -97,6 +164,35 @@ class AppForm extends React.Component {
       [`${err[0]}ErrMsg`]: err[1],
     });
   }
+  onRemovePort = id => {
+    const { appPorts } = this.state;
+    for (let i = 0; i < appPorts.length; i += 1) {
+      if (appPorts[i].id === id) {
+        appPorts.splice(i, 1);
+        break;
+      }
+    }
+    this.setState({
+      appPorts,
+    });
+  };
+  onAddPort = () => {
+    const { appPorts } = this.state;
+    appPorts.push(
+      getPortLineData({
+        port: 0,
+        path: '',
+      }),
+    );
+    this.setState({
+      appPorts,
+    });
+  };
+  onAppPortsChange = appPorts => {
+    this.setState({
+      appPorts,
+    });
+  };
   getAppNameUI() {
     const state = this.state;
     const appNameErr = state.appNameErrMsg;
@@ -112,7 +208,7 @@ class AppForm extends React.Component {
         getValue={() => this.state.appName}
       >
         <div className={cx('form-group', appNameErr ? 'has-error' : '')}>
-          <p className="control-label">应用名称</p>
+          <h5 className="control-label">应用名称</h5>
           <input
             name="appName"
             type="text"
@@ -148,7 +244,7 @@ class AppForm extends React.Component {
             appHardwareConfigureErrMsg ? 'has-error' : '',
           )}
         >
-          <p className="control-label">选择内存</p>
+          <h5 className="control-label">选择内存</h5>
           <Select
             style={{ width: '100%' }}
             placeholder="请选择内存配置"
@@ -167,6 +263,27 @@ class AppForm extends React.Component {
       </FormElement>
     );
   }
+  getAppPortsUI() {
+    const { appPorts } = this.state;
+    return (
+      <FormElement
+        name="appPorts"
+        ref={ref => {
+          this.refAppPorts = ref;
+        }}
+        getValue={() => this.state.appPorts}
+        onErrMsg={this.onElementErrMsg}
+      >
+        <AppFormPorts
+          ports={appPorts}
+          onChange={this.onAppPortsChange}
+          onAdd={this.onAddPort}
+          onRemove={this.onRemovePort}
+          errMsg={this.state.appPortsErrMsg}
+        />
+      </FormElement>
+    );
+  }
   getAppImageUI() {
     const state = this.state;
     const appImageErr = state.appImageErrMsg;
@@ -182,7 +299,7 @@ class AppForm extends React.Component {
         onErrMsg={this.onElementErrMsg}
       >
         <div className={cx('form-group', appImageErr ? 'has-error' : '')}>
-          <p className="control-label">选择镜像</p>
+          <h5 className="control-label">选择镜像</h5>
           <Select
             style={{ width: '100%' }}
             placeholder="请选择镜像"
@@ -192,7 +309,7 @@ class AppForm extends React.Component {
             searchable
             onSearchInputChange={this.onSearchImage}
             onItemClick={this.onSearchImageItemClick}
-            data={this.state.searchedImages}
+            data={this.state.searchedImages || []}
           />
           {appImageErr
             ? <p className="help-block">
@@ -215,6 +332,7 @@ class AppForm extends React.Component {
             this.refAppName,
             this.refAppImage,
             this.refAppHardwareConfigure,
+            this.refAppPorts,
           ]}
         >
           <div className="panel-body">
@@ -229,6 +347,11 @@ class AppForm extends React.Component {
             <div className="row">
               <div className="col-sm-12">
                 {this.getAppImageUI()}
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-sm-12">
+                {this.getAppPortsUI()}
               </div>
             </div>
             <div className="row">

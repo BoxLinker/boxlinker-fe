@@ -8,8 +8,10 @@ class Body extends React.Component {
   render() {
     return (
       <div className={`${s.body} clearfix`}>
-        <BodyNav />
-        <BodyContent />
+        <div className="row">
+          <BodyNav />
+          <BodyContent />
+        </div>
       </div>
     );
   }

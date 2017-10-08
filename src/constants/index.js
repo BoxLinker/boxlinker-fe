@@ -9,3 +9,13 @@ export const ACTION_USERINFO = 'ACTION_USERINFO';
 
 export const URL_SEARCH_IMAGE = '/v1/registry/pub/image/list';
 export const URL_USERINFO = '/v1/user/account/userinfo';
+export const API = {
+  SERVICE: {
+    CREATE: '/v1/application/auth/service',
+    QUERY: '/v1/application/auth/service',
+    UPDATE: name => `/v1/application/auth/service/${name}`,
+    DELETE: name => `/v1/application/auth/service/${name}`,
+    EXISTS: name => `/v1/application/auth/service/${name}/exists`,
+  },
+  USERINFO: '/v1/user/account/userinfo',
+};

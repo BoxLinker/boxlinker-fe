@@ -42,6 +42,7 @@ class Html extends React.Component {
             href="plugins/font-awesome-4_7_0/css/font-awesome.min.css"
           />
           <link rel="stylesheet" href="plugins/pace/pace.min.css" />
+          <link rel="stylesheet" href="plugins/animate-css/animate.min.css" />
           <link rel="stylesheet" href="css/bootstrap.min.css" />
           <link rel="stylesheet" href="css/nifty.min.css" />
           {scripts.map(script =>
