@@ -20,5 +20,5 @@ export const getServices = createAction('GET_SERVICES', async fetch => {
   if (data.status === 0) {
     return data.results;
   }
-  return [];
+  return {};
 });

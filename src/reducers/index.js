@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 import { handleAction } from 'redux-actions';
-import { isArray } from 'lodash';
 
 const runtime = handleAction(
   'SET_RUNTIME_VARIABLE',
@@ -22,13 +21,8 @@ const userinfo = handleAction(
 
 const services = handleAction(
   'GET_SERVICES',
-  (state, action) => {
-    if (isArray(action.payload)) {
-      return action.payload;
-    }
-    return [];
-  },
-  [],
+  (state, action) => action.payload || {},
+  {},
 );
 
 export default combineReducers({
