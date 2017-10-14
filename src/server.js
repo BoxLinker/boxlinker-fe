@@ -45,7 +45,7 @@ app.get('*', async (req, res, next) => {
     });
 
     store.dispatch(runtime('initialNow', Date.now()));
-    await store.dispatch(userinfo(fetch));
+    await store.dispatch(userinfo(req.cookies['X-Access-Token']));
     const user = store.getState().userinfo;
     if (!user || !user.id) {
       res.redirect(config.redirect.loginUrl);

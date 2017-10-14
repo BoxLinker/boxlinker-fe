@@ -89,6 +89,8 @@ class MainNav extends React.Component {
                   <li className="list-header">导航</li>
                   {this.getNavItem({ href: '/', title: '控制台' })}
                   {this.getNavItem({ href: '/applications', title: '应用' })}
+                  {this.getNavItem({ href: '/services', title: '服务' })}
+                  {this.getNavItem({ href: '/volumes', title: '数据卷' })}
                   <li>
                     <a href="javascript:void(0)">
                       <i className="fa fa-home" />

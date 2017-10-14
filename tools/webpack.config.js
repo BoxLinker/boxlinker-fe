@@ -74,7 +74,7 @@ const config = {
 
             // Experimental ECMAScript proposals
             // https://babeljs.io/docs/plugins/#presets-stage-x-experimental-presets-
-            'stage-2',
+            'stage-0',
             // JSX, Flow
             // https://github.com/babel/babel/tree/master/packages/babel-preset-react
             'react',
@@ -92,7 +92,6 @@ const config = {
           ],
         },
       },
-
       // css 规则
       {
         test: reStyle,
@@ -144,7 +143,6 @@ const config = {
           },
         ],
       },
-
       // image 规则
       {
         test: reImage,

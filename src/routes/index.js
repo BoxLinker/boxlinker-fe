@@ -14,6 +14,14 @@ const routes = {
         import(/* webpackChunkName: 'applications' */ './applications'),
     },
     {
+      path: '/services',
+      load: () => import(/* webpackChunkName: 'services' */ './services'),
+    },
+    {
+      path: '/volumes',
+      load: () => import(/* webpackChunkName: 'volumes' */ './volumes'),
+    },
+    {
       path: '*',
       load: () => import(/* webpackChunkName: 'not-found' */ './not-found'),
     },
