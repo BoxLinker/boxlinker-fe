@@ -1,8 +1,18 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import cx from 'classnames';
 /* eslint-disable import/no-unresolved, import/extensions, no-console */
 import { Form, FormElement, Select } from 'boxlinker-ui';
+import { connect } from 'react-redux';
+import { createVolume } from 'actions/volumes';
+
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = dispatch => ({
+  createVolume: form => {
+    dispatch(createVolume(form));
+  },
+});
 
 const sizeConfig = [
   {
@@ -23,7 +33,10 @@ const sizeConfig = [
   },
 ];
 
-export default class VolumeForm extends React.Component {
+class VolumeForm extends React.Component {
+  static propTypes = {
+    createVolume: PropTypes.func.isRequired,
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -62,6 +75,7 @@ export default class VolumeForm extends React.Component {
       return;
     }
     console.log('data>', data);
+    this.props.createVolume(data);
   };
   getNameEle() {
     const { nameErrMsg } = this.state;
@@ -158,3 +172,5 @@ export default class VolumeForm extends React.Component {
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(VolumeForm);

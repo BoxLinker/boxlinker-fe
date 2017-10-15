@@ -11,22 +11,22 @@ const columns = [
     label: '名称',
   },
   {
-    field: 'image',
-    label: '镜像',
+    field: 'size',
+    label: '大小',
   },
 ];
 
 class Comp extends React.Component {
   static propTypes = {
     loadPage: PropTypes.func,
-    data: PropTypes.shape({
+    volumes: PropTypes.shape({
       data: PropTypes.array,
       pagination: PropTypes.object,
     }),
   };
   static defaultProps = {
     loadPage: () => {},
-    data: [],
+    volumes: [],
   };
   componentDidMount() {
     this.props.loadPage();
@@ -35,9 +35,9 @@ class Comp extends React.Component {
     this.props.loadPage(pagination);
   };
   render() {
-    const { data } = this.props;
+    const { volumes } = this.props;
     // console.log('>>>', services);
-    return <Grid columns={columns} data={data} onLoad={this.onLoadPage} />;
+    return <Grid columns={columns} data={volumes} onLoad={this.onLoadPage} />;
   }
 }
 

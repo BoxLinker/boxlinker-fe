@@ -58,7 +58,7 @@ class Body extends React.Component {
           <div className="col-lg-12">
             <div className="">
               {tabIndex === '0' ? <AppForm /> : null}
-              {tabIndex === '2' ? <VolumeForm /> : null}
+              {tabIndex === '1' ? <VolumeForm /> : null}
             </div>
           </div>
         </div>

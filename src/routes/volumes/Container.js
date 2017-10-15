@@ -1,14 +1,14 @@
 import { connect } from 'react-redux';
 import Comp from './Comp';
-import { getServices } from '../../actions';
+import { getVolumes } from '../../actions/volumes';
 
 const mapStateToProps = state => ({
-  services: state.services,
+  volumes: state.volumes,
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadServices: fetch => {
-    dispatch(getServices(fetch));
+  loadPage: pagination => {
+    dispatch(getVolumes(pagination));
   },
 });
 
