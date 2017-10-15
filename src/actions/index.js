@@ -25,3 +25,27 @@ export const getServices = createAction('GET_SERVICES', async pagination => {
     return null;
   }
 });
+
+export const getServices1 = createAction(
+  'GET_SERVICES1',
+  async (fetch, pagination) => {
+    let page = pagination;
+    if (!pagination) {
+      page = {
+        currentPage: 1,
+        pageCount: 10,
+      };
+    }
+    const { currentPage, pageCount } = page;
+    const data = await fetch(
+      `${API.SERVICE.QUERY}?currentPage=${currentPage}&pageCount=${pageCount}`,
+      {
+        method: 'GET',
+      },
+    );
+    if (data.status === 0) {
+      return data.results;
+    }
+    return {};
+  },
+);
