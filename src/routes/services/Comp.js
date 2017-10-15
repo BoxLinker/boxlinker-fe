@@ -82,10 +82,10 @@ class Comp extends React.Component {
     services: [],
   };
   componentDidMount() {
-    this.props.loadServices(this.context.fetch);
+    this.props.loadServices();
   }
   onLoadPage = pagination => {
-    this.props.loadServices(this.context.fetch, pagination);
+    this.props.loadServices(pagination);
   };
   render() {
     const { services } = this.props;

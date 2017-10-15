@@ -1,13 +1,11 @@
-import { ACTION_RECEIVE_IMAGE } from '../constants';
+import { handleAction } from 'redux-actions';
 
-export default function runtime(state = {}, action) {
-  switch (action.type) {
-    case ACTION_RECEIVE_IMAGE:
-      return {
-        ...state,
-        [action.payload.name]: action.payload.value,
-      };
-    default:
-      return state;
-  }
-}
+export const images = handleAction(
+  'GET_IMAGES',
+  (state, action) => action.payload || {},
+  {},
+);
+
+export default {
+  images,
+};

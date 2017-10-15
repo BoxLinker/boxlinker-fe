@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { handleAction } from 'redux-actions';
+import { images } from './image';
 
 const runtime = handleAction(
   'SET_RUNTIME_VARIABLE',
@@ -29,4 +30,5 @@ export default combineReducers({
   runtime,
   userinfo,
   services,
+  images,
 });
