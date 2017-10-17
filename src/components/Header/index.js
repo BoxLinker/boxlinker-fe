@@ -11,8 +11,8 @@ class Header extends React.Component {
     store: PropTypes.object,
   };
   getUserDropdown() {
-    const user = this.context.store.getState().userInfo;
-    if (!user) {
+    const { userinfo } = this.context.store.getState();
+    if (!userinfo) {
       return null;
     }
     return (
@@ -26,7 +26,7 @@ class Header extends React.Component {
             <i className="demo-pli-male" />
           </span>
           <div className="username hidden-xs">
-            {user.name}
+            {userinfo.name}
           </div>
         </a>
         <div className="dropdown-menu dropdown-menu-md dropdown-menu-right panel-default">
