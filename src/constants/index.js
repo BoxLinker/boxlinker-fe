@@ -17,5 +17,12 @@ export const API = {
     DELETE: name => `/v1/application/auth/service/${name}`,
     EXISTS: name => `/v1/application/auth/service/${name}/exists`,
   },
+  IMAGES: {
+    QUERY: '/v1/registry/auth/image/list',
+  },
+  VOLUMES: {
+    QUERY: '/v1/application/auth/volume',
+    CREATE: '/v1/application/auth/volume',
+  },
   USERINFO: '/v1/user/account/userinfo',
 };

@@ -1,11 +1,11 @@
 import { handleAction } from 'redux-actions';
 
-export const images = handleAction(
-  'GET_IMAGES',
+export const volumes = handleAction(
+  'GET_VOLUMES',
   (state, action) => action.payload || {},
   {},
 );
 
 export default {
-  images,
+  volumes,
 };
