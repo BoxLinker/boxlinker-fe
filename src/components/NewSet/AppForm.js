@@ -215,11 +215,7 @@ class AppForm extends React.Component {
             className="form-control"
             onChange={this.onElementChange}
           />
-          {appNameErr
-            ? <p className="help-block">
-                {appNameErr}
-              </p>
-            : null}
+          {appNameErr ? <p className="help-block">{appNameErr}</p> : null}
         </div>
       </FormElement>
     );
@@ -254,11 +250,9 @@ class AppForm extends React.Component {
             onItemClick={this.onHardwareConfigureItemClick}
             data={hardwareConfiguration}
           />
-          {appHardwareConfigureErrMsg
-            ? <p className="help-block">
-                {appHardwareConfigureErrMsg}
-              </p>
-            : null}
+          {appHardwareConfigureErrMsg ? (
+            <p className="help-block">{appHardwareConfigureErrMsg}</p>
+          ) : null}
         </div>
       </FormElement>
     );
@@ -311,11 +305,7 @@ class AppForm extends React.Component {
             onItemClick={this.onSearchImageItemClick}
             data={this.state.searchedImages || []}
           />
-          {appImageErr
-            ? <p className="help-block">
-                {appImageErr}
-              </p>
-            : null}
+          {appImageErr ? <p className="help-block">{appImageErr}</p> : null}
         </div>
       </FormElement>
     );
@@ -337,22 +327,14 @@ class AppForm extends React.Component {
         >
           <div className="panel-body">
             <div className="row">
-              <div className="col-sm-6">
-                {this.getAppNameUI()}
-              </div>
-              <div className="col-sm-6">
-                {this.getAppHardwareConfigureUI()}
-              </div>
+              <div className="col-sm-6">{this.getAppNameUI()}</div>
+              <div className="col-sm-6">{this.getAppHardwareConfigureUI()}</div>
             </div>
             <div className="row">
-              <div className="col-sm-12">
-                {this.getAppImageUI()}
-              </div>
+              <div className="col-sm-12">{this.getAppImageUI()}</div>
             </div>
             <div className="row">
-              <div className="col-sm-12">
-                {this.getAppPortsUI()}
-              </div>
+              <div className="col-sm-12">{this.getAppPortsUI()}</div>
             </div>
             <div className="row">
               <div className="col-sm-12">

@@ -13,9 +13,7 @@ class Content extends React.Component {
     return (
       <div id="content-container" className={s.root}>
         <PageHead />
-        <PageContent>
-          {this.props.children}
-        </PageContent>
+        <PageContent>{this.props.children}</PageContent>
       </div>
     );
   }

@@ -33,11 +33,7 @@ export class Form extends React.Component {
     );
   };
   render() {
-    return (
-      <form onSubmit={this.onSubmit}>
-        {this.props.children}
-      </form>
-    );
+    return <form onSubmit={this.onSubmit}>{this.props.children}</form>;
   }
 }
 

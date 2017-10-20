@@ -25,9 +25,7 @@ class Header extends React.Component {
           <span className="ic-user pull-right">
             <i className="demo-pli-male" />
           </span>
-          <div className="username hidden-xs">
-            {userinfo.name}
-          </div>
+          <div className="username hidden-xs">{userinfo.name}</div>
         </a>
         <div className="dropdown-menu dropdown-menu-md dropdown-menu-right panel-default">
           {/* Dropdown heading */}

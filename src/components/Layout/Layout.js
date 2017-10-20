@@ -31,9 +31,7 @@ class Layout extends React.Component {
         <Header />
         <div className="boxed">
           <MainNav path={this.props.path} />
-          <Content>
-            {this.props.children}
-          </Content>
+          <Content>{this.props.children}</Content>
         </div>
         <NewSet />
         <Notification />
