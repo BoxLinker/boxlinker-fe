@@ -12,7 +12,8 @@ const isAnalyze =
   process.argv.includes('--analyze') || process.argv.includes('--analyse');
 
 const reScript = /\.jsx?$/;
-const reStyle = /\.(css|less|scss|sss|pcss)$/;
+// const reStyle = /\.(css|less|scss|sss|pcss)$/;
+const reStyle = /\.(css|sss|pcss)$/;
 const reImage = /\.(bmp|gif|jpe?g|png|svg)$/;
 const staticAssetName = isDebug
   ? '[path][name].[ext]?[hash:8]'
@@ -89,13 +90,6 @@ const config = {
             // Adds __self attribute to JSX which React will use for some warnings
             // https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-jsx-self
             ...(isDebug ? ['transform-react-jsx-self'] : []),
-            [
-              'import',
-              {
-                libraryName: 'antd',
-                css: true, // or 'css'
-              },
-            ],
           ],
         },
       },
@@ -147,6 +141,36 @@ const config = {
                 path: './tools/postcss.config.js',
               },
             },
+          },
+
+          // Compile Less to CSS
+          // https://github.com/webpack-contrib/less-loader
+          // Install dependencies before uncommenting: yarn add --dev less-loader less
+          {
+            test: /\.less$/,
+            use: [
+              {
+                loader: 'style-loader',
+              },
+              {
+                loader: 'css-loader',
+              },
+              {
+                loader: 'less-loader',
+                options: {
+                  strictMath: true,
+                  noIeCompat: true,
+                },
+              },
+            ],
+          },
+
+          // Compile Sass to CSS
+          // https://github.com/webpack-contrib/sass-loader
+          // Install dependencies before uncommenting: yarn add --dev sass-loader node-sass
+          {
+            test: /\.(scss|sass)$/,
+            loader: 'css-loader!sass-loader',
           },
         ],
       },
