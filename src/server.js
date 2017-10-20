@@ -21,6 +21,8 @@ import configureStore from './store/configureStore';
 // import { getUserInfo } from './actions/user';
 import { runtime, userinfo } from './actions';
 
+const isDebug = process.env.NODE_ENV === 'development';
+
 const app = express();
 
 app.use(express.static(path.resolve(__dirname, 'public')));
@@ -34,9 +36,18 @@ app.get('*', async (req, res, next) => {
 
     const fetch = createFetch(nodeFetch, {
       baseUrl: config.api.serverUrl,
-      cookie: req.cookies['X-Access-Token'],
+      cookie: isDebug ? process.env.DEV_TOKEN : req.cookies['X-Access-Token'],
     });
 
+    const token = isDebug
+      ? process.env.DEV_TOKEN
+      : req.cookies['X-Access-Token'];
+
+    if (isDebug) {
+      res.cookie('X-Access-Token', token, {
+        domain: 'localhost',
+      });
+    }
     const initialState = {};
 
     const store = configureStore(initialState, {
@@ -45,7 +56,7 @@ app.get('*', async (req, res, next) => {
     });
 
     store.dispatch(runtime('initialNow', Date.now()));
-    await store.dispatch(userinfo(req.cookies['X-Access-Token']));
+    await store.dispatch(userinfo(token));
     const user = store.getState().userinfo;
     if (!user || !user.id) {
       res.redirect(config.redirect.loginUrl);

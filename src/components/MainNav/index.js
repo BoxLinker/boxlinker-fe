@@ -108,6 +108,7 @@ class MainNav extends React.Component {
                 </div>
                 <ul id="mainnav-menu" className="list-group">
                   <li className="list-header">导航</li>
+                  {this.getNavItem({ href: '/demo', title: 'Demo' })}
                   {this.getNavItem({ href: '/', title: '控制台' })}
                   {this.getNavItem({ href: '/applications', title: '应用' })}
                   {this.getNavItem({ href: '/services', title: '服务' })}

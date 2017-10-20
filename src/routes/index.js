@@ -26,6 +26,10 @@ const routes = {
       load: () => import(/* webpackChunkName: 'images' */ './images'),
     },
     {
+      path: '/demo',
+      load: () => import(/* webpackChunkName: 'demo' */ './demo'),
+    },
+    {
       path: '*',
       load: () => import(/* webpackChunkName: 'not-found' */ './not-found'),
     },

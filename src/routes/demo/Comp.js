@@ -1,8 +1,10 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import { Form, Field, Select, Option } from 'bui';
+import { Form, Field, Select } from 'bui';
 import s from './index.css';
+
+const Option = Select.Option;
 
 class Comp extends React.Component {
   render() {
@@ -20,9 +22,6 @@ class Comp extends React.Component {
                 <Option value="Yiminghe">yiminghe</Option>
               </Select>
             </Field>
-            <button type="submit" className="btn btn-primary">
-              提交
-            </button>
           </Form>
         </div>
       </div>

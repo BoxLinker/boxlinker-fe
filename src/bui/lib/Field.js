@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { isArray, isString, isFunction } from 'lodash';
-import { FormItem } from 'antd';
+import { Form } from 'antd';
+
+const FormItem = Form.Item;
 
 const defaultRules = {
   required: (val, errMsg) =>
