@@ -32,7 +32,9 @@ class MainNav extends React.Component {
       <li className={active}>
         <Link to={href}>
           <i className="fa fa-home" />
-          <span className="menu-title">{title}</span>
+          <span className="menu-title">
+            {title}
+          </span>
         </Link>
       </li>
     );
@@ -60,8 +62,12 @@ class MainNav extends React.Component {
           <span className="pull-right dropdown-toggle">
             <i className="dropdown-caret" />
           </span>
-          <p className="mnp-name">{userinfo.name}</p>
-          <span className="mnp-desc">{userinfo.email}</span>
+          <p className="mnp-name">
+            {userinfo.name}
+          </p>
+          <span className="mnp-desc">
+            {userinfo.email}
+          </span>
         </a>
       </div>
     );
@@ -91,7 +97,7 @@ class MainNav extends React.Component {
   }
   render() {
     return (
-      <div id="mainnav-container" className={s.root}>
+      <nav id="mainnav-container" className={s.root}>
         <div id="mainnav">
           <div id="mainnav-menu-wrap">
             <div className="nano">
@@ -115,7 +121,7 @@ class MainNav extends React.Component {
             </div>
           </div>
         </div>
-      </div>
+      </nav>
     );
   }
 }

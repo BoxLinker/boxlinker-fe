@@ -44,7 +44,14 @@ class Comp extends React.Component {
   };
   render() {
     const { images } = this.props;
-    return <Grid columns={columns} data={images} onLoad={this.onLoadPage} />;
+    return (
+      <Grid
+        rowKey={item => `${item.name}${item.tag}`}
+        columns={columns}
+        data={images}
+        onLoad={this.onLoadPage}
+      />
+    );
   }
 }
 

@@ -90,7 +90,14 @@ class Comp extends React.Component {
   render() {
     const { services } = this.props;
     // console.log('>>>', services);
-    return <Grid columns={columns} data={services} onLoad={this.onLoadPage} />;
+    return (
+      <Grid
+        rowKey="name"
+        columns={columns}
+        data={services}
+        onLoad={this.onLoadPage}
+      />
+    );
   }
 }
 

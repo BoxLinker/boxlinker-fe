@@ -1,9 +1,9 @@
 import React from 'react';
+/* eslint-disable */
 
 import s from './index.pcss';
 import AppForm from './AppForm';
 import VolumeForm from './VolumeForm';
-/* eslint-disable no-script-url */
 
 const tabs = [
   { text: '应用', tabIndex: '0' },

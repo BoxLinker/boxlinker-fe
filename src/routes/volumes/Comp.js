@@ -37,7 +37,14 @@ class Comp extends React.Component {
   render() {
     const { volumes } = this.props;
     // console.log('>>>', services);
-    return <Grid columns={columns} data={volumes} onLoad={this.onLoadPage} />;
+    return (
+      <Grid
+        rowKey="name"
+        columns={columns}
+        data={volumes}
+        onLoad={this.onLoadPage}
+      />
+    );
   }
 }
 

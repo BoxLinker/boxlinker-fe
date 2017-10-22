@@ -4,9 +4,9 @@ import cx from 'classnames';
 /* eslint-disable import/no-unresolved, import/extensions */
 import { Form, FormElement, Select } from 'boxlinker-ui';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import { URL_SEARCH_IMAGE, API } from '../../constants';
-import s from './AppForm.pcss';
-import AppFormPorts from './AppFormPorts';
+import { URL_SEARCH_IMAGE, API } from 'constants';
+import s from './Form.pcss';
+import FormPorts from './FormPorts';
 
 const hardwareConfiguration = [
   {
@@ -215,7 +215,11 @@ class AppForm extends React.Component {
             className="form-control"
             onChange={this.onElementChange}
           />
-          {appNameErr ? <p className="help-block">{appNameErr}</p> : null}
+          {appNameErr
+            ? <p className="help-block">
+                {appNameErr}
+              </p>
+            : null}
         </div>
       </FormElement>
     );
@@ -250,9 +254,11 @@ class AppForm extends React.Component {
             onItemClick={this.onHardwareConfigureItemClick}
             data={hardwareConfiguration}
           />
-          {appHardwareConfigureErrMsg ? (
-            <p className="help-block">{appHardwareConfigureErrMsg}</p>
-          ) : null}
+          {appHardwareConfigureErrMsg
+            ? <p className="help-block">
+                {appHardwareConfigureErrMsg}
+              </p>
+            : null}
         </div>
       </FormElement>
     );
@@ -268,7 +274,7 @@ class AppForm extends React.Component {
         getValue={() => this.state.appPorts}
         onErrMsg={this.onElementErrMsg}
       >
-        <AppFormPorts
+        <FormPorts
           ports={appPorts}
           onChange={this.onAppPortsChange}
           onAdd={this.onAddPort}
@@ -305,7 +311,11 @@ class AppForm extends React.Component {
             onItemClick={this.onSearchImageItemClick}
             data={this.state.searchedImages || []}
           />
-          {appImageErr ? <p className="help-block">{appImageErr}</p> : null}
+          {appImageErr
+            ? <p className="help-block">
+                {appImageErr}
+              </p>
+            : null}
         </div>
       </FormElement>
     );
@@ -313,9 +323,9 @@ class AppForm extends React.Component {
   render() {
     return (
       <div className="panel bord-no" style={{ boxShadow: 'none' }}>
-        <div className="panel-heading">
+        {/* <div className="panel-heading">
           <h3 className="panel-title">新建应用</h3>
-        </div>
+        </div> */}
         <Form
           onSubmit={this.onSubmit}
           getElements={() => [
@@ -327,14 +337,22 @@ class AppForm extends React.Component {
         >
           <div className="panel-body">
             <div className="row">
-              <div className="col-sm-6">{this.getAppNameUI()}</div>
-              <div className="col-sm-6">{this.getAppHardwareConfigureUI()}</div>
+              <div className="col-sm-6">
+                {this.getAppNameUI()}
+              </div>
+              <div className="col-sm-6">
+                {this.getAppHardwareConfigureUI()}
+              </div>
             </div>
             <div className="row">
-              <div className="col-sm-12">{this.getAppImageUI()}</div>
+              <div className="col-sm-12">
+                {this.getAppImageUI()}
+              </div>
             </div>
             <div className="row">
-              <div className="col-sm-12">{this.getAppPortsUI()}</div>
+              <div className="col-sm-12">
+                {this.getAppPortsUI()}
+              </div>
             </div>
             <div className="row">
               <div className="col-sm-12">

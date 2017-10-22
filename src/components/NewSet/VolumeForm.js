@@ -97,7 +97,11 @@ class VolumeForm extends React.Component {
             className="form-control"
             onChange={this.onElementChange}
           />
-          {nameErrMsg ? <p className="help-block">{nameErrMsg}</p> : null}
+          {nameErrMsg
+            ? <p className="help-block">
+                {nameErrMsg}
+              </p>
+            : null}
         </div>
       </FormElement>
     );
@@ -125,7 +129,11 @@ class VolumeForm extends React.Component {
             onItemClick={this.onSizeConfigItemClick}
             data={sizeConfig}
           />
-          {sizeErrMsg ? <p className="help-block">{sizeErrMsg}</p> : null}
+          {sizeErrMsg
+            ? <p className="help-block">
+                {sizeErrMsg}
+              </p>
+            : null}
         </div>
       </FormElement>
     );
@@ -142,8 +150,12 @@ class VolumeForm extends React.Component {
         >
           <div className="panel-body">
             <div className="row">
-              <div className="col-sm-6">{this.getNameEle()}</div>
-              <div className="col-sm-6">{this.getSizeEle()}</div>
+              <div className="col-sm-6">
+                {this.getNameEle()}
+              </div>
+              <div className="col-sm-6">
+                {this.getSizeEle()}
+              </div>
             </div>
             <div className="row">
               <div className="col-sm-12">

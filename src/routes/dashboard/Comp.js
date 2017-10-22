@@ -25,12 +25,16 @@ class Comp extends React.Component {
       type: 'success',
     });
   };
+  showModal = () => {
+    this.context.event.emit('app.newService.show');
+  };
   render() {
     return (
       <div className={s.root}>
         <div className={s.container}>
           <button onClick={this.showNewSet}>New Set</button>
           <button onClick={this.showNotification}>showNotification</button>
+          <button onClick={this.showModal}>Service Modal</button>
         </div>
       </div>
     );

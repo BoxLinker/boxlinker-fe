@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AppFormPort from './AppFormPort';
+import FormPort from './FormPort';
 
 export default class AppFormPorts extends React.Component {
   static propTypes = {
@@ -43,25 +43,25 @@ export default class AppFormPorts extends React.Component {
   getPortsComp() {
     const { ports } = this.props;
     /* eslint-disable react/no-array-index-key */
-    return ports.map(item => (
-      <AppFormPort
+    return ports.map(item =>
+      <FormPort
         data={item}
         key={item.id}
         onChange={this.onChange}
         optBtn={
-          ports.length > 1 ? (
-            <button
-              type="button"
-              data-port-id={item.id}
-              className="btn btn-sx btn-default"
-              onClick={this.onRemove}
-            >
-              <i className="fa fa-minus" />
-            </button>
-          ) : null
+          ports.length > 1
+            ? <button
+                type="button"
+                data-port-id={item.id}
+                className="btn btn-sx btn-default"
+                onClick={this.onRemove}
+              >
+                <i className="fa fa-minus" />
+              </button>
+            : null
         }
-      />
-    ));
+      />,
+    );
   }
   render() {
     const { errMsg } = this.props;
@@ -77,7 +77,9 @@ export default class AppFormPorts extends React.Component {
               <td>&nbsp;</td>
             </tr>
           </thead>
-          <tbody>{this.getPortsComp()}</tbody>
+          <tbody>
+            {this.getPortsComp()}
+          </tbody>
         </table>
         <button
           type="button"
@@ -86,7 +88,11 @@ export default class AppFormPorts extends React.Component {
         >
           <i className="fa fa-plus" />&nbsp;添加端口
         </button>
-        {errMsg ? <p className="help-block">{errMsg}</p> : null}
+        {errMsg
+          ? <p className="help-block">
+              {errMsg}
+            </p>
+          : null}
       </div>
     );
   }

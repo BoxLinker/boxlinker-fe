@@ -54,7 +54,9 @@ export default class AppFormPort extends React.Component {
             onChange={this.onPathChange}
           />
         </td>
-        <td>{this.props.optBtn}</td>
+        <td>
+          {this.props.optBtn}
+        </td>
       </tr>
     );
   }
