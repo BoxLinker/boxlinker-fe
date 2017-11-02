@@ -146,32 +146,32 @@ const config = {
           // Compile Less to CSS
           // https://github.com/webpack-contrib/less-loader
           // Install dependencies before uncommenting: yarn add --dev less-loader less
-          {
-            test: /\.less$/,
-            use: [
-              {
-                loader: 'style-loader',
-              },
-              {
-                loader: 'css-loader',
-              },
-              {
-                loader: 'less-loader',
-                options: {
-                  strictMath: true,
-                  noIeCompat: true,
-                },
-              },
-            ],
-          },
+          // {
+          //   test: /\.less$/,
+          //   use: [
+          //     {
+          //       loader: 'style-loader',
+          //     },
+          //     {
+          //       loader: 'css-loader',
+          //     },
+          //     {
+          //       loader: 'less-loader',
+          //       options: {
+          //         strictMath: true,
+          //         noIeCompat: true,
+          //       },
+          //     },
+          //   ],
+          // },
 
           // Compile Sass to CSS
           // https://github.com/webpack-contrib/sass-loader
           // Install dependencies before uncommenting: yarn add --dev sass-loader node-sass
-          {
-            test: /\.(scss|sass)$/,
-            loader: 'css-loader!sass-loader',
-          },
+          // {
+          //   test: /\.(scss|sass)$/,
+          //   loader: 'css-loader!sass-loader',
+          // },
         ],
       },
       // image 规则

@@ -4,6 +4,7 @@
 import 'isomorphic-fetch';
 import Cookies from 'universal-cookie';
 import { isString, isFunction } from 'lodash';
+import history from './history';
 
 const logger = console;
 const isNode =
@@ -52,6 +53,10 @@ export class ErrAPI extends Err {
 
 export class ErrJSONParse extends Err {
   type = 'ErrJSONParse';
+}
+
+export class ErrUnauthroized extends Err {
+  type = 'ErrUnauthroized';
 }
 
 export class ErrRequest extends Err {
@@ -113,6 +118,12 @@ const bFetch = async (url, options) => {
           return json;
         }
         throw new ErrAPI(`api 返回错误 status:${json.status}`);
+      }
+      case 401: {
+        if (history.location.path !== '/login') {
+          history.go('/login');
+        }
+        throw new ErrUnauthroized();
       }
       default:
         throw new ErrRequest(`请求失败 ${res.status}:${res.statusText}`);

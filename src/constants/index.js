@@ -1,5 +1,10 @@
 /* eslint-disable import/prefer-default-export */
 
+const isNode =
+  Object.prototype.toString.call(
+    typeof process !== 'undefined' ? process : 0,
+  ) === '[object process]';
+
 export const SET_RUNTIME_VARIABLE = 'SET_RUNTIME_VARIABLE';
 
 export const ACTION_SEARCH_IMAGE = 'ACTION_SEARCH_IMAGE';
@@ -27,3 +32,7 @@ export const API = {
   USERINFO: '/v1/user/account/userinfo',
   LOGIN: '/v1/user/auth/login',
 };
+
+export function GetEnv(name) {
+  return isNode ? process.env[name] : window.App[name];
+}

@@ -6,6 +6,7 @@ module.exports = {
     loginUrl: process.env.REDIRECT_LOGIN_URL || 'http://localhost:8086',
   },
   api: {
+    COOKIE_DOMAIN: process.env.COOKIE_DOMAIN || 'localhost',
     // API URL to be used in the client-side code
     clientUrl: process.env.API_CLIENT_URL || `http://localhost:8081`,
     // API URL to be used in the server-side code

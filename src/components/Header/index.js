@@ -1,9 +1,11 @@
+/* eslint-disable no-script-url,import/no-unresolved,import/extensions */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from 'boxlinker-ui';
+import cookie from 'utils/cookie';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './index.css';
 
-/* eslint-disable no-script-url */
 
 class Header extends React.Component {
   static contextTypes = {
@@ -25,9 +27,7 @@ class Header extends React.Component {
           <span className="ic-user pull-right">
             <i className="demo-pli-male" />
           </span>
-          <div className="username hidden-xs">
-            {userinfo.name}
-          </div>
+          <div className="username hidden-xs">{userinfo.name}</div>
         </a>
         <div className="dropdown-menu dropdown-menu-md dropdown-menu-right panel-default">
           {/* Dropdown heading */}
@@ -74,14 +74,20 @@ class Header extends React.Component {
           </ul>
           {/* Dropdown footer */}
           <div className="pad-all text-right">
-            <a href="/" className="btn btn-primary">
+            <Button theme="primary" onClick={this.logout}>
+              <i className="fa fa-lock" />&nbsp;退出
+            </Button>
+            {/* <a href="/" className="btn btn-primary">
               <i className="demo-pli-unlock" /> Logout
-            </a>
+            </a> */}
           </div>
         </div>
       </li>
     );
   }
+  logout = () => {
+    cookie.remove();
+  };
   render() {
     return (
       <header id="navbar" className={s.root}>

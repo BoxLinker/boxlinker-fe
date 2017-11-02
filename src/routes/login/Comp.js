@@ -1,30 +1,60 @@
 import React from 'react';
+import Cookie from 'universal-cookie';
 // import PropTypes from 'prop-types';
 /* eslint-disable import/no-unresolved, import/extensions */
-import { Form, FormElement } from 'boxlinker-ui';
+import { Form, FormElement, Button } from 'boxlinker-ui';
 import bFetch from 'bfetch';
 import cls from './style';
-import { API } from '../../constants';
+import { API, GetEnv } from '../../constants';
+import history from '../../history';
+
+const cookie = new Cookie();
 
 class Comp extends React.Component {
   constructor(props) {
     super(props);
+    // ['onSubmit'].forEach(fn => {
+    //   this[fn] = this[fn].bind(this);
+    // });
     this.state = {
+      loading: false,
+      loginErrMsg: '',
       username: '',
       password: '',
       usernameErrMsg: '',
       passwordErrMsg: '',
     };
   }
-  onSubmit = async (data, err) => {
+  onSubmit = (data, err) => {
     if (err) {
       return;
     }
-    const res = await bFetch(API.LOGIN, {
+    this.setState({
+      loading: true,
+      loginErrMsg: '',
+    });
+    bFetch(API.LOGIN, {
       method: 'POST',
       body: JSON.stringify(data),
-    });
-    console.log('login res:>', res); // eslint-disable-line
+    })
+      .then(res => {
+        this.setState({
+          loading: false,
+        });
+        const token = res.results['X-Access-Token'];
+        if (token) {
+          cookie.set('X-Access-Token', token, {
+            domain: GetEnv('COOKIE_DOMAIN'),
+          });
+          history.replace('/');
+        }
+      })
+      .catch(() => {
+        this.setState({
+          loading: false,
+          loginErrMsg: '用户名或密码错误',
+        });
+      });
   };
   onElementErrMsg = err => {
     this.setState({
@@ -50,7 +80,7 @@ class Comp extends React.Component {
     }
   };
   getUsernameField() {
-    const { usernameErrMsg } = this.state;
+    const { usernameErrMsg, loading } = this.state;
     return (
       <FormElement
         name="username"
@@ -71,18 +101,17 @@ class Comp extends React.Component {
             className="form-control"
             onChange={this.onElementChange}
             placeholder="用户名"
+            disabled={loading}
           />
-          {usernameErrMsg
-            ? <p className="help-block">
-                {usernameErrMsg}
-              </p>
-            : null}
+          {usernameErrMsg ? (
+            <p className="help-block">{usernameErrMsg}</p>
+          ) : null}
         </div>
       </FormElement>
     );
   }
   getPasswordField() {
-    const { passwordErrMsg } = this.state;
+    const { passwordErrMsg, loading } = this.state;
     return (
       <FormElement
         name="password"
@@ -103,17 +132,22 @@ class Comp extends React.Component {
             className="form-control"
             onChange={this.onElementChange}
             placeholder="密码"
+            disabled={loading}
           />
-          {passwordErrMsg
-            ? <p className="help-block">
-                {passwordErrMsg}
-              </p>
-            : null}
+          {passwordErrMsg ? (
+            <p className="help-block">{passwordErrMsg}</p>
+          ) : null}
         </div>
       </FormElement>
     );
   }
+  clearErrMsg = () => {
+    this.setState({
+      loginErrMsg: '',
+    });
+  };
   render() {
+    const { loading, loginErrMsg } = this.state;
     return (
       <div style={cls.wrapper} className="cls-container">
         <div className="cls-content">
@@ -123,6 +157,14 @@ class Comp extends React.Component {
                 <h1 className="h3">从这里开始</h1>
                 <p>登录您的账户</p>
               </div>
+              {loginErrMsg ? (
+                <div className="alert alert-danger">
+                  <button className="close" onClick={this.clearErrMsg}>
+                    <i className="fa fa-close" />
+                  </button>
+                  {loginErrMsg}
+                </div>
+              ) : null}
               <Form
                 onSubmit={this.onSubmit}
                 getElements={() => [this.refUsername, this.refPassword]}
@@ -130,12 +172,9 @@ class Comp extends React.Component {
                 <div>
                   {this.getUsernameField()}
                   {this.getPasswordField()}
-                  <button
-                    className="btn btn-primary btn-lg btn-block"
-                    type="submit"
-                  >
+                  <Button loading={loading} block type="submit" theme="primary">
                     登录
-                  </button>
+                  </Button>
                 </div>
               </Form>
             </div>

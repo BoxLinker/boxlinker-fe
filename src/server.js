@@ -39,15 +39,16 @@ app.get('*', async (req, res, next) => {
       cookie: isDebug ? process.env.DEV_TOKEN : req.cookies['X-Access-Token'],
     });
 
-    const token = isDebug
-      ? process.env.DEV_TOKEN
-      : req.cookies['X-Access-Token'];
+    // const token = isDebug
+    //   ? process.env.DEV_TOKEN
+    //   : req.cookies['X-Access-Token'];
 
-    if (isDebug) {
-      res.cookie('X-Access-Token', token, {
-        domain: 'localhost',
-      });
-    }
+    // if (isDebug) {
+    //   res.cookie('X-Access-Token', token, {
+    //     domain: 'localhost',
+    //   });
+    // }
+    const token = req.cookies['X-Access-Token'];
     const initialState = {};
 
     const store = configureStore(initialState, {
@@ -58,7 +59,7 @@ app.get('*', async (req, res, next) => {
     store.dispatch(runtime('initialNow', Date.now()));
     await store.dispatch(userinfo(token));
     const user = store.getState().userinfo;
-    if (!user || !user.id) {
+    if ((!user || !user.id) && req.path !== '/login') {
       res.redirect(config.redirect.loginUrl);
       return;
     }
@@ -90,9 +91,7 @@ app.get('*', async (req, res, next) => {
 
     const data = { ...route };
     data.children = ReactDOM.renderToString(
-      <App context={context}>
-        {route.component}
-      </App>,
+      <App context={context}>{route.component}</App>,
     );
 
     data.styles = [{ id: 'css', cssText: [...css].join('') }];
@@ -103,6 +102,7 @@ app.get('*', async (req, res, next) => {
     data.scripts.push(assets.client.js);
     data.app = {
       apiUrl: config.api.clientUrl,
+      COOKIE_DOMAIN: config.api.COOKIE_DOMAIN,
       state: context.store.getState(),
     };
 
