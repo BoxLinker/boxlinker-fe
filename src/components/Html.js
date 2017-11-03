@@ -31,38 +31,36 @@ class Html extends React.Component {
         <head>
           <meta charSet="utf-8" />
           <meta httpEquiv="x-ua-compatible" content="ie=edge" />
-          <title>
-            {title}
-          </title>
+          <title>{title}</title>
           <meta name="description" content={description} />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="stylesheet" href="plugins/pace/pace.min.css" />
+          <link rel="stylesheet" href="/plugins/pace/pace.min.css" />
           <link
             rel="stylesheet"
-            href="plugins/font-awesome-4_7_0/css/font-awesome.min.css"
+            href="/plugins/font-awesome-4_7_0/css/font-awesome.min.css"
           />
-          <link rel="stylesheet" href="plugins/pace/pace.min.css" />
-          <link rel="stylesheet" href="plugins/animate-css/animate.min.css" />
-          <link rel="stylesheet" href="css/bootstrap.min.css" />
-          <link rel="stylesheet" href="css/nifty.min.css" />
-          {scripts.map(script =>
-            <link key={script} rel="preload" href={script} as="script" />,
-          )}
+          <link rel="stylesheet" href="/plugins/pace/pace.min.css" />
+          <link rel="stylesheet" href="/plugins/animate-css/animate.min.css" />
+          <link rel="stylesheet" href="/css/bootstrap.min.css" />
+          <link rel="stylesheet" href="/css/nifty.min.css" />
+          {scripts.map(script => (
+            <link key={script} rel="preload" href={script} as="script" />
+          ))}
           <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-          {styles.map(style =>
+          {styles.map(style => (
             <style
               key={style.id}
               id={style.id}
               dangerouslySetInnerHTML={{ __html: style.cssText }}
-            />,
-          )}
+            />
+          ))}
         </head>
         <body>
           <div id="app" dangerouslySetInnerHTML={{ __html: children }} />
-          <script src="plugins/pace/pace.min.js" />
-          <script src="js/jquery.min.js" />
-          <script src="js/bootstrap.min.js" />
-          <script src="js/nifty.min.js" />
+          <script src="/plugins/pace/pace.min.js" />
+          <script src="/js/jquery.min.js" />
+          <script src="/js/bootstrap.min.js" />
+          <script src="/js/nifty.min.js" />
           <script
             dangerouslySetInnerHTML={{ __html: `window.App=${serialize(app)}` }}
           />

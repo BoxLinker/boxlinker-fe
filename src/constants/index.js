@@ -11,6 +11,7 @@ export const ACTION_SEARCH_IMAGE = 'ACTION_SEARCH_IMAGE';
 export const ACTION_RECEIVE_IMAGE = 'ACTION_RECEIVE_IMAGE';
 export const ACTION_CLICK_MAINNAV = 'ACTION_CLICK_MAINNAV';
 export const ACTION_USERINFO = 'ACTION_USERINFO';
+export const TOKEN_NAME = 'X-Access-Token';
 
 export const URL_SEARCH_IMAGE = '/v1/registry/pub/image/list';
 export const URL_USERINFO = '/v1/user/account/userinfo';

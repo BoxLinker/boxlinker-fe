@@ -19,8 +19,8 @@ export default class NewServiceModal extends React.Component {
     this.context.event.on('app.newService.toggle', this.toggle);
   }
   componentWillUnmount() {
-    this.context.event.off('app.newService.show', this.show);
-    this.context.event.off('app.newService.toggle', this.toggle);
+    this.context.event.removeListener('app.newService.show', this.show);
+    this.context.event.removeListener('app.newService.toggle', this.toggle);
   }
   toggle = () => {
     this.setState({ visible: !this.state.visible });

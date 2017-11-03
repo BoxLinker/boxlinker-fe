@@ -6,11 +6,7 @@ class PageContent extends React.Component {
     children: PropTypes.element.isRequired,
   };
   render() {
-    return (
-      <div id="page-content">
-        {this.props.children}
-      </div>
-    );
+    return <div id="page-content">{this.props.children}</div>;
   }
 }
 

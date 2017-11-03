@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { Button } from 'boxlinker-ui';
 import cookie from 'utils/cookie';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import { TOKEN_NAME, GetEnv } from '../../constants';
 import s from './index.css';
-
 
 class Header extends React.Component {
   static contextTypes = {
@@ -86,7 +86,10 @@ class Header extends React.Component {
     );
   }
   logout = () => {
-    cookie.remove();
+    cookie.remove(TOKEN_NAME, {
+      domain: GetEnv('COOKIE_DOMAIN'),
+    });
+    window.location.href = '/login';
   };
   render() {
     return (
@@ -95,7 +98,7 @@ class Header extends React.Component {
           <div className="navbar-header">
             <a href="/" className="navbar-brand">
               <img
-                src="img/logo-icon.png"
+                src="/img/logo-icon.png"
                 alt="Boxlinker Logo"
                 className={`brand-icon ${s.brandIcon}`}
               />

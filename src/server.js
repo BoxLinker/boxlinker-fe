@@ -55,7 +55,6 @@ app.get('*', async (req, res, next) => {
       fetch,
       // I should not use `history` on server.. but how I do redirection? follow universal-router
     });
-
     store.dispatch(runtime('initialNow', Date.now()));
     await store.dispatch(userinfo(token));
     const user = store.getState().userinfo;

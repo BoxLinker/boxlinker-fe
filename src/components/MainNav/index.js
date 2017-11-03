@@ -10,33 +10,6 @@ class MainNav extends React.Component {
     event: PropTypes.object.isRequired,
     store: PropTypes.object,
   };
-  static propTypes = {
-    path: PropTypes.string,
-  };
-  static defaultProps = {
-    path: '',
-  };
-  constructor(props) {
-    super(props);
-    [].forEach(fn => {
-      this[fn] = this[fn].bind(this);
-    });
-  }
-  getNavItem({ href, title }) {
-    let h = href;
-    if (!href.startsWith('/')) {
-      h = `/${href}`;
-    }
-    const active = this.props.path === h ? 'active' : '';
-    return (
-      <li className={active}>
-        <Link to={href}>
-          <i className="fa fa-home" />
-          <span className="menu-title">{title}</span>
-        </Link>
-      </li>
-    );
-  }
   getUserPanel() {
     const { userinfo } = this.context.store.getState();
     if (!userinfo) {
@@ -47,7 +20,7 @@ class MainNav extends React.Component {
         <div className="pad-btm">
           <img
             className="img-circle img-md"
-            src="img/profile-photos/1.png"
+            src="/img/profile-photos/1.png"
             alt="User Profile"
           />
         </div>
@@ -89,6 +62,21 @@ class MainNav extends React.Component {
       </div>
     );
   }
+  getNavItem = ({ href, title }) => {
+    let h = href;
+    if (!href.startsWith('/')) {
+      h = `/${href}`;
+    }
+    const active = h === '' ? 'active' : '';
+    return (
+      <li className={active}>
+        <Link to={href}>
+          <i className="fa fa-home" />
+          <span className="menu-title">{title}</span>
+        </Link>
+      </li>
+    );
+  };
   render() {
     return (
       <nav id="mainnav-container" className={s.root}>

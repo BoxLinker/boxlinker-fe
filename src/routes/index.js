@@ -15,7 +15,18 @@ const routes = {
     },
     {
       path: '/services',
-      load: () => import(/* webpackChunkName: 'services' */ './services'),
+      children: [
+        {
+          path: '',
+          load: () =>
+            import(/* webpackChunkName: 'services' */ './services/list'),
+        },
+        {
+          path: '/create',
+          load: () =>
+            import(/* webpackChunkName: 'createService' */ './services/create'),
+        },
+      ],
     },
     {
       path: '/volumes',

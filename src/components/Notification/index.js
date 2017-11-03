@@ -18,7 +18,10 @@ class Notification extends React.Component {
     this.context.event.on('app.notification', this.showNotification);
   }
   componentWillUnmount() {
-    this.context.event.off('app.notification', this.showNotification);
+    this.context.event.removeListener(
+      'app.notification',
+      this.showNotification,
+    );
   }
   onRemoveItem = id => {
     const { list } = this.state;
@@ -33,9 +36,9 @@ class Notification extends React.Component {
     });
   };
   getOne(data) {
-    return data
-      ? <Item key={data.id} data={data} onRemove={this.onRemoveItem} />
-      : null;
+    return data ? (
+      <Item key={data.id} data={data} onRemove={this.onRemoveItem} />
+    ) : null;
   }
   showNotification = data => {
     const list = this.state.list.concat({
@@ -48,11 +51,7 @@ class Notification extends React.Component {
   };
   render() {
     const list = this.state.list.map(item => this.getOne(item));
-    return (
-      <div className={s.root}>
-        {list}
-      </div>
-    );
+    return <div className={s.root}>{list}</div>;
   }
 }
 export default withStyles(s)(Notification);

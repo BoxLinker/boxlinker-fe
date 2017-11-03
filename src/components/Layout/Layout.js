@@ -12,7 +12,6 @@ import Header from '../Header';
 import MainNav from '../MainNav';
 import Content from '../Content';
 import Notification from '../Notification';
-import NewServiceModal from '../Modal/NewService';
 
 class Layout extends React.Component {
   static propTypes = {
@@ -31,12 +30,9 @@ class Layout extends React.Component {
         <Header />
         <div className="boxed">
           <MainNav path={this.props.path} />
-          <Content>
-            {this.props.children}
-          </Content>
+          <Content>{this.props.children}</Content>
         </div>
         <Notification />
-        <NewServiceModal />
       </div>
     );
   }

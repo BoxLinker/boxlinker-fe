@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 /* eslint-disable import/no-unresolved, import/extensions */
 import { Form, FormElement, Select } from 'boxlinker-ui';
-import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { URL_SEARCH_IMAGE, API } from 'constants';
-import s from './Form.pcss';
 import FormPorts from './FormPorts';
 
 const hardwareConfiguration = [
@@ -359,4 +357,4 @@ class AppForm extends React.Component {
   }
 }
 
-export default withStyles(s)(AppForm);
+export default AppForm;

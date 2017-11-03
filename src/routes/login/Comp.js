@@ -6,7 +6,6 @@ import { Form, FormElement, Button } from 'boxlinker-ui';
 import bFetch from 'bfetch';
 import cls from './style';
 import { API, GetEnv } from '../../constants';
-import history from '../../history';
 
 const cookie = new Cookie();
 
@@ -46,7 +45,7 @@ class Comp extends React.Component {
           cookie.set('X-Access-Token', token, {
             domain: GetEnv('COOKIE_DOMAIN'),
           });
-          history.replace('/');
+          window.location.href = '/';
         }
       })
       .catch(() => {

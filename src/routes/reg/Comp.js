@@ -72,11 +72,9 @@ class Comp extends React.Component {
             onChange={this.onElementChange}
             placeholder="用户名"
           />
-          {usernameErrMsg
-            ? <p className="help-block">
-                {usernameErrMsg}
-              </p>
-            : null}
+          {usernameErrMsg ? (
+            <p className="help-block">{usernameErrMsg}</p>
+          ) : null}
         </div>
       </FormElement>
     );
@@ -104,11 +102,9 @@ class Comp extends React.Component {
             onChange={this.onElementChange}
             placeholder="密码"
           />
-          {passwordErrMsg
-            ? <p className="help-block">
-                {passwordErrMsg}
-              </p>
-            : null}
+          {passwordErrMsg ? (
+            <p className="help-block">{passwordErrMsg}</p>
+          ) : null}
         </div>
       </FormElement>
     );
