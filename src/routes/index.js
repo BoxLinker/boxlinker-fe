@@ -26,6 +26,11 @@ const routes = {
           load: () =>
             import(/* webpackChunkName: 'createService' */ './services/create'),
         },
+        {
+          path: '/:name/get',
+          load: () =>
+            import(/* webpackChunkName: 'getService' */ './services/detail'),
+        },
       ],
     },
     {

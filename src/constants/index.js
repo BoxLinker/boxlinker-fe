@@ -19,6 +19,7 @@ export const API = {
   SERVICE: {
     CREATE: '/v1/application/auth/service',
     QUERY: '/v1/application/auth/service',
+    GET: name => `/v1/application/auth/service/${name}`,
     UPDATE: name => `/v1/application/auth/service/${name}`,
     DELETE: name => `/v1/application/auth/service/${name}`,
     EXISTS: name => `/v1/application/auth/service/${name}/exists`,

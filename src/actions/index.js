@@ -26,26 +26,14 @@ export const getServices = createAction('GET_SERVICES', async pagination => {
   }
 });
 
-export const getServices1 = createAction(
-  'GET_SERVICES1',
-  async (fetch, pagination) => {
-    let page = pagination;
-    if (!pagination) {
-      page = {
-        currentPage: 1,
-        pageCount: 10,
-      };
-    }
-    const { currentPage, pageCount } = page;
-    const data = await fetch(
-      `${API.SERVICE.QUERY}?currentPage=${currentPage}&pageCount=${pageCount}`,
-      {
-        method: 'GET',
-      },
-    );
-    if (data.status === 0) {
+export const getServiceDetail = createAction(
+  'GET_SERVICE_DETAIL',
+  async name => {
+    try {
+      const data = await bFetch(API.SERVICE.GET(name));
       return data.results;
+    } catch (err) {
+      return null;
     }
-    return {};
   },
 );

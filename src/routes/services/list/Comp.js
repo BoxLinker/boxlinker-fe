@@ -67,6 +67,7 @@ const columns = [
 ];
 
 class Comp extends React.Component {
+  static displayName = 'ServiceList';
   static contextTypes = {
     fetch: PropTypes.func,
   };
@@ -91,12 +92,19 @@ class Comp extends React.Component {
     const { services } = this.props;
     // console.log('>>>', services);
     return (
-      <Grid
-        rowKey="name"
-        columns={columns}
-        data={services}
-        onLoad={this.onLoadPage}
-      />
+      <div className="panel">
+        <div className="panel-heading">
+          <h4 className="panel-title">服务列表</h4>
+        </div>
+        <div className="panel-body">
+          <Grid
+            rowKey="name"
+            columns={columns}
+            data={services}
+            onLoad={this.onLoadPage}
+          />
+        </div>
+      </div>
     );
   }
 }
