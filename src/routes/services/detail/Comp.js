@@ -16,7 +16,7 @@ class Comp extends React.Component {
   componentDidMount() {
     this.props.loadServiceDetail(this.props.name);
     this.props.loadServicePodLog(
-      'e6db864935594c15847325e074f761431cf1884a1084711e9d03d76a1dc9406d',
+      '17af5da76bc1c863d45696a6c3e5c250329ee8a3fa17cd5bb401800b2e4a4350',
       this.moreLog,
     );
   }

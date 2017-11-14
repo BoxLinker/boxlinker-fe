@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom/server';
 import App from 'components/App';
 import Html from 'components/Html';
 import PrettyError from 'pretty-error';
-import nodeFetch from 'node-fetch';
+// import nodeFetch from 'node-fetch';
 import { EventEmitter } from 'events';
 
 import config from './config';
@@ -15,14 +15,14 @@ import router from './router';
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
 import errorPageStyle from './routes/error/ErrorPage.css';
-import createFetch from './createFetch';
+// import createFetch from './createFetch';
 import configureStore from './store/configureStore';
 // import { setRuntimeVariable } from './actions/runtime';
 // import { getUserInfo } from './actions/user';
 import { runtime, userinfo } from './actions';
 
-const isDebug = process.env.NODE_ENV === 'development';
-
+// const isDebug = process.env.NODE_ENV === 'development';
+const env = config();
 const app = express();
 
 app.use(express.static(path.resolve(__dirname, 'public')));
@@ -34,10 +34,10 @@ app.get('*', async (req, res, next) => {
   try {
     const css = new Set();
 
-    const fetch = createFetch(nodeFetch, {
-      baseUrl: config.api.serverUrl,
-      cookie: isDebug ? process.env.DEV_TOKEN : req.cookies['X-Access-Token'],
-    });
+    // const fetch = createFetch(nodeFetch, {
+    //   baseUrl: config.api.serverUrl,
+    //   cookie: isDebug ? process.env.DEV_TOKEN : req.cookies['X-Access-Token'],
+    // });
 
     // const token = isDebug
     //   ? process.env.DEV_TOKEN
@@ -52,14 +52,14 @@ app.get('*', async (req, res, next) => {
     const initialState = {};
 
     const store = configureStore(initialState, {
-      fetch,
+      // fetch,
       // I should not use `history` on server.. but how I do redirection? follow universal-router
     });
     store.dispatch(runtime('initialNow', Date.now()));
     await store.dispatch(userinfo(token));
     const user = store.getState().userinfo;
     if ((!user || !user.id) && req.path !== '/login') {
-      res.redirect(config.redirect.loginUrl);
+      res.redirect(env.BOXLINKER_REDIRECT_LOGIN_URL);
       return;
     }
     const context = {
@@ -71,7 +71,7 @@ app.get('*', async (req, res, next) => {
         styles.forEach(style => css.add(style._getCss()));
       },
       // Universal HTTP client
-      fetch,
+      // fetch,
       // You can access redux through react-redux connect
       store,
       storeSubscription: null,
@@ -100,8 +100,8 @@ app.get('*', async (req, res, next) => {
     }
     data.scripts.push(assets.client.js);
     data.app = {
-      apiUrl: config.api.clientUrl,
-      COOKIE_DOMAIN: config.api.COOKIE_DOMAIN,
+      env,
+      // COOKIE_DOMAIN: env.BOXLINKER_COOKIE_DOMAIN,
       state: context.store.getState(),
     };
 

@@ -12,7 +12,9 @@ const isNode =
     typeof process !== 'undefined' ? process : 0,
   ) === '[object process]';
 
-const baseURL = isNode ? process.env.API_SERVER_URL : window.App.apiUrl;
+const baseURL = isNode
+  ? process.env.BOXLINKER_API_SERVER_URL
+  : window.App.env.BOXLINKER_API_SERVER_URL;
 
 /* eslint-disable no-console */
 const cookies = new Cookies();

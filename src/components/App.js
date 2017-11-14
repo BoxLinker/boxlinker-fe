@@ -6,7 +6,7 @@ const contextType = {
   event: PropTypes.object.isRequired,
   insertCss: PropTypes.func.isRequired,
   // Universal HTTP client
-  fetch: PropTypes.func.isRequired,
+  // fetch: PropTypes.func.isRequired,
   // Integrate Redux
   // http://redux.js.org/docs/basics/UsageWithReact.html
   ...ReduxProvider.childContextTypes,

@@ -87,7 +87,7 @@ class Header extends React.Component {
   }
   logout = () => {
     cookie.remove(TOKEN_NAME, {
-      domain: GetEnv('COOKIE_DOMAIN'),
+      domain: GetEnv('BOXLINKER_COOKIE_DOMAIN'),
     });
     window.location.href = '/login';
   };

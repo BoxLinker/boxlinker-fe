@@ -4,10 +4,10 @@ import ReactDOM from 'react-dom';
 import deepForceUpdate from 'react-deep-force-update';
 import queryString from 'query-string';
 import { EventEmitter } from 'events';
-import Cookies from 'universal-cookie';
+// import Cookies from 'universal-cookie';
 // import { createPath } from 'history/PathUtils';
 import App from './components/App';
-import createFetch from './createFetch';
+// import createFetch from './createFetch';
 import history from './history';
 import { updateMeta } from './DOMUtils';
 import router from './router';
@@ -15,7 +15,7 @@ import configureStore from './store/configureStore';
 
 /* eslint-disable global-require */
 
-const cookies = new Cookies();
+// const cookies = new Cookies();
 
 // Global (context) variables that can be easily accessed from any React component
 // https://facebook.github.io/react/docs/context.html
@@ -32,10 +32,10 @@ const context = {
     };
   },
   // Universal HTTP client
-  fetch: createFetch(self.fetch, {
-    baseUrl: window.App.apiUrl,
-    cookie: cookies.get('X-Access-Token'),
-  }),
+  // fetch: createFetch(self.fetch, {
+  //   baseUrl: window.App.apiUrl,
+  //   cookie: cookies.get('X-Access-Token'),
+  // }),
 };
 
 // Switch off the native scroll restoration behavior and handle it manually

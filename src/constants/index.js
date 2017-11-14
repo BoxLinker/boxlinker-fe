@@ -37,5 +37,5 @@ export const API = {
 };
 
 export function GetEnv(name) {
-  return isNode ? process.env[name] : window.App[name];
+  return isNode ? process.env[name] : window.App.env[name];
 }

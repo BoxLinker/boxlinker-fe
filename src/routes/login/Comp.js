@@ -43,7 +43,7 @@ class Comp extends React.Component {
         const token = res.results['X-Access-Token'];
         if (token) {
           cookie.set('X-Access-Token', token, {
-            domain: GetEnv('COOKIE_DOMAIN'),
+            domain: GetEnv('BOXLINKER_COOKIE_DOMAIN'),
           });
           window.location.href = '/';
         }
