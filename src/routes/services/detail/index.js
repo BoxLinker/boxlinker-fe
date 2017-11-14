@@ -2,13 +2,13 @@ import React from 'react';
 import Layout from 'components/Layout';
 import Container from './Container';
 
-async function action({ url }) {
+async function action({ url, params }) {
   return {
-    chunks: ['application-detail'],
+    chunks: ['getService'],
     title: '应用详情',
     component: (
       <Layout path={url}>
-        <Container />
+        <Container name={params.name} />
       </Layout>
     ),
   };

@@ -80,7 +80,7 @@ const addParams = (url, params) => {
   return `${url}${/\?/.test(url) ? '&' : '?'}${arr.join('&')}`;
 };
 
-const bFetch = async (url, options) => {
+const bFetch = async (url, options = {}) => {
   const defaults = {
     method: 'GET',
     headers: {
@@ -105,6 +105,9 @@ const bFetch = async (url, options) => {
         ...(options.token && { 'X-Access-Token': options.token }),
       },
     });
+    if (options.rawResponse) {
+      return res;
+    }
     switch (res.status) {
       case 200: {
         const txt = await res.text();

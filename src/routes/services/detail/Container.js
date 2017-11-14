@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getServiceDetail } from 'actions';
+import { getServiceDetail, getServicePodLog } from 'actions';
 import Comp from './Comp';
 
 const mapStateToProps = state => ({
@@ -9,6 +9,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   loadServiceDetail: pagination => {
     dispatch(getServiceDetail(pagination));
+  },
+  loadServicePodLog: (containerID, callback) => {
+    getServicePodLog(containerID, callback);
   },
 });
 

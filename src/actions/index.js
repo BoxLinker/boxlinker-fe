@@ -3,6 +3,8 @@ import { createAction } from 'redux-actions';
 import bFetch from 'bfetch';
 import { API } from '../constants';
 
+const log = console.log; //eslint-disable-line
+
 export const runtime = createAction('SET_RUNTIME_VARIABLE', (name, value) => ({
   name,
   value,
@@ -37,3 +39,30 @@ export const getServiceDetail = createAction(
     }
   },
 );
+
+export const getServicePodLog = async (containerID, callback) => {
+  try {
+    const response = await bFetch(API.SERVICE.LOG(containerID), {
+      rawResponse: true,
+    });
+    const reader = response.body.getReader();
+    // The following function handles each data chunk
+    const push = () =>
+      // "done" is a Boolean and value a "Uint8Array"
+      reader
+        .read()
+        .then(({ done, value }) => {
+          // Is there no more data to read?
+          if (done) {
+            // Tell the browser that we have finished sending data
+            return;
+          }
+          callback(new TextDecoder('utf-8').decode(value));
+          // Get the data and send it to the browser via the controller
+        })
+        .then(push);
+    push();
+  } catch (err) {
+    console.error(err);
+  }
+};
