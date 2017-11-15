@@ -3,53 +3,84 @@ import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { Grid } from 'boxlinker-ui'; // eslint-disable-line
 import LogView from 'components/Log';
+import InputViewer from 'components/InputViewer';
+import { PanelTabs } from 'components/Tabs';
 import s from './index.css'; // eslint-disable-line
-/* eslint-disable no-script-url */
+/* eslint-disable no-script-url,class-methods-use-this */
 
 class Comp extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
     loadServiceDetail: PropTypes.func.isRequired,
-    loadServicePodLog: PropTypes.func.isRequired,
   };
   static defaultProps = {};
   componentDidMount() {
     this.props.loadServiceDetail(this.props.name);
-    this.props.loadServicePodLog(
-      '17af5da76bc1c863d45696a6c3e5c250329ee8a3fa17cd5bb401800b2e4a4350',
-      this.moreLog,
-    );
   }
-  moreLog = text => {
-    try {
-      const value = text.substring(
-        text.indexOf('{'),
-        text.lastIndexOf('}') + 1,
-      );
-
-      const json = JSON.parse(value);
-      if (json && json.hits && Array.isArray(json.hits.hits)) {
-        const lines = json.hits.hits.map(hit => ({
-          // id: hit._id, //eslint-disable-line
-          value: hit._source.log, //eslint-disable-line
-          ts: hit._source['@timestamp'], //eslint-disable-line
-        }));
-        this.logRef.addLines(lines);
-      }
-    } catch (err) {
-      console.error('parse log error: ', text);
+  onSwitchTab = key => {
+    if (key !== 'log') {
+      this.logRef.stop();
+    } else {
+      this.logRef.start();
     }
   };
-  render() {
+  getTabBaseinfo() {
     return (
       <div>
-        <div>{this.props.name}</div>
-        <LogView
-          ref={ref => {
-            this.logRef = ref;
-          }}
+        <InputViewer
+          inline
+          name="name"
+          label={<h5>名称</h5>}
+          value="jfkdlsjfdkls"
         />
       </div>
+    );
+  }
+  getTabLog() {
+    return (
+      <LogView
+        ref={ref => {
+          this.logRef = ref;
+        }}
+      />
+    );
+  }
+  getTabSettings() {
+    return <div>设置</div>;
+  }
+  getTabMonitor() {
+    return <div>监控</div>;
+  }
+  render() {
+    const { name } = this.props;
+    return (
+      <PanelTabs
+        title={name}
+        activeKey="baseinfo"
+        onSwitchTab={this.onSwitchTab}
+        tabs={[
+          {
+            key: 'baseinfo',
+            label: '基础信息',
+            tabView: this.getTabBaseinfo(),
+          },
+          {
+            key: 'monitor',
+            label: '监控',
+            tabView: this.getTabMonitor(),
+          },
+          {
+            key: 'log',
+            label: '日志',
+            tabView: this.getTabLog(),
+          },
+          {
+            key: 'settings',
+            label: '设置',
+            tabView: this.getTabSettings(),
+          },
+        ]}
+      />
     );
   }
 }

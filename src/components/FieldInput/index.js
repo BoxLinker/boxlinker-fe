@@ -5,39 +5,51 @@ import Field from '../Field';
 export default class FieldInput extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
-    label: PropTypes.string,
+    // label: PropTypes.string,
+    value: PropTypes.string,
+    staticMode: PropTypes.bool,
+    inlineMode: PropTypes.bool,
     type: PropTypes.string,
     placeholder: PropTypes.string,
   };
   static defaultProps = {
-    label: '',
+    // label: '',
+    value: '',
+    staticMode: false,
+    inlineMode: false,
     type: 'text',
     placeholder: '',
   };
   constructor(props) {
     super(props);
     this.state = {
-      value: '',
+      value: props.value,
     };
   }
   onChange = e => {
     const value = e.target.value;
     this.setState({ value });
   };
-  render() {
-    const { name, type, label, placeholder } = this.props;
+  getInput() {
+    const { name, type, placeholder, staticMode } = this.props;
     const { value } = this.state;
+    if (staticMode) {
+      return <p className="form-control-static">{value}</p>;
+    }
+
     return (
-      <Field name={name} label={label}>
-        <input
-          value={value}
-          name={name}
-          type={type}
-          className="form-control"
-          onChange={this.onChange}
-          placeholder={placeholder}
-        />
-      </Field>
+      <input
+        value={value}
+        name={name}
+        type={type}
+        className="form-control"
+        onChange={this.onChange}
+        placeholder={placeholder}
+      />
     );
+  }
+  render() {
+    const { ...props } = this.props;
+    return <Field {...props}>{this.getInput()}</Field>;
   }
 }

@@ -12,9 +12,9 @@ const isNode =
     typeof process !== 'undefined' ? process : 0,
   ) === '[object process]';
 
-const baseURL = isNode
+export const BaseURL = isNode
   ? process.env.BOXLINKER_API_SERVER_URL
-  : window.App.env.BOXLINKER_API_SERVER_URL;
+  : window.App.env.BOXLINKER_API_CLIENT_URL;
 
 /* eslint-disable no-console */
 const cookies = new Cookies();
@@ -96,7 +96,7 @@ const bFetch = async (url, options = {}) => {
     ...options.pagination,
   };
   try {
-    const uUrl = addParams(`${baseURL}${url}`, params);
+    const uUrl = addParams(`${BaseURL}${url}`, params);
     logger.log(`fetch: ${uUrl}`);
     const res = await fetch(uUrl, {
       ...defaults,

@@ -2,11 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormElement } from 'boxlinker-ui'; // eslint-disable-line
 
+/* eslint-disable jsx-a11y/label-has-for */
+
 const REQUIRED_TIP = '不能为空';
 
 export default class Field extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
+    inlineMode: PropTypes.bool,
     label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     rules: PropTypes.array, // eslint-disable-line
     required: PropTypes.bool,
@@ -15,6 +18,7 @@ export default class Field extends React.Component {
     onGetValue: PropTypes.func,
   };
   static defaultProps = {
+    inlineMode: false,
     label: null,
     rules: [],
     required: false,
@@ -33,9 +37,30 @@ export default class Field extends React.Component {
       errMsg: err[1],
     });
   };
-  render() {
-    const { name, label, children, required, requiredTip, rules } = this.props;
+  getBody() {
     const { errMsg } = this.state;
+    const { inlineMode, label, children } = this.props;
+    if (inlineMode) {
+      return (
+        <div className={`form-group ${errMsg ? 'has-error' : ''}`}>
+          <label className="col-md-3 control-label">{label}</label>
+          <div className="col-md-9">
+            {children}
+            {errMsg ? <p className="help-block">{errMsg}</p> : null}
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div className={`form-group ${errMsg ? 'has-error' : ''}`}>
+        {label ? <label className="control-label">{label}</label> : null}
+        {children}
+        {errMsg ? <p className="help-block">{errMsg}</p> : null}
+      </div>
+    );
+  }
+  render() {
+    const { name, required, requiredTip, rules } = this.props;
     if (required) {
       rules.unshift(`required:${requiredTip || REQUIRED_TIP}`);
     }
@@ -46,11 +71,7 @@ export default class Field extends React.Component {
         onErrMsg={this.onErrMsg}
         getValue={this.props.onGetValue}
       >
-        <div className={`form-group ${errMsg ? 'has-error' : ''}`}>
-          {label ? <h5>{label}</h5> : null}
-          {children}
-          {errMsg ? <p className="help-block">{errMsg}</p> : null}
-        </div>
+        {this.getBody()}
       </FormElement>
     );
   }

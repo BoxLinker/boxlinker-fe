@@ -52,7 +52,6 @@ const getPortLineData = item => ({
 
 class AppForm extends React.Component {
   static contextTypes = {
-    fetch: PropTypes.func.isRequired,
     event: PropTypes.object,
   };
   constructor(props) {
