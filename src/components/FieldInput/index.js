@@ -31,12 +31,8 @@ export default class FieldInput extends React.Component {
     this.setState({ value });
   };
   getInput() {
-    const { name, type, placeholder, staticMode } = this.props;
+    const { name, type, placeholder } = this.props;
     const { value } = this.state;
-    if (staticMode) {
-      return <p className="form-control-static">{value}</p>;
-    }
-
     return (
       <input
         value={value}

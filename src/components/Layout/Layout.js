@@ -5,7 +5,8 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 // external-global styles must be imported in your JS.
 import normalizeCss from 'normalize.css';
 /* eslint-disable import/no-unresolved */
-import buiCss from 'boxlinker-ui/dist/bui.css';
+// import buiCss from 'boxlinker-ui/dist/bui.css';
+import BUI_CSS from 'bui/style.less';
 
 import s from './Layout.css';
 import Header from '../Header';
@@ -38,4 +39,9 @@ class Layout extends React.Component {
   }
 }
 
-export default withStyles(normalizeCss, buiCss, s)(Layout);
+export default withStyles(
+  normalizeCss,
+  BUI_CSS,
+  // buiCss,
+  s,
+)(Layout);

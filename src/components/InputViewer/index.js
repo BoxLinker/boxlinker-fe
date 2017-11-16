@@ -6,9 +6,11 @@ import FieldInput from '../FieldInput';
 class InputViewer extends React.Component {
   static propTypes = {
     value: PropTypes.string,
+    onSave: PropTypes.func,
   };
   static defaultProps = {
     value: '',
+    onSave: () => {},
   };
   constructor(props) {
     super(props);
@@ -21,10 +23,13 @@ class InputViewer extends React.Component {
       editMode: true,
     });
   };
-  save = () => {
-    this.setState({
-      editMode: false,
-    });
+  save = async () => {
+    const success = await this.props.onSave();
+    if (success) {
+      this.setState({
+        editMode: false,
+      });
+    }
   };
   cancel = () => {
     this.setState({

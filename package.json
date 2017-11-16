@@ -85,6 +85,8 @@
     "jest-codemods": "^0.10.1",
     "jquery": "^3.2.1",
     "jscodeshift": "^0.3.32",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
     "lint-staged": "^4.0.0",
     "markdown-it": "^8.3.1",
     "mkdirp": "^0.5.1",

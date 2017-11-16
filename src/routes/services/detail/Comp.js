@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { Grid } from 'boxlinker-ui'; // eslint-disable-line
 import LogView from 'components/Log';
-import InputViewer from 'components/InputViewer';
+// import InputViewer from 'components/InputViewer';
 import { PanelTabs } from 'components/Tabs';
 import s from './index.css'; // eslint-disable-line
+import { BaseInfoTab } from './tabs';
 /* eslint-disable no-script-url,class-methods-use-this */
 
 class Comp extends React.Component {
@@ -26,14 +27,15 @@ class Comp extends React.Component {
   };
   getTabBaseinfo() {
     return (
-      <div>
-        <InputViewer
-          inline
-          name="name"
-          label={<h5>名称</h5>}
-          value="jfkdlsjfdkls"
-        />
-      </div>
+      <BaseInfoTab />
+      // <div>
+      //   <InputViewer
+      //     inline
+      //     name="name"
+      //     label={<h5>名称</h5>}
+      //     value="jfkdlsjfdkls"
+      //   />
+      // </div>
     );
   }
   getTabLog() {

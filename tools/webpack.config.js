@@ -12,8 +12,8 @@ const isAnalyze =
   process.argv.includes('--analyze') || process.argv.includes('--analyse');
 
 const reScript = /\.jsx?$/;
-// const reStyle = /\.(css|less|scss|sss|pcss)$/;
-const reStyle = /\.(css|sss|pcss)$/;
+const reStyle = /\.(css|less|scss|sss|pcss)$/;
+// const reStyle = /\.(css|sss|pcss)$/;
 const reImage = /\.(bmp|gif|jpe?g|png|svg)$/;
 const staticAssetName = isDebug
   ? '[path][name].[ext]?[hash:8]'
@@ -75,7 +75,7 @@ const config = {
 
             // Experimental ECMAScript proposals
             // https://babeljs.io/docs/plugins/#presets-stage-x-experimental-presets-
-            'stage-0',
+            'stage-1',
             // JSX, Flow
             // https://github.com/babel/babel/tree/master/packages/babel-preset-react
             'react',
@@ -102,10 +102,12 @@ const config = {
             issuer: { not: [reStyle] },
             use: 'isomorphic-style-loader',
           },
-
           // Process external/third-party styles
           {
-            exclude: path.resolve(__dirname, '../src'),
+            exclude: [
+              path.resolve(__dirname, '../src/components'),
+              path.resolve(__dirname, '../src/routes'),
+            ],
             loader: 'css-loader',
             options: {
               sourceMap: isDebug,
@@ -116,7 +118,10 @@ const config = {
 
           // Process internal/project styles (from src folder)
           {
-            include: path.resolve(__dirname, '../src'),
+            include: [
+              path.resolve(__dirname, '../src/components'),
+              path.resolve(__dirname, '../src/routes'),
+            ],
             loader: 'css-loader',
             options: {
               // CSS Loader https://github.com/webpack/css-loader
@@ -146,24 +151,10 @@ const config = {
           // Compile Less to CSS
           // https://github.com/webpack-contrib/less-loader
           // Install dependencies before uncommenting: yarn add --dev less-loader less
-          // {
-          //   test: /\.less$/,
-          //   use: [
-          //     {
-          //       loader: 'style-loader',
-          //     },
-          //     {
-          //       loader: 'css-loader',
-          //     },
-          //     {
-          //       loader: 'less-loader',
-          //       options: {
-          //         strictMath: true,
-          //         noIeCompat: true,
-          //       },
-          //     },
-          //   ],
-          // },
+          {
+            test: /\.less$/,
+            loader: 'less-loader',
+          },
 
           // Compile Sass to CSS
           // https://github.com/webpack-contrib/sass-loader

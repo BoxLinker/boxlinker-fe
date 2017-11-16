@@ -16,9 +16,13 @@ export default class Field extends React.Component {
     requiredTip: PropTypes.string,
     children: PropTypes.any, // eslint-disable-line
     onGetValue: PropTypes.func,
+    value: PropTypes.any, // eslint-disable-line
+    staticMode: PropTypes.bool,
   };
   static defaultProps = {
     inlineMode: false,
+    staticMode: false,
+    value: '',
     label: null,
     rules: [],
     required: false,
@@ -60,9 +64,19 @@ export default class Field extends React.Component {
     );
   }
   render() {
-    const { name, required, requiredTip, rules } = this.props;
+    const {
+      name,
+      required,
+      requiredTip,
+      rules,
+      value,
+      staticMode,
+    } = this.props;
     if (required) {
       rules.unshift(`required:${requiredTip || REQUIRED_TIP}`);
+    }
+    if (staticMode) {
+      return <p className="form-control-static">{value}</p>;
     }
     return (
       <FormElement

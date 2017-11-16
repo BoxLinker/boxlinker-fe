@@ -1,0 +1,1 @@
+export BaseInfoTab from './BaseInfo';
