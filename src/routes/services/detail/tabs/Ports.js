@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Grid, Button } from 'bui';
 import FieldInput from 'components/FieldInput';
 import FieldSelect from 'components/FieldSelect';
+import { cloneDeep } from 'lodash';
 
 const protocolData = [
   {
@@ -19,37 +20,19 @@ const protocolData = [
   },
 ];
 
-const data = [
-  {
-    id: 1,
-    port: '8080',
-    protocol: 'TCP',
-    path: '/test',
-  },
-  {
-    id: 2,
-    port: '5678',
-    protocol: 'HTTP',
-    path: '/test',
-  },
-  {
-    id: 4,
-    port: '8080',
-    protocol: 'TCP',
-    path: '/test',
-  },
-];
-
 class Ports extends React.Component {
   static propTypes = {
     onSave: PropTypes.func,
+    data: PropTypes.array, // eslint-disable-line
   };
   static defaultProps = {
     onSave: () => {},
+    data: [],
   };
   constructor(props) {
     super(props);
     this.state = {
+      data: cloneDeep(props.data),
       editMode: false,
       saving: false,
     };
@@ -118,14 +101,32 @@ class Ports extends React.Component {
       {
         field: 'operate',
         label: '操作',
-        render: () =>
+        render: (v, item) =>
           editMode ? (
-            <Button>
+            <Button
+              onClick={() => {
+                this.removeLine(item);
+              }}
+            >
               <i className="fa fa-minus" />
             </Button>
           ) : null,
       },
     ];
+  }
+  removeLine(item) {
+    const { data } = this.state;
+    const d = cloneDeep(data); // 这里一定要给 state 设置新的数组
+    for (let i = 0; i < d.length; i += 1) {
+      const k = d[i];
+      if (k.id === item.id) {
+        d.splice(i, 1);
+        break;
+      }
+    }
+    this.setState({
+      data: d,
+    });
   }
   edit = () => {
     this.setState({
@@ -135,6 +136,7 @@ class Ports extends React.Component {
   cancel = () => {
     this.setState({
       editMode: false,
+      data: this.props.data,
     });
   };
   save = () => {
@@ -156,6 +158,7 @@ class Ports extends React.Component {
     }
   };
   render() {
+    const { data } = this.state;
     return (
       <div>
         <label className="control-label" htmlFor="grid">

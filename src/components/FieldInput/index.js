@@ -11,6 +11,7 @@ export default class FieldInput extends React.Component {
     inlineMode: PropTypes.bool,
     type: PropTypes.string,
     placeholder: PropTypes.string,
+    onChange: PropTypes.func,
   };
   static defaultProps = {
     // label: '',
@@ -19,6 +20,7 @@ export default class FieldInput extends React.Component {
     inlineMode: false,
     type: 'text',
     placeholder: '',
+    onChange: () => {},
   };
   constructor(props) {
     super(props);
@@ -28,14 +30,15 @@ export default class FieldInput extends React.Component {
   }
   onChange = e => {
     const value = e.target.value;
-    this.setState({ value });
+    // this.setState({ value });
+    this.props.onChange(value);
   };
   getInput() {
     const { name, type, placeholder } = this.props;
     const { value } = this.state;
     return (
       <input
-        value={value}
+        defaultValue={value}
         name={name}
         type={type}
         className="form-control"

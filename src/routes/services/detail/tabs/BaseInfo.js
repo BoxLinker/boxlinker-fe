@@ -66,7 +66,28 @@ class BaseInfoTab extends React.Component {
         <div className="row">
           <div className="col-md-12">
             <hr className="bord-no" />
-            <Ports />
+            <Ports
+              data={[
+                {
+                  id: 1,
+                  port: '8080',
+                  protocol: 'TCP',
+                  path: '/test',
+                },
+                {
+                  id: 2,
+                  port: '5678',
+                  protocol: 'HTTP',
+                  path: '/test',
+                },
+                {
+                  id: 4,
+                  port: '8080',
+                  protocol: 'TCP',
+                  path: '/test',
+                },
+              ]}
+            />
           </div>
         </div>
       </div>
