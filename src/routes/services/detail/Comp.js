@@ -6,7 +6,7 @@ import LogView from 'components/Log';
 // import InputViewer from 'components/InputViewer';
 import { PanelTabs } from 'components/Tabs';
 import s from './index.css'; // eslint-disable-line
-import { BaseInfoTab } from './tabs';
+import { BaseInfoTab, MonitorTab } from './tabs';
 /* eslint-disable no-script-url,class-methods-use-this */
 
 class Comp extends React.Component {
@@ -19,6 +19,15 @@ class Comp extends React.Component {
     this.props.loadServiceDetail(this.props.name);
   }
   onSwitchTab = key => {
+    ['baseinfo', 'log', 'monitor', 'settings'].forEach(index => {
+      const ref = this[`${index}Ref`];
+      if (key === index) {
+        ref.focus && ref.focus(); // eslint-disable-line
+      } else {
+        ref.blur && ref.blur(); // eslint-disable-line
+      }
+    });
+
     if (key !== 'log') {
       this.logRef.stop();
     } else {
@@ -27,15 +36,11 @@ class Comp extends React.Component {
   };
   getTabBaseinfo() {
     return (
-      <BaseInfoTab />
-      // <div>
-      //   <InputViewer
-      //     inline
-      //     name="name"
-      //     label={<h5>名称</h5>}
-      //     value="jfkdlsjfdkls"
-      //   />
-      // </div>
+      <BaseInfoTab
+        ref={ref => {
+          this.baseinfoRef = ref;
+        }}
+      />
     );
   }
   getTabLog() {
@@ -48,10 +53,24 @@ class Comp extends React.Component {
     );
   }
   getTabSettings() {
-    return <div>设置</div>;
+    return (
+      <div
+        ref={ref => {
+          this.settingsRef = ref;
+        }}
+      >
+        设置
+      </div>
+    );
   }
   getTabMonitor() {
-    return <div>监控</div>;
+    return (
+      <MonitorTab
+        ref={ref => {
+          this.monitorRef = ref;
+        }}
+      />
+    );
   }
   render() {
     const { name } = this.props;

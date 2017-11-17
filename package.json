@@ -61,6 +61,7 @@
     "babel-types": "^6.25.0",
     "bootstrap": "^3.3.7",
     "browser-sync": "^2.18.12",
+    "chart.js": "^2.7.1",
     "chokidar": "^1.7.0",
     "cross-env": "^5.0.1",
     "css-loader": "^0.28.4",
