@@ -4,6 +4,8 @@ import bFetch, { BaseURL } from 'bfetch';
 import Cookies from 'universal-cookie';
 import { API } from '../constants';
 
+export { default as ServiceAction } from './services';
+
 const logger = console;
 const log = console.log; //eslint-disable-line
 

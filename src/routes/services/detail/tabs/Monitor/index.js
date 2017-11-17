@@ -1,15 +1,17 @@
 import React from 'react';
 import Chart from 'chart.js';
-/* eslint-disable */
+import { ServiceAction } from 'actions';
+
+const logger = console;
 
 const options = {
-  type: 'bar',
+  type: 'line',
   data: {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    labels: ['0'],
     datasets: [
       {
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
+        label: '内存',
+        data: [0],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',
@@ -43,22 +45,47 @@ const options = {
   },
 };
 
+const formatChartData = (arr, callback) => {
+  const labels = [];
+  const data = [];
+  arr.forEach(d => {
+    const date = new Date(d[0] * 1000);
+    const ts = `${date.getMinutes()}:${date.getSeconds()}`;
+    const val = d[1];
+    labels.push(ts);
+    data.push(val);
+  });
+  callback(labels, data);
+};
+
 class MonitorTab extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      networkData: null,
+    };
+  }
+  componentDidMount() {
+    this.chartNetwork = new Chart(this.refNetwork, options);
+    this.chartCPU = new Chart(this.refCPU, options);
+    this.chartMemory = new Chart(this.refMemory, options);
+  }
   focus() {
     setTimeout(() => {
-      this.renderNetwork();
-      this.renderCPU();
       this.renderMemory();
     }, 0);
   }
-  renderNetwork() {
-    new Chart(this.refNetwork, options);
-  }
-  renderCPU() {
-    new Chart(this.refCPU, options);
-  }
-  renderMemory() {
-    new Chart(this.refMemory, options);
+  async renderMemory() {
+    const networkData = await ServiceAction.fetchServiceMemoryMonAction(
+      'nginx-ingress-controller',
+    );
+    const c = this.chartMemory;
+    formatChartData(networkData, (labels, data) => {
+      logger.log(c);
+      c.config.data.labels = labels;
+      c.config.data.datasets[0].data = data;
+      c.update();
+    });
   }
   render() {
     return (

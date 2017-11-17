@@ -24,6 +24,7 @@ export const API = {
     DELETE: name => `/v1/application/auth/service/${name}`,
     EXISTS: name => `/v1/application/auth/service/${name}/exists`,
     LOG: containerID => `/v1/application/auth/log/${containerID}`,
+    MON_MEMORY: name => `/v1/application/auth/monitor/${name}`,
   },
   IMAGES: {
     QUERY: '/v1/registry/auth/image/list',
