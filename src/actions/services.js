@@ -18,6 +18,23 @@ const fetchServiceMemoryMonAction = async serviceName => {
   return null;
 };
 
+const fetchServiceTotalMatricAction = async serviceName => {
+  try {
+    const res = await bFetch(API.SERVICE.TOTAL_MATRIC(serviceName), {
+      params: {
+        start: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+        end: new Date().toISOString(),
+        step: '1m',
+      },
+    });
+    return res.results;
+  } catch (err) {
+    logger.error('fetchServiceMemoryMonAction', err);
+  }
+  return null;
+};
+
 export default {
+  fetchServiceTotalMatricAction,
   fetchServiceMemoryMonAction,
 };

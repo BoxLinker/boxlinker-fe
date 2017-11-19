@@ -9,6 +9,8 @@ import s from './index.css'; // eslint-disable-line
 import { BaseInfoTab, MonitorTab } from './tabs';
 /* eslint-disable no-script-url,class-methods-use-this */
 
+// const logger = console;
+
 class Comp extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,

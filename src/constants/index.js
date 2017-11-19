@@ -25,6 +25,7 @@ export const API = {
     EXISTS: name => `/v1/application/auth/service/${name}/exists`,
     LOG: containerID => `/v1/application/auth/log/${containerID}`,
     MON_MEMORY: name => `/v1/application/auth/monitor/${name}`,
+    TOTAL_MATRIC: name => `/v1/application/auth/monitor/${name}`,
   },
   IMAGES: {
     QUERY: '/v1/registry/auth/image/list',
