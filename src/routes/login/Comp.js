@@ -184,9 +184,9 @@ class Comp extends React.Component {
               >
                 忘记密码 ?
               </a>
-              <a href="pages-register.html" className="btn-link mar-lft">
+              {/* <a href="pages-register.html" className="btn-link mar-lft">
                 创建新账户
-              </a>
+              </a> */}
             </div>
           </div>
         </div>

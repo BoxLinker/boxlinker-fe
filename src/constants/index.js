@@ -34,6 +34,9 @@ export const API = {
     QUERY: '/v1/application/auth/volume',
     CREATE: '/v1/application/auth/volume',
   },
+  USER: {
+    REG: '/v1/user/auth/reg',
+  },
   USERINFO: '/v1/user/account/userinfo',
   LOGIN: '/v1/user/auth/login',
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Link from 'components/Link';
-import { Grid } from 'boxlinker-ui'; // eslint-disable-line
+import Grid from 'bui/Grid'; // eslint-disable-line
 import s from './index.css'; // eslint-disable-line
 /* eslint-disable no-script-url */
 
@@ -72,9 +72,6 @@ const columns = [
 
 class Comp extends React.Component {
   static displayName = 'ServiceList';
-  static contextTypes = {
-    fetch: PropTypes.func,
-  };
   static propTypes = {
     loadServices: PropTypes.func,
     services: PropTypes.shape({
@@ -84,7 +81,7 @@ class Comp extends React.Component {
   };
   static defaultProps = {
     loadServices: () => {},
-    services: [],
+    services: {},
   };
   componentDidMount() {
     this.props.loadServices();
@@ -99,6 +96,7 @@ class Comp extends React.Component {
       <div className="panel">
         <div className="panel-heading">
           <h4 className="panel-title">服务列表</h4>
+          <div className="panel-control" />
         </div>
         <div className="panel-body">
           <Grid

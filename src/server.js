@@ -58,7 +58,7 @@ app.get('*', async (req, res, next) => {
     store.dispatch(runtime('initialNow', Date.now()));
     await store.dispatch(userinfo(token));
     const user = store.getState().userinfo;
-    if ((!user || !user.id) && req.path !== '/login') {
+    if ((!user || !user.id) && req.path !== '/login' && req.path !== '/reg') {
       res.redirect(env.BOXLINKER_REDIRECT_LOGIN_URL);
       return;
     }

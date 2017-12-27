@@ -32,6 +32,7 @@ class Err {
     let opt = options;
     if (isString(options)) {
       opt = {
+        status: -1,
         message: options,
       };
     }
@@ -122,7 +123,10 @@ const bFetch = async (url, options = {}) => {
         if (json.status === STATUS.OK) {
           return json;
         }
-        throw new ErrAPI(`api 返回错误 status:${json.status}`);
+        throw new ErrAPI({
+          status: json.status,
+          msg: json.msg,
+        });
       }
       case 401: {
         if (history.location.path !== '/login') {

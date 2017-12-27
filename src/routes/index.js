@@ -53,10 +53,10 @@ const routes = {
       path: '/forgot',
       load: () => import(/* webpackChunkName: 'forgot' */ './forgot'),
     },
-    {
-      path: '/demo',
-      load: () => import(/* webpackChunkName: 'demo' */ './demo'),
-    },
+    // {
+    //   path: '/demo',
+    //   load: () => import(/* webpackChunkName: 'demo' */ './demo'),
+    // },
     {
       path: '*',
       load: () => import(/* webpackChunkName: 'not-found' */ './not-found'),

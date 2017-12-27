@@ -1,7 +1,7 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 /* eslint-disable import/no-unresolved, import/extensions */
-import { Form, FormElement } from 'boxlinker-ui';
+import { Form, FormElement } from 'bui/Form';
 import bFetch from 'bfetch';
 import cls from './style';
 import { API } from '../../constants';
@@ -12,19 +12,26 @@ class Comp extends React.Component {
     this.state = {
       username: '',
       password: '',
+      email: '',
       usernameErrMsg: '',
       passwordErrMsg: '',
+      emailErrMsg: '',
     };
   }
   onSubmit = async (data, err) => {
     if (err) {
       return;
     }
-    const res = await bFetch(API.LOGIN, {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-    console.log('login res:>', res); // eslint-disable-line
+    try {
+      const res = await bFetch(API.USER.REG, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+      console.log('reg res:>', res); // eslint-disable-line
+      alert('注册成功，请到邮箱验证'); // todo 添加提示页面
+    } catch (e) {
+      alert(`${e.msg} - ${e.status}`);
+    }
   };
   onElementErrMsg = err => {
     this.setState({
@@ -46,9 +53,43 @@ class Comp extends React.Component {
         });
         this.refPassword.validate();
         break;
+      case 'email':
+        this.setState({
+          email: v,
+        });
+        this.refEmail.validate();
+        break;
       default:
     }
   };
+  getEmailField() {
+    const { emailErrMsg } = this.state;
+    return (
+      <FormElement
+        name="email"
+        rules={['required:邮箱不能为空', 'regexEmail:邮箱格式不正确']}
+        ref={ref => {
+          this.refEmail = ref;
+        }}
+        onErrMsg={this.onElementErrMsg}
+        getValue={() => this.state.email}
+      >
+        <div
+          style={cls.field}
+          className={`form-group ${emailErrMsg ? 'has-error' : ''}`}
+        >
+          <input
+            name="email"
+            type="text"
+            className="form-control"
+            onChange={this.onElementChange}
+            placeholder="邮箱"
+          />
+          {emailErrMsg ? <p className="help-block">{emailErrMsg}</p> : null}
+        </div>
+      </FormElement>
+    );
+  }
   getUsernameField() {
     const { usernameErrMsg } = this.state;
     return (
@@ -121,29 +162,34 @@ class Comp extends React.Component {
               </div>
               <Form
                 onSubmit={this.onSubmit}
-                getElements={() => [this.refUsername, this.refPassword]}
+                getElements={() => [
+                  this.refUsername,
+                  this.refEmail,
+                  this.refPassword,
+                ]}
               >
                 <div>
                   {this.getUsernameField()}
+                  {this.getEmailField()}
                   {this.getPasswordField()}
                   <button
                     className="btn btn-primary btn-lg btn-block"
                     type="submit"
                   >
-                    登录
+                    注册
                   </button>
                 </div>
               </Form>
             </div>
             <div className="pad-all bord-top">
-              <a
+              {/* <a
                 href="pages-password-reminder.html"
                 className="btn-link mar-rgt"
               >
                 忘记密码 ?
-              </a>
-              <a href="pages-register.html" className="btn-link mar-lft">
-                创建新账户
+              </a> */}
+              <a href="/login" className="btn-link mar-lft">
+                已有账号，这里登录
               </a>
             </div>
           </div>

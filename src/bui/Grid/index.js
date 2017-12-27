@@ -6,7 +6,6 @@ const DEFAULT_PAGE_COUNT = 10;
 /* eslint-disable no-debugger */
 export default class Grid extends React.Component {
   static propTypes = {
-    hover: PropTypes.bool,
     columns: PropTypes.arrayOf(
       PropTypes.shape({
         field: PropTypes.string.isRequired,
@@ -17,18 +16,23 @@ export default class Grid extends React.Component {
       }).isRequired,
     ).isRequired,
     rowKey: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
-    data: PropTypes.arrayOf(PropTypes.object),
-    pagination: PropTypes.shape({
-      currentPage: PropTypes.number,
-      pageCount: PropTypes.number,
-      totalCount: PropTypes.number,
+    data: PropTypes.shape({
+      data: PropTypes.arrayOf(PropTypes.object),
+      pagination: PropTypes.shape({
+        currentPage: PropTypes.number,
+        pageCount: PropTypes.number,
+        totalCount: PropTypes.number,
+      }),
     }),
     onLoad: PropTypes.func,
   };
   static defaultProps = {
-    hover: false,
     data: [],
-    pagination: null,
+    pagination: {
+      currentPage: -1,
+      pageCount: -1,
+      totalCount: -1,
+    },
     onLoad: () => {},
   };
   onLoadPage = ({ target: { dataset } }) => {
@@ -57,7 +61,7 @@ export default class Grid extends React.Component {
               className={`${colume.minWidth ? 'min-width' : ''}`}
               style={style}
             >
-              <div className="th-inner">{colume.label}</div>
+              {colume.label}
             </th>
           );
         })}
@@ -66,14 +70,15 @@ export default class Grid extends React.Component {
   }
   getBody() {
     const { columns, data } = this.props;
-    if (!data) {
+    const results = data.data;
+    if (!results) {
       return null;
     }
     const columesMap = {};
     columns.forEach(colume => {
       columesMap[colume.field] = colume;
     });
-    return data.map(item => {
+    return results.map(item => {
       const tds = columns.map(column => {
         let value = item[column.field];
         if ((isObject(value) || isArray(value)) && !isFunction(column.render)) {
@@ -96,11 +101,11 @@ export default class Grid extends React.Component {
   }
   getPagination() {
     /* eslint-disable no-script-url */
-    const { pagination } = this.props;
-    if (!pagination) {
+    const { data } = this.props;
+    if (!data || !data.pagination) {
       return null;
     }
-    const { currentPage, pageCount, totalCount } = pagination;
+    const { currentPage, pageCount, totalCount } = data.pagination;
     let pPageCount = pageCount;
     if (pPageCount <= 0) {
       pPageCount = DEFAULT_PAGE_COUNT;
@@ -160,18 +165,13 @@ export default class Grid extends React.Component {
     );
   }
   render() {
-    const { hover } = this.props;
     return (
-      <div className="bootstrap-table">
-        <div className="fixed-table-container">
-          <div className="fixed-table-body">
-            <table className={`table ${hover ? 'table-hover' : ''}`}>
-              <thead>{this.getHead()}</thead>
-              <tbody>{this.getBody()}</tbody>
-            </table>
-            {this.getPagination()}
-          </div>
-        </div>
+      <div>
+        <table className="table table-hover">
+          <thead>{this.getHead()}</thead>
+          <tbody>{this.getBody()}</tbody>
+        </table>
+        {this.getPagination()}
       </div>
     );
   }

@@ -32,9 +32,10 @@ class Comp extends React.Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <button onClick={this.showNewSet}>New Set</button>
+          Coming soon ...
+          {/* <button onClick={this.showNewSet}>New Set</button>
           <button onClick={this.showNotification}>showNotification</button>
-          <button onClick={this.showModal}>Service Modal</button>
+          <button onClick={this.showModal}>Service Modal</button> */}
         </div>
       </div>
     );
