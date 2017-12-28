@@ -4,8 +4,8 @@ import Cookie from 'universal-cookie';
 /* eslint-disable import/no-unresolved, import/extensions */
 import { Form, FormElement, Button } from 'boxlinker-ui';
 import bFetch from 'bfetch';
+import { API, GetEnv } from 'const';
 import cls from './style';
-import { API, GetEnv } from '../../constants';
 
 const cookie = new Cookie();
 

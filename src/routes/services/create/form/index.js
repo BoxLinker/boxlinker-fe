@@ -2,9 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 /* eslint-disable import/no-unresolved, import/extensions */
-import { Form, FormElement, Select } from 'boxlinker-ui';
-import { URL_SEARCH_IMAGE, API } from 'constants';
+import { Form, FormElement, Select } from 'bui';
+import { API } from 'const';
+import bFetch from 'bfetch';
 import FormPorts from './FormPorts';
+
+const log = console;
 
 const hardwareConfiguration = [
   {
@@ -91,17 +94,21 @@ class AppForm extends React.Component {
     });
     this.refAppImage.validate();
   }
-  onSearchImage() {
-    this.context
-      .fetch(URL_SEARCH_IMAGE, {
+  onSearchImage = async (value, that) => {
+    try {
+      const res = await bFetch(API.REGISTRY.SEARCH_IMAGE, {
         method: 'GET',
-      })
-      .then(json => {
-        this.setState({
-          searchedImages: json.results,
-        });
+        params: {
+          value,
+        },
       });
-  }
+      that.setState({
+        searchedImages: res.results,
+      });
+    } catch (err) {
+      log.error('search image err: ', err);
+    }
+  };
   onHardwareConfigureItemClick(item) {
     if (!item) return;
     this.setState({
@@ -298,7 +305,9 @@ class AppForm extends React.Component {
             getLabel={item => `${item.name}:${item.tag}`}
             valueKey="id"
             searchable
-            onSearchInputChange={this.onSearchImage}
+            onSearchInputChange={e => {
+              this.onSearchImage(e, this);
+            }}
             onItemClick={this.onSearchImageItemClick}
             data={this.state.searchedImages || []}
           />

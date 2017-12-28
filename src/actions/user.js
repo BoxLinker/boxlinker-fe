@@ -1,4 +1,4 @@
-import { ACTION_USERINFO, URL_USERINFO } from '../constants';
+import { ACTION_USERINFO, URL_USERINFO } from 'const';
 
 export function getUserInfo(fetch) {
   return dispatch =>

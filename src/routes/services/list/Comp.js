@@ -95,8 +95,12 @@ class Comp extends React.Component {
     return (
       <div className="panel">
         <div className="panel-heading">
+          <div className="panel-control">
+            <Link to="/services/create" className="btn btn-primary">
+              新建服务
+            </Link>
+          </div>
           <h4 className="panel-title">服务列表</h4>
-          <div className="panel-control" />
         </div>
         <div className="panel-body">
           <Grid

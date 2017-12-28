@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { createAction } from 'redux-actions';
 import bFetch from 'bfetch';
-import { API } from '../constants';
+import { API } from 'const';
 
 export const getVolumes = createAction('GET_VOLUMES', async pagination => {
   try {

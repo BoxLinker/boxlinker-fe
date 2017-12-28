@@ -3,8 +3,8 @@ import React from 'react';
 /* eslint-disable import/no-unresolved, import/extensions */
 import { Form, FormElement } from 'boxlinker-ui';
 import bFetch from 'bfetch';
+import { API } from 'const';
 import cls from './style';
-import { API } from '../../constants';
 
 class Comp extends React.Component {
   constructor(props) {

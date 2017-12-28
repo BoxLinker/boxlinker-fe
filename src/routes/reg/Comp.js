@@ -1,10 +1,10 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 /* eslint-disable import/no-unresolved, import/extensions */
-import { Form, FormElement } from 'bui/Form';
+import { Form, FormElement, Alert } from 'bui';
 import bFetch from 'bfetch';
+import { API } from 'const';
 import cls from './style';
-import { API } from '../../constants';
 
 class Comp extends React.Component {
   constructor(props) {
@@ -16,9 +16,13 @@ class Comp extends React.Component {
       usernameErrMsg: '',
       passwordErrMsg: '',
       emailErrMsg: '',
+      submitErr: null,
     };
   }
-  onSubmit = async (data, err) => {
+  onSubmit = async (data, err, that) => {
+    that.setState({
+      submitErr: null,
+    });
     if (err) {
       return;
     }
@@ -30,7 +34,9 @@ class Comp extends React.Component {
       console.log('reg res:>', res); // eslint-disable-line
       alert('注册成功，请到邮箱验证'); // todo 添加提示页面
     } catch (e) {
-      alert(`${e.msg} - ${e.status}`);
+      that.setState({
+        submitErr: e,
+      });
     }
   };
   onElementErrMsg = err => {
@@ -151,6 +157,7 @@ class Comp extends React.Component {
     );
   }
   render() {
+    const { submitErr } = this.state;
     return (
       <div style={cls.wrapper} className="cls-container">
         <div className="cls-content">
@@ -158,10 +165,18 @@ class Comp extends React.Component {
             <div className="panel-body">
               <div className="mar-ver pad-btm">
                 <h1 className="h3">从这里开始</h1>
-                <p>登录您的账户</p>
+                <p>注册一个新账户</p>
               </div>
+              {submitErr ? (
+                <Alert theme="danger">
+                  <strong>[{submitErr.status()}]</strong>&nbsp;{submitErr.message()}
+                </Alert>
+              ) : null}
+
               <Form
-                onSubmit={this.onSubmit}
+                onSubmit={(data, err) => {
+                  this.onSubmit(data, err, this);
+                }}
                 getElements={() => [
                   this.refUsername,
                   this.refEmail,

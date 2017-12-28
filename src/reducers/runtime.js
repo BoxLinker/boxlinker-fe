@@ -1,4 +1,4 @@
-import { SET_RUNTIME_VARIABLE } from '../constants';
+import { SET_RUNTIME_VARIABLE } from 'const';
 
 export default function runtime(state = {}, action) {
   switch (action.type) {

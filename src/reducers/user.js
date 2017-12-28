@@ -1,4 +1,4 @@
-import { ACTION_USERINFO } from '../constants';
+import { ACTION_USERINFO } from 'const';
 
 export default function userInfo(state = {}, action) {
   switch (action.type) {

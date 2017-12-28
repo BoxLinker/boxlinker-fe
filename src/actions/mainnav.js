@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import { ACTION_CLICK_MAINNAV } from '../constants';
+import { ACTION_CLICK_MAINNAV } from 'const';
 
 export function locationChange() {
   return {

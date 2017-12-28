@@ -4,7 +4,7 @@ import cx from 'classnames';
 /* eslint-disable import/no-unresolved, import/extensions */
 import { Form, FormElement, Select } from 'boxlinker-ui';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import { URL_SEARCH_IMAGE, API } from 'constants';
+import { URL_SEARCH_IMAGE, API } from 'const';
 import s from './Form.pcss';
 import FormPorts from './FormPorts';
 

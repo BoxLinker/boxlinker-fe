@@ -44,6 +44,16 @@ class Err {
     }
     return this instanceof err;
   }
+  status() {
+    return this.options.status;
+  }
+  error() {
+    const { status, message } = this.options;
+    return `[${status}] ${message}`;
+  }
+  message() {
+    return this.options.message;
+  }
   toString() {
     const { message } = this.options;
     return `[BFetch Err] -> ${this.type}:${message}`;

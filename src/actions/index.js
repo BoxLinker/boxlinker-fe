@@ -2,7 +2,7 @@
 import { createAction } from 'redux-actions';
 import bFetch, { BaseURL } from 'bfetch';
 import Cookies from 'universal-cookie';
-import { API } from '../constants';
+import { API } from 'const';
 
 export { default as ServiceAction } from './services';
 

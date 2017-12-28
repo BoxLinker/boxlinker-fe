@@ -1,5 +1,5 @@
 import bFetch from 'bfetch';
-import { API } from '../constants';
+import { API } from 'const';
 
 const logger = console;
 

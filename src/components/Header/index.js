@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'boxlinker-ui';
 import cookie from 'utils/cookie';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import { TOKEN_NAME, GetEnv } from '../../constants';
+import { TOKEN_NAME, GetEnv } from 'const';
 import s from './index.css';
 
 class Header extends React.Component {

@@ -3,13 +3,21 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 class Select extends React.Component {
-  onItemClick = e => {
+  constructor(props) {
+    super(props);
+
+    // 属性
+    ['onSearchInputChange', 'onItemClick'].forEach(fn => {
+      this[fn] = this[fn].bind(this);
+    });
+  }
+  onItemClick(e) {
     const item = this.getDataItemByValue(e.target.dataset.selectValue);
-    this.props.onChange(item);
-  };
-  onSearchInputChange = e => {
-    this.props.onSearchInputChange(e);
-  };
+    this.props.onItemClick(item);
+  }
+  onSearchInputChange({ target: { value } }) {
+    this.props.onSearchInputChange(value);
+  }
   getLabelByValue(value) {
     const data = this.props.data;
     const l = data.length;
@@ -132,7 +140,7 @@ Select.propTypes = {
   data: PropTypes.array,
   getLabel: PropTypes.func,
   labelKey: PropTypes.string,
-  onChange: PropTypes.func,
+  onItemClick: PropTypes.func,
   onSearchInputChange: PropTypes.func,
   open: PropTypes.bool,
   placeholder: PropTypes.string,
@@ -150,7 +158,7 @@ Select.defaultProps = {
   searchText: '',
   getLabel: null,
   onSearchInputChange: () => {},
-  onChange: () => {},
+  onItemClick: () => {},
   open: false,
   data: [],
   searchable: false,
