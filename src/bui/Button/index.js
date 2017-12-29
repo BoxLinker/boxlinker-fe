@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 class Button extends React.Component {
   static propTypes = {
     theme: PropTypes.string,
+    type: PropTypes.string,
+    style: PropTypes.object, // eslint-disable-line
+    buttonType: PropTypes.string,
     size: PropTypes.string,
     loading: PropTypes.bool,
     block: PropTypes.bool,
@@ -12,6 +15,9 @@ class Button extends React.Component {
   };
   static defaultProps = {
     theme: 'default',
+    type: 'default',
+    style: {},
+    buttonType: 'button',
     block: false,
     size: '',
     loadingIcon: 'Loading...',
@@ -19,14 +25,30 @@ class Button extends React.Component {
     children: 'Button',
   };
   render() {
-    const { loading, loadingIcon, theme, size, block, ...props } = this.props;
+    const {
+      loading,
+      loadingIcon,
+      theme,
+      size,
+      block,
+      type,
+      buttonType,
+      style,
+    } = this.props;
     const sSize = `${size ? `btn-${size}` : ''}`;
     const blockCls = `${block ? 'btn-block' : ''}`;
+
+    let look = theme;
+    if (type) {
+      look = type;
+    }
+
     if (loading) {
       return (
         <button
-          {...props}
-          className={`btn btn-${theme} ${sSize} ${blockCls}`}
+          style={style}
+          type={buttonType}
+          className={`btn btn-${look} ${sSize} ${blockCls}`}
           disabled
         >
           {loadingIcon}
@@ -34,7 +56,11 @@ class Button extends React.Component {
       );
     }
     return (
-      <button {...props} className={`btn btn-${theme} ${sSize} ${blockCls}`}>
+      <button
+        style={style}
+        type={buttonType}
+        className={`btn btn-${look} ${sSize} ${blockCls}`}
+      >
         {this.props.children}
       </button>
     );

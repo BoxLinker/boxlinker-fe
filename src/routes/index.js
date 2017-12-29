@@ -50,8 +50,12 @@ const routes = {
       load: () => import(/* webpackChunkName: 'reg' */ './reg'),
     },
     {
-      path: '/forgot',
-      load: () => import(/* webpackChunkName: 'forgot' */ './forgot'),
+      path: '/pass-forgot',
+      load: () => import(/* webpackChunkName: 'pass-forgot' */ './pass-forgot'),
+    },
+    {
+      path: '/pass-reset',
+      load: () => import(/* webpackChunkName: 'pass-reset' */ './pass-reset'),
     },
     // {
     //   path: '/demo',

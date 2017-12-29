@@ -39,6 +39,9 @@ export const API = {
   },
   USER: {
     REG: '/v1/user/auth/reg',
+    CHANGE_PASS: '/v1/user/account/changepassword',
+    SEND_RESET_PASS_EMAIL: '/v1/user/pub/pass/send_email',
+    RESET_PASS: '/v1/user/account/pass_reset',
   },
   USERINFO: '/v1/user/account/userinfo',
   LOGIN: '/v1/user/auth/login',

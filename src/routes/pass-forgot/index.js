@@ -3,7 +3,7 @@ import Container from './Container';
 
 async function action() {
   return {
-    chunks: ['forgot'],
+    chunks: ['pass-forgot'],
     title: '忘记密码',
     component: <Container />,
   };

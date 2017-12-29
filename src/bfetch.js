@@ -76,6 +76,14 @@ export class ErrRequest extends Err {
   type = 'ErrRequest';
 }
 
+export class ErrUnknow extends Err {
+  type = 'ErrUnknow';
+  constructor(options) {
+    super(options);
+    this.err = options.err;
+  }
+}
+
 const addParams = (url, params) => {
   if (!params) {
     return url;
@@ -106,10 +114,11 @@ const bFetch = async (url, options = {}) => {
     ...options.params,
     ...options.pagination,
   };
+  let res = null;
   try {
     const uUrl = addParams(`${BaseURL}${url}`, params);
     logger.log(`fetch: ${uUrl}`);
-    const res = await fetch(uUrl, {
+    res = await fetch(uUrl, {
       ...defaults,
       ...options,
       headers: {
@@ -118,38 +127,38 @@ const bFetch = async (url, options = {}) => {
         ...(options.token && { 'X-Access-Token': options.token }),
       },
     });
-    if (options.rawResponse) {
-      return res;
-    }
-    switch (res.status) {
-      case 200: {
-        const txt = await res.text();
-        let json = null;
-        try {
-          json = JSON.parse(txt);
-        } catch (err) {
-          throw new ErrJSONParse(`JSON 解析失败: ${txt}`);
-        }
-        if (json.status === STATUS.OK) {
-          return json;
-        }
-        throw new ErrAPI({
-          status: json.status,
-          msg: json.msg,
-        });
-      }
-      case 401: {
-        if (history.location.path !== '/login') {
-          history.go('/login');
-        }
-        throw new ErrUnauthroized();
-      }
-      default:
-        throw new ErrRequest(`请求失败 ${res.status}:${res.statusText}`);
-    }
   } catch (err) {
     logger.error(err);
-    throw err;
+    throw new ErrUnknow({ err, message: `unknow fetch err: ${err}` });
+  }
+  if (options.rawResponse) {
+    return res;
+  }
+  switch (res.status) {
+    case 200: {
+      const txt = await res.text();
+      let json = null;
+      try {
+        json = JSON.parse(txt);
+      } catch (err) {
+        throw new ErrJSONParse(`JSON 解析失败: ${txt}`);
+      }
+      if (json.status === STATUS.OK) {
+        return json;
+      }
+      throw new ErrAPI({
+        status: json.status,
+        message: json.msg || json.message,
+      });
+    }
+    case 401: {
+      if (history.location.path !== '/login') {
+        history.go('/login');
+      }
+      throw new ErrUnauthroized();
+    }
+    default:
+      throw new ErrRequest(`请求失败 ${res.status}:${res.statusText}`);
   }
 };
 

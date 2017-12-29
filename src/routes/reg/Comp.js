@@ -1,7 +1,7 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 /* eslint-disable import/no-unresolved, import/extensions */
-import { Form, FormElement, Alert } from 'bui';
+import { Form, FormElement, Alert, Button } from 'bui';
 import bFetch from 'bfetch';
 import { API } from 'const';
 import cls from './style';
@@ -17,6 +17,7 @@ class Comp extends React.Component {
       passwordErrMsg: '',
       emailErrMsg: '',
       submitErr: null,
+      regSuccess: false,
     };
   }
   onSubmit = async (data, err, that) => {
@@ -32,7 +33,9 @@ class Comp extends React.Component {
         body: JSON.stringify(data),
       });
       console.log('reg res:>', res); // eslint-disable-line
-      alert('注册成功，请到邮箱验证'); // todo 添加提示页面
+      this.setState({
+        regSuccess: true,
+      });
     } catch (e) {
       that.setState({
         submitErr: e,
@@ -101,7 +104,10 @@ class Comp extends React.Component {
     return (
       <FormElement
         name="username"
-        rules={['required:用户名称不能为空', 'regexName:格式不正确(字母、数字、下划线, 16 位以内)']}
+        rules={[
+          'required:用户名称不能为空',
+          'regexName:格式不正确(字母、数字、下划线, 16 位以内, 字母开头)',
+        ]}
         ref={ref => {
           this.refUsername = ref;
         }}
@@ -156,45 +162,64 @@ class Comp extends React.Component {
       </FormElement>
     );
   }
-  render() {
+  getSubmitErrAlert() {
     const { submitErr } = this.state;
+    if (!submitErr) {
+      return null;
+    }
+    return (
+      <Alert type="danger" closeable>
+        <strong>[{submitErr.status()}]</strong>&nbsp;{submitErr.message()}
+      </Alert>
+    );
+  }
+  getRegSuccessAlert() {
+    const { regSuccess, email } = this.state;
+    if (!regSuccess) {
+      return null;
+    }
+    return (
+      <Alert type="success">
+        <strong>注册成功！</strong>&nbsp;请您到邮箱 {email} 点击验证链接!
+      </Alert>
+    );
+  }
+  getRegForm() {
+    const { regSuccess } = this.state;
+    if (regSuccess) {
+      return null;
+    }
+    return (
+      <Form
+        onSubmit={(data, err) => {
+          this.onSubmit(data, err, this);
+        }}
+        getElements={() => [this.refUsername, this.refEmail, this.refPassword]}
+      >
+        <div>
+          {this.getUsernameField()}
+          {this.getEmailField()}
+          {this.getPasswordField()}
+          <Button block buttonType="submit" type="primary">
+            注册
+          </Button>
+        </div>
+      </Form>
+    );
+  }
+  render() {
     return (
       <div style={cls.wrapper} className="cls-container">
         <div className="cls-content">
-          <div className="cls-content-sm panel">
+          <div className="cls-content-lg panel">
             <div className="panel-body">
               <div className="mar-ver pad-btm">
                 <h1 className="h3">从这里开始</h1>
                 <p>注册一个新账户</p>
               </div>
-              {submitErr ? (
-                <Alert theme="danger">
-                  <strong>[{submitErr.status()}]</strong>&nbsp;{submitErr.message()}
-                </Alert>
-              ) : null}
-
-              <Form
-                onSubmit={(data, err) => {
-                  this.onSubmit(data, err, this);
-                }}
-                getElements={() => [
-                  this.refUsername,
-                  this.refEmail,
-                  this.refPassword,
-                ]}
-              >
-                <div>
-                  {this.getUsernameField()}
-                  {this.getEmailField()}
-                  {this.getPasswordField()}
-                  <button
-                    className="btn btn-primary btn-lg btn-block"
-                    type="submit"
-                  >
-                    注册
-                  </button>
-                </div>
-              </Form>
+              {this.getSubmitErrAlert()}
+              {this.getRegSuccessAlert()}
+              {this.getRegForm()}
             </div>
             <div className="pad-all bord-top">
               {/* <a

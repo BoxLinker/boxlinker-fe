@@ -1,8 +1,8 @@
 import React from 'react';
 import Cookie from 'universal-cookie';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 /* eslint-disable import/no-unresolved, import/extensions */
-import { Form, FormElement, Button } from 'boxlinker-ui';
+import { Form, FormElement, Button, Alert } from 'bui';
 import bFetch from 'bfetch';
 import { API, GetEnv } from 'const';
 import cls from './style';
@@ -10,6 +10,9 @@ import cls from './style';
 const cookie = new Cookie();
 
 class Comp extends React.Component {
+  static contextTypes = {
+    getUrlParameter: PropTypes.func,
+  };
   constructor(props) {
     super(props);
     // ['onSubmit'].forEach(fn => {
@@ -140,6 +143,17 @@ class Comp extends React.Component {
       </FormElement>
     );
   }
+  getLoginSuccessAlert() { // eslint-disable-line
+    const t = this.context.getUrlParameter('reg_confirmed_username');
+    if (!t) {
+      return null;
+    }
+    return (
+      <Alert type="success">
+        恭喜您 <strong>{t}</strong> 注册成功，请登录!
+      </Alert>
+    );
+  }
   clearErrMsg = () => {
     this.setState({
       loginErrMsg: '',
@@ -164,6 +178,7 @@ class Comp extends React.Component {
                   {loginErrMsg}
                 </div>
               ) : null}
+              {this.getLoginSuccessAlert()}
               <Form
                 onSubmit={this.onSubmit}
                 getElements={() => [this.refUsername, this.refPassword]}
@@ -171,17 +186,20 @@ class Comp extends React.Component {
                 <div>
                   {this.getUsernameField()}
                   {this.getPasswordField()}
-                  <Button loading={loading} block type="submit" theme="primary">
+                  <Button
+                    loading={loading}
+                    block
+                    type="primary"
+                    buttonType="submit"
+                    theme="primary"
+                  >
                     登录
                   </Button>
                 </div>
               </Form>
             </div>
             <div className="pad-all bord-top">
-              <a
-                href="pages-password-reminder.html"
-                className="btn-link mar-rgt"
-              >
+              <a href="/pass-forgot" className="btn-link mar-rgt">
                 忘记密码 ?
               </a>
               {/* <a href="pages-register.html" className="btn-link mar-lft">

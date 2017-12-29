@@ -4,16 +4,16 @@ import PropTypes from 'prop-types';
 export default class Alert extends React.Component {
   static propTypes = {
     closeable: PropTypes.bool,
-    theme: PropTypes.string,
+    type: PropTypes.string,
     children: PropTypes.any, // eslint-disable-line
   };
   static defaultProps = {
-    theme: 'primary',
-    closeable: true,
+    type: 'primary',
+    closeable: false,
     children: 'Alert message.',
   };
   render() {
-    const { closeable, theme } = this.props;
+    const { closeable, type } = this.props;
     let closeBtn = null;
     if (closeable) {
       closeBtn = (
@@ -23,7 +23,7 @@ export default class Alert extends React.Component {
       );
     }
     return (
-      <div className={`alert alert-${theme}`}>
+      <div className={`alert alert-${type}`}>
         {closeBtn}
         {this.props.children}
       </div>

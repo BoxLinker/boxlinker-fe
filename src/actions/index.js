@@ -15,6 +15,9 @@ export const runtime = createAction('SET_RUNTIME_VARIABLE', (name, value) => ({
 }));
 
 export const userinfo = createAction('GET_USERINFO', async token => {
+  if (!token) {
+    return null;
+  }
   try {
     const data = await bFetch(API.USERINFO, { token });
     return data.results;

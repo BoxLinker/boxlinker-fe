@@ -21,6 +21,8 @@ import configureStore from './store/configureStore';
 // import { getUserInfo } from './actions/user';
 import { runtime, userinfo } from './actions';
 
+const logger = console;
+const COOKIE_NAME = 'X-Access-Token';
 // const isDebug = process.env.NODE_ENV === 'development';
 const env = config();
 const app = express();
@@ -34,32 +36,26 @@ app.get('*', async (req, res, next) => {
   try {
     const css = new Set();
 
-    // const fetch = createFetch(nodeFetch, {
-    //   baseUrl: config.api.serverUrl,
-    //   cookie: isDebug ? process.env.DEV_TOKEN : req.cookies['X-Access-Token'],
-    // });
-
-    // const token = isDebug
-    //   ? process.env.DEV_TOKEN
-    //   : req.cookies['X-Access-Token'];
-
-    // if (isDebug) {
-    //   res.cookie('X-Access-Token', token, {
-    //     domain: 'localhost',
-    //   });
-    // }
-    const token = req.cookies['X-Access-Token'];
+    const visitLoginReg =
+      req.path === '/login' ||
+      req.path === '/reg' ||
+      req.path === '/pass-forgot';
+    const token = req.cookies[COOKIE_NAME] || req.query.access_token;
     const initialState = {};
-
-    const store = configureStore(initialState, {
-      // fetch,
-      // I should not use `history` on server.. but how I do redirection? follow universal-router
-    });
+    const store = configureStore(initialState, {});
     store.dispatch(runtime('initialNow', Date.now()));
     await store.dispatch(userinfo(token));
     const user = store.getState().userinfo;
-    if ((!user || !user.id) && req.path !== '/login' && req.path !== '/reg') {
-      res.redirect(env.BOXLINKER_REDIRECT_LOGIN_URL);
+    const authOk = user && user.id;
+    if (authOk) {
+      if (visitLoginReg) {
+        logger.log('visit login|reg when logged -> ', authOk);
+        res.redirect('/');
+        return;
+      }
+    } else if (!visitLoginReg) {
+      res.clearCookie(COOKIE_NAME);
+      res.redirect('/login');
       return;
     }
     const context = {
@@ -69,6 +65,9 @@ app.get('*', async (req, res, next) => {
       insertCss: (...styles) => {
         // eslint-disable-next-line no-underscore-dangle
         styles.forEach(style => css.add(style._getCss()));
+      },
+      getUrlParameter(name) {
+        return req.query[name];
       },
       // Universal HTTP client
       // fetch,

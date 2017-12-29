@@ -31,6 +31,14 @@ const context = {
       removeCss.forEach(f => f());
     };
   },
+  getUrlParameter(name) {
+    const n = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]'); //eslint-disable-line
+    const regex = new RegExp(`[\\?&]${n}=([^&#]*)`);
+    const results = regex.exec(location.search);
+    return results === null
+      ? ''
+      : decodeURIComponent(results[1].replace(/\+/g, ' '));
+  },
   // Universal HTTP client
   // fetch: createFetch(self.fetch, {
   //   baseUrl: window.App.apiUrl,

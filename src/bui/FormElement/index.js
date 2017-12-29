@@ -13,7 +13,7 @@ const defaultRules = {
     }),
   regexName: (val, errMsg) =>
     new Promise((resolve, reject) => {
-      if (/^[a-zA-Z][0-9a-zA-Z_]{6,16}$/.test(val)) {
+      if (/^[a-zA-Z][0-9a-zA-Z_]{5,15}$/.test(val)) {
         resolve(val);
       } else {
         reject(errMsg);
@@ -22,6 +22,14 @@ const defaultRules = {
   regexEmail: (val, errMsg) =>
     new Promise((resolve, reject) => {
       if (/^(\w)+(\.\w+)*@(\w)+((\.\w{2,5}){1,3})$/.test(val)) {
+        resolve(val);
+      } else {
+        reject(errMsg);
+      }
+    }),
+  regexPassword: (val, errMsg) =>
+    new Promise((resolve, reject) => {
+      if (val && val.length >= 6) {
         resolve(val);
       } else {
         reject(errMsg);
@@ -52,16 +60,16 @@ export default class FormElement extends React.Component {
         }
         if (isString(rule)) {
           const i = rule.indexOf(':');
-          let name, errMsg;
+          let ruleName, errMsg;
           if (i <= 0) {
-            name = rule;
+            ruleName = rule;
             errMsg = DEFAULT_ERR_MSG;
           } else {
-            name = rule.substring(0, i);
+            ruleName = rule.substring(0, i);
             errMsg = rule.substring(i + 1);
           }
-          if (isFunction(defaultRules[name])) {
-            fns.push(defaultRules[name](v, errMsg));
+          if (isFunction(defaultRules[ruleName])) {
+            fns.push(defaultRules[ruleName](v, errMsg, name));
           }
         } else if (isFunction(rule)) {
           const p = rule(v);
@@ -109,6 +117,9 @@ FormElement.propTypes = {
   getValue: PropTypes.func,
   name: PropTypes.string.isRequired,
   onErrMsg: PropTypes.func,
+  // [string, func]
+  // string 时: 格式为 'ruleName:errMsg'
+  // func   时: 格式为 func (value) => { return new Promise() }
   rules: PropTypes.array,
 };
 

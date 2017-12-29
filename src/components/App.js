@@ -5,6 +5,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 const contextType = {
   event: PropTypes.object.isRequired,
   insertCss: PropTypes.func.isRequired,
+  getUrlParameter: PropTypes.func.isRequired,
   // Universal HTTP client
   // fetch: PropTypes.func.isRequired,
   // Integrate Redux
