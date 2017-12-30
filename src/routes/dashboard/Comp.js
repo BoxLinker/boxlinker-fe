@@ -16,27 +16,10 @@ class Comp extends React.Component {
   static contextTypes = {
     event: PropTypes.object.isRequired,
   };
-  showNewSet = () => {
-    this.context.event.emit('app.new.toggle');
-  };
-  showNotification = () => {
-    this.context.event.emit('app.notification', {
-      msg: '这是一条 notification ~~~~',
-      type: 'success',
-    });
-  };
-  showModal = () => {
-    this.context.event.emit('app.newService.show');
-  };
   render() {
     return (
       <div className={s.root}>
-        <div className={s.container}>
-          Coming soon ...
-          {/* <button onClick={this.showNewSet}>New Set</button>
-          <button onClick={this.showNotification}>showNotification</button>
-          <button onClick={this.showModal}>Service Modal</button> */}
-        </div>
+        <div className={s.container}>Coming soon ...</div>
       </div>
     );
   }

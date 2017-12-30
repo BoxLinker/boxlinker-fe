@@ -1,15 +1,15 @@
 require('dotenv').config();
 
-const getEnvs = () => {
-  const envs = {};
-  Object.keys(process.env).forEach(e => {
-    if (/^BOXLINKER_/.test(e)) {
-      envs[e] = process.env[e];
-    }
-  });
-  return envs;
-};
-export default getEnvs;
+// const getEnvs = () => {
+//   const envs = {};
+//   Object.keys(process.env).forEach(e => {
+//     if (/^BOXLINKER_/.test(e)) {
+//       envs[e] = process.env[e];
+//     }
+//   });
+//   return envs;
+// };
+// export default getEnvs;
 
 // module.exports = {
 //   port: process.env.PORT || 3000,

@@ -19,7 +19,7 @@ export const userinfo = createAction('GET_USERINFO', async token => {
     return null;
   }
   try {
-    const data = await bFetch(API.USERINFO, { token });
+    const data = await bFetch(API.USER.USERINFO, { token });
     return data.results;
   } catch (err) {
     return null;

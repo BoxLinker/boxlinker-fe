@@ -1,3 +1,5 @@
+/* eslint-disable import/first */
+import './config';
 import path from 'path';
 import express from 'express';
 import cookieParser from 'cookie-parser';
@@ -20,8 +22,6 @@ import configureStore from './store/configureStore';
 // import { getUserInfo } from './actions/user';
 import { runtime, userinfo } from './actions';
 
-require('dotenv').config();
-
 const logger = console;
 const COOKIE_NAME = 'X-Access-Token';
 // const isDebug = process.env.NODE_ENV === 'development';
@@ -31,6 +31,9 @@ Object.keys(process.env).forEach(key => {
     env[key] = process.env[key];
   }
 });
+
+logger.info('env: \n', env);
+
 const app = express();
 
 app.use(express.static(path.resolve(__dirname, 'public')));
