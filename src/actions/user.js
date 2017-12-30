@@ -1,13 +1,21 @@
-import { ACTION_USERINFO, URL_USERINFO } from 'const';
+import { ACTION_USERINFO, API } from 'const';
+import bFetch from 'bfetch';
 
-export function getUserInfo(fetch) {
-  return dispatch =>
-    fetch(URL_USERINFO, { method: 'GET' }).then(json => {
+export function getUserInfo() {
+  return dispatch => {
+    try {
+      const res = bFetch(API.USER.USERINFO, { method: 'GET' });
       dispatch({
         type: ACTION_USERINFO,
-        payload: json.results,
+        payload: res.results,
       });
-    });
+    } catch (e) {
+      dispatch({
+        type: ACTION_USERINFO,
+        payload: null,
+      });
+    }
+  };
 }
 
 export default getUserInfo;

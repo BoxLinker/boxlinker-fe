@@ -14,7 +14,6 @@ export const ACTION_USERINFO = 'ACTION_USERINFO';
 export const TOKEN_NAME = 'X-Access-Token';
 
 // export const URL_SEARCH_IMAGE = '/v1/registry/pub/image/list';
-export const URL_USERINFO = '/v1/user/account/userinfo';
 export const API = {
   SERVICE: {
     CREATE: '/v1/application/auth/service',
@@ -42,9 +41,9 @@ export const API = {
     CHANGE_PASS: '/v1/user/account/changepassword',
     SEND_RESET_PASS_EMAIL: '/v1/user/pub/pass/send_email',
     RESET_PASS: '/v1/user/account/pass_reset',
+    USERINFO: '/v1/user/account/userinfo',
+    LOGIN: '/v1/user/auth/login',
   },
-  USERINFO: '/v1/user/account/userinfo',
-  LOGIN: '/v1/user/auth/login',
 };
 
 export function GetEnv(name) {

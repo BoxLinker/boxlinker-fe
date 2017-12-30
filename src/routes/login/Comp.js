@@ -32,7 +32,7 @@ class Comp extends React.Component {
       loading: true,
       loginErrMsg: '',
     });
-    bFetch(API.LOGIN, {
+    bFetch(API.USER.LOGIN, {
       method: 'POST',
       body: JSON.stringify(data),
     })

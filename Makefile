@@ -8,5 +8,5 @@ push: container
 	docker push ${IMAGE_PREFIX}/${IMAGE_NAME}:${IMAGE_TAG}
 
 container:
-	yarn run build -- --release
+	yarn run build --release
 	docker build -t ${IMAGE_PREFIX}/${IMAGE_NAME}:${IMAGE_TAG} .
