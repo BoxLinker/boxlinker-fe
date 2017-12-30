@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default class Alert extends React.Component {
+class Alert extends React.Component {
   static propTypes = {
     closeable: PropTypes.bool,
     type: PropTypes.string,
@@ -30,3 +30,5 @@ export default class Alert extends React.Component {
     );
   }
 }
+
+export default Alert;

@@ -21,7 +21,9 @@ class HeaderBar extends React.Component {
           </div>
           <div className="media-body">
             <span className="text-semibold text-lg text-uppercase">新建</span>
-            <p className="text-muted text-xs">在这里，你可以新建任何您需要的资源对象.</p>
+            <p className="text-muted text-xs">
+              在这里，你可以新建任何您需要的资源对象.
+            </p>
           </div>
         </div>
       </div>

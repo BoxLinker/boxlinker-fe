@@ -10,7 +10,6 @@ import PrettyError from 'pretty-error';
 // import nodeFetch from 'node-fetch';
 import { EventEmitter } from 'events';
 
-import config from './config';
 import router from './router';
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
@@ -21,10 +20,17 @@ import configureStore from './store/configureStore';
 // import { getUserInfo } from './actions/user';
 import { runtime, userinfo } from './actions';
 
+require('dotenv').config();
+
 const logger = console;
 const COOKIE_NAME = 'X-Access-Token';
 // const isDebug = process.env.NODE_ENV === 'development';
-const env = config();
+const env = {};
+Object.keys(process.env).forEach(key => {
+  if (/^BOXLINKER_/.test(key)) {
+    env[key] = process.env[key];
+  }
+});
 const app = express();
 
 app.use(express.static(path.resolve(__dirname, 'public')));
@@ -134,8 +140,10 @@ app.use((err, req, res, next) => {
 
 // Launch server
 if (!module.hot) {
-  app.listen(config.port, () => {
-    console.info(`The server is running at http://localhost:${config.port}/`);
+  app.listen(process.env.BOXLINKER_PORT, () => {
+    console.info(
+      `The server is running at http://${process.env.BOXLINKER_PORT}/`,
+    );
   });
 }
 

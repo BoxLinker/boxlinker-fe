@@ -57,10 +57,6 @@ const routes = {
       path: '/pass-reset',
       load: () => import(/* webpackChunkName: 'pass-reset' */ './pass-reset'),
     },
-    // {
-    //   path: '/demo',
-    //   load: () => import(/* webpackChunkName: 'demo' */ './demo'),
-    // },
     {
       path: '*',
       load: () => import(/* webpackChunkName: 'not-found' */ './not-found'),

@@ -82,7 +82,10 @@ class VolumeForm extends React.Component {
     return (
       <FormElement
         name="name"
-        rules={['required:数据卷名称不能为空', 'regexName:格式不正确(字母、数字、下划线, 16 位以内)']}
+        rules={[
+          'required:数据卷名称不能为空',
+          'regexName:格式不正确(字母、数字、下划线, 16 位以内)',
+        ]}
         ref={ref => {
           this.refName = ref;
         }}

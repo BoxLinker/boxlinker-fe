@@ -4,6 +4,8 @@ import { writeFile, copyFile, makeDir, copyDir, cleanDir } from './lib/fs';
 import pkg from '../package.json';
 import { format } from './run';
 
+const isDebug = !process.argv.includes('--release');
+
 /**
  * Copies static files such as robots.txt, favicon.ico to the
  * output (build) folder.
@@ -28,7 +30,7 @@ async function copy() {
     ),
     copyFile('LICENSE.txt', 'build/LICENSE.txt'),
     copyFile('yarn.lock', 'build/yarn.lock'),
-    copyFile('.env', 'build/.env'),
+    copyFile(isDebug ? '.env' : '.env.prod', 'build/.env'),
     copyDir('public', 'build/public'),
   ]);
 

@@ -32,7 +32,9 @@ const getImageURIByID = (id, images) => {
   for (let i = 0; i < images.length; i += 1) {
     const image = images[i];
     if (image.id === id) {
-      return `index.boxlinker.com/${image.namespace}/${image.name}:${image.tag}`;
+      return `index.boxlinker.com/${image.namespace}/${image.name}:${
+        image.tag
+      }`;
     }
   }
   return '';
@@ -204,7 +206,10 @@ class AppForm extends React.Component {
     return (
       <FormElement
         name="appName"
-        rules={['required:应用名称不能为空', 'regexName:格式不正确(字母、数字、下划线, 16 位以内)']}
+        rules={[
+          'required:应用名称不能为空',
+          'regexName:格式不正确(字母、数字、下划线, 16 位以内)',
+        ]}
         ref={ref => {
           this.refAppName = ref;
         }}

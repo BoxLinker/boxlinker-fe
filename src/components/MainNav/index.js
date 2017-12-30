@@ -62,7 +62,7 @@ class MainNav extends React.Component {
       </div>
     );
   }
-  getNavItem = ({ href, title }) => {
+  getNavItem = ({ href, title, icon }) => {
     let h = href;
     if (!href.startsWith('/')) {
       h = `/${href}`;
@@ -71,7 +71,7 @@ class MainNav extends React.Component {
     return (
       <li className={active}>
         <Link to={href}>
-          <i className="fa fa-home" />
+          <i className={`fa fa-${icon}`} />
           <span className="menu-title">{title}</span>
         </Link>
       </li>
@@ -91,11 +91,31 @@ class MainNav extends React.Component {
                 <ul id="mainnav-menu" className="list-group">
                   <li className="list-header">导航</li>
                   {/* {this.getNavItem({ href: '/demo', title: 'Demo' })} */}
-                  {this.getNavItem({ href: '/', title: '控制台' })}
-                  {this.getNavItem({ href: '/applications', title: '应用' })}
-                  {this.getNavItem({ href: '/services', title: '服务' })}
-                  {this.getNavItem({ href: '/volumes', title: '数据卷' })}
-                  {this.getNavItem({ href: '/images', title: '镜像' })}
+                  {this.getNavItem({
+                    href: '/',
+                    title: '控制台',
+                    icon: 'home',
+                  })}
+                  {this.getNavItem({
+                    href: '/applications',
+                    title: '应用',
+                    icon: 'home',
+                  })}
+                  {this.getNavItem({
+                    href: '/services',
+                    title: '服务',
+                    icon: 'cube',
+                  })}
+                  {this.getNavItem({
+                    href: '/volumes',
+                    title: '数据卷',
+                    icon: 'database',
+                  })}
+                  {this.getNavItem({
+                    href: '/images',
+                    title: '镜像',
+                    icon: 'home',
+                  })}
                   <li className="list-divider" />
                 </ul>
               </div>

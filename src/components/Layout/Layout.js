@@ -6,7 +6,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import normalizeCss from 'normalize.css';
 /* eslint-disable import/no-unresolved */
 // import buiCss from 'boxlinker-ui/dist/bui.css';
-import BUI_CSS from 'bui/style.less';
+import BUI_CSS from '../../bui/style.less';
 
 import s from './Layout.css';
 import Header from '../Header';

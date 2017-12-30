@@ -9,7 +9,11 @@ class PageHead extends React.Component {
           <h1 className="page-header text-overflow">控制台</h1>
           <div className="searchbox">
             <div className="input-group custom-search-form">
-              <input type="text" className="form-control" placeholder="搜索.." />
+              <input
+                type="text"
+                className="form-control"
+                placeholder="搜索.."
+              />
               <span className="input-group-btn">
                 <button className="text-muted" type="button">
                   <i className="demo-pli-magnifi-glass" />

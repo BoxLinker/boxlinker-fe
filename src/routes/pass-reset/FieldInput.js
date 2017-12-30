@@ -72,7 +72,9 @@ export default class FieldInput extends React.Component {
     }
     if (required && ruleHasNot('required', rules)) {
       rules.push(
-        ['required', required === true ? `${label}不能为空` : required].join(':'),
+        ['required', required === true ? `${label}不能为空` : required].join(
+          ':',
+        ),
       );
     }
     switch (type) {

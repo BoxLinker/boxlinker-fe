@@ -108,6 +108,13 @@ class Header extends React.Component {
             </a>
           </div>
           <div className="navbar-content clearfix">
+            <ul className="nav navbar-top-links pull-left">
+              <li className="tgl-menu-btn">
+                <a className="mainnav-toggle" href="javascript:void(0)">
+                  <i className="fa fa-bars" />
+                </a>
+              </li>
+            </ul>
             <ul className="nav navbar-top-links pull-right">
               <li>
                 <a

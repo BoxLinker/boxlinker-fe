@@ -59,9 +59,9 @@ class PanelTabs extends React.Component {
         {tabs.map(tab => (
           <div
             key={tab.key}
-            className={`tab-pane fade ${tab.key === activeKey
-              ? 'active in'
-              : ''}`}
+            className={`tab-pane fade ${
+              tab.key === activeKey ? 'active in' : ''
+            }`}
           >
             {tab.tabView}
           </div>

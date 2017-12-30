@@ -2,9 +2,9 @@ import React from 'react';
 import Cookie from 'universal-cookie';
 import PropTypes from 'prop-types';
 /* eslint-disable import/no-unresolved, import/extensions */
-import { Form, FormElement, Button, Alert } from 'bui';
 import bFetch from 'bfetch';
 import { API, GetEnv } from 'const';
+import { Form, FormElement, Alert, Button } from 'bui';
 import cls from './style';
 
 const cookie = new Cookie();
@@ -15,9 +15,6 @@ class Comp extends React.Component {
   };
   constructor(props) {
     super(props);
-    // ['onSubmit'].forEach(fn => {
-    //   this[fn] = this[fn].bind(this);
-    // });
     this.state = {
       loading: false,
       loginErrMsg: '',
@@ -86,7 +83,10 @@ class Comp extends React.Component {
     return (
       <FormElement
         name="username"
-        rules={['required:用户名称不能为空', 'regexName:格式不正确(字母、数字、下划线, 16 位以内)']}
+        rules={[
+          'required:用户名称不能为空',
+          'regexName:格式不正确(字母、数字、下划线, 16 位以内)',
+        ]}
         ref={ref => {
           this.refUsername = ref;
         }}
