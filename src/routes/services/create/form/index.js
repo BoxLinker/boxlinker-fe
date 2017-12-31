@@ -7,6 +7,8 @@ import { API } from 'const';
 import bFetch from 'bfetch';
 import FormPorts from './FormPorts';
 
+const { SimpleSelect } = Select;
+
 const log = console;
 
 const hardwareConfiguration = [
@@ -250,7 +252,7 @@ class AppForm extends React.Component {
           )}
         >
           <h5 className="control-label">选择内存</h5>
-          <Select
+          <SimpleSelect
             style={{ width: '100%' }}
             placeholder="请选择内存配置"
             value={this.state.appHardwareConfigure}
@@ -303,7 +305,7 @@ class AppForm extends React.Component {
       >
         <div className={cx('form-group', appImageErr ? 'has-error' : '')}>
           <h5 className="control-label">选择镜像</h5>
-          <Select
+          <SimpleSelect
             style={{ width: '100%' }}
             placeholder="请选择镜像"
             value={this.state.appImage}
