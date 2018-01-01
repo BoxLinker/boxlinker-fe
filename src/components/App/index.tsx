@@ -1,8 +1,13 @@
 import * as React from 'react';
 import { Layout, Menu, Icon } from 'antd';
+import { Link } from 'react-router';
 import './App.css';
 
 const { Header, Sider, Content } = Layout;
+
+// export interface Props {
+//   children: 
+// };
 
 class App extends React.Component {
   state = {
@@ -26,12 +31,16 @@ class App extends React.Component {
           <div className="App-logo" />
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             <Menu.Item key="1">
-              <Icon type="user" />
-              <span>控制台</span>
+              <Link to="/">
+                <Icon type="user" />
+                <span>控制台</span>
+              </Link>
             </Menu.Item>
             <Menu.Item key="2">
-              <Icon type="video-camera" />
-              <span>服务</span>
+              <Link to="/services">
+                <Icon type="video-camera" />
+                <span>服务</span>
+              </Link>
             </Menu.Item>
             <Menu.Item key="3">
               <Icon type="upload" />
@@ -52,7 +61,7 @@ class App extends React.Component {
             />
           </Header>
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 1280 }}>
-            Content
+            {this.props.children}
           </Content>
         </Layout>
       </Layout>
