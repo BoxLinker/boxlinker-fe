@@ -5,9 +5,22 @@ import Select from './Select';
 import Form from './Form';
 import FormElement from './FormElement';
 import Alert from './Alert';
+import Field from './Field';
 import FieldInput from './FieldInput';
+import FieldSelect from './FieldSelect';
 
-export { Button, Grid, Toggle, Select, Form, FormElement, Alert, FieldInput };
+export {
+  Button,
+  Grid,
+  Toggle,
+  Select,
+  Form,
+  FormElement,
+  Alert,
+  FieldInput,
+  FieldSelect,
+  Field,
+};
 
 export default {
   Button,
@@ -18,6 +31,8 @@ export default {
   FormElement,
   FieldInput,
   Alert,
+  FieldSelect,
+  Field,
 };
 
 // export { default as Button } from './Button';

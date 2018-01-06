@@ -6,26 +6,21 @@ const noop = () => {};
 
 class Option extends React.Component {
   static propTypes = {
-    value: PropTypes.string,
-    children: PropTypes.any, //eslint-disable-line
+    value: PropTypes.any, //eslint-disable-line
     onClick: PropTypes.func,
+    children: PropTypes.any, //eslint-disable-line
   };
   static defaultProps = {
+    label: '',
     value: '',
-    children: null,
     onClick: noop,
   };
   onClick = () => {
     this.props.onClick(this.props.value);
   };
   render() {
-    const { children } = this.props;
     return (
-      <li className="bui-dropdown-results-option">
-        <a href="javascript:void(0)" onClick={this.onClick}>
-          {children}
-        </a>
-      </li>
+      <li className="bui-dropdown-results-option">{this.props.children}</li>
     );
   }
 }

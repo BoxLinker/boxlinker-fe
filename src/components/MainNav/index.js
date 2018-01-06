@@ -9,6 +9,8 @@ class MainNav extends React.Component {
   static contextTypes = {
     event: PropTypes.object.isRequired,
     store: PropTypes.object,
+    getUrlParameter: PropTypes.func,
+    getUrlPath: PropTypes.func,
   };
   getUserPanel() {
     const { userinfo } = this.context.store.getState();
@@ -67,7 +69,11 @@ class MainNav extends React.Component {
     if (!href.startsWith('/')) {
       h = `/${href}`;
     }
-    const active = h === '' ? 'active' : '';
+    const p = this.context.getUrlPath();
+    let active = p.startsWith(h) ? 'active-link' : '';
+    if (h === '/') {
+      active = p === h ? 'active-link' : '';
+    }
     return (
       <li className={active}>
         <Link to={href}>

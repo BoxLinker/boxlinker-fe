@@ -39,6 +39,9 @@ const context = {
       ? ''
       : decodeURIComponent(results[1].replace(/\+/g, ' '));
   },
+  getUrlPath() {
+    return location.pathname;
+  },
   // Universal HTTP client
   // fetch: createFetch(self.fetch, {
   //   baseUrl: window.App.apiUrl,

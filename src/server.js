@@ -78,6 +78,9 @@ app.get('*', async (req, res, next) => {
       getUrlParameter(name) {
         return req.query[name];
       },
+      getUrlPath() {
+        return req.path;
+      },
       // Universal HTTP client
       // fetch,
       // You can access redux through react-redux connect

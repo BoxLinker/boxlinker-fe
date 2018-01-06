@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 /* eslint-disable import/no-unresolved, import/extensions */
-import { Form, FormElement, Select } from 'bui';
+import { Form, FormElement, Select, Field } from 'bui';
 import { API } from 'const';
 import bFetch from 'bfetch';
 import FormPorts from './FormPorts';
 
-const { SimpleSelect } = Select;
+const { SimpleSelect, Option } = Select;
 
 const log = console;
 
@@ -232,6 +232,22 @@ class AppForm extends React.Component {
     );
   }
   getAppHardwareConfigureUI() {
+    return (
+      <Field
+        label="选择内存"
+        name="appHardwareConfigure"
+        data={hardwareConfiguration}
+        ref={ref => {
+          this.refAppHardwareConfigure = ref;
+        }}
+      >
+        <Select defaultValue="1">
+          <Option value="1">64M</Option>
+        </Select>
+      </Field>
+    );
+  }
+  getAppHardwareConfigureUI1() {
     const state = this.state;
     const appHardwareConfigureErrMsg = state.appHardwareConfigureErrMsg;
 
@@ -334,7 +350,7 @@ class AppForm extends React.Component {
           getElements={() => [
             this.refAppName,
             this.refAppImage,
-            this.refAppHardwareConfigure,
+            this.refAppHardwareConfigure.getRefElement(),
             this.refAppPorts,
           ]}
         >
