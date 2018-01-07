@@ -1,20 +1,43 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import Layout from '../../components/Layout';
+import { Collapse, Row, Col, List, Avatar } from 'antd';
+
+import { ServicePanel, ImagePanel, VolumePanel } from './panels';
+
+import './style.css';
+
+const { Panel } = Collapse;
+
+const services = [
+  {
+    title: 'Ant Design Title 1',
+  },
+  {
+    title: 'Ant Design Title 2',
+  },
+  {
+    title: 'Ant Design Title 3',
+  },
+  {
+    title: 'Ant Design Title 4',
+  },
+];
 
 class Comp extends React.Component {
   render() {
     return (
-      <Layout>
-        <button
-          onClick={() => {
-            this.props.navigateTo('/services');
-          }}
-        >
-          Dashboard
-        </button>
-      </Layout>
+      <div>
+        <Row gutter={16}>
+          <Col span={12}>
+            <ServicePanel />
+            <ImagePanel />
+          </Col>
+          <Col span={12}>
+            <VolumePanel />
+          </Col>
+        </Row>
+      </div>
     );
   }
 }

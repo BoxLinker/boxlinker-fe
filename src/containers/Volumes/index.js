@@ -1,20 +1,32 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import Layout from '../../components/Layout';
+import { Button } from 'antd';
+
+import CreateModal from './create';
+import QueryTable from './list';
 
 class Comp extends React.Component {
+  openCreate = () => {
+    if (this.createRef) {
+      this.createRef.toggle(true);
+    }
+  };
   render() {
     return (
-      <Layout>
-        <button
-          onClick={() => {
-            this.props.navigateTo('/');
+      <div>
+        <p>
+          <Button type="primary" onClick={this.openCreate}>
+            新建数据卷
+          </Button>
+        </p>
+        <QueryTable />
+        <CreateModal
+          ref={ref => {
+            this.createRef = ref;
           }}
-        >
-          Volumes
-        </button>
-      </Layout>
+        />
+      </div>
     );
   }
 }

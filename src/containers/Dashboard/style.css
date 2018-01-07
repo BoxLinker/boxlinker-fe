@@ -1,0 +1,12 @@
+.dashboard-panel {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.dashboard-panel:first-child {
+  margin-top: 0px;
+}
+
+.dashboard-panel:last-child {
+  margin-bottom: 0px;
+}

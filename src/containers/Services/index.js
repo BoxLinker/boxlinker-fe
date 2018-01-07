@@ -1,43 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { Table, Button } from 'antd';
-import Layout from '../../components/Layout';
+import { Button } from 'antd';
 
 import CreateModal from './create';
+import QueryTable from './list';
 
-const dataSource = [
-  {
-    key: '1',
-    name: '胡彦斌',
-    age: 32,
-    address: '西湖区湖底公园1号',
-  },
-  {
-    key: '2',
-    name: '胡彦祖',
-    age: 42,
-    address: '西湖区湖底公园1号',
-  },
-];
-
-const columns = [
-  {
-    title: '姓名',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: '年龄',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: '住址',
-    dataIndex: 'address',
-    key: 'address',
-  },
-];
 class Comp extends React.Component {
   openCreate = () => {
     if (this.createRef) {
@@ -46,19 +14,19 @@ class Comp extends React.Component {
   };
   render() {
     return (
-      <Layout>
+      <div>
         <p>
           <Button type="primary" onClick={this.openCreate}>
             新建服务
           </Button>
         </p>
-        <Table bordered dataSource={dataSource} columns={columns} />
+        <QueryTable />
         <CreateModal
           ref={ref => {
             this.createRef = ref;
           }}
         />
-      </Layout>
+      </div>
     );
   }
 }

@@ -1,6 +1,8 @@
+// eslint-disable no-script-url, jsx-a11y/anchor-is-valid
 import * as React from 'react';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon, Dropdown } from 'antd';
 import { connect } from 'react-redux';
+import cookie from 'js-cookie';
 import { push } from 'react-router-redux';
 import './App.css';
 
@@ -19,6 +21,17 @@ class Comp extends React.Component {
       collapsed: !this.state.collapsed,
     });
   };
+  handleHeaderMenuSelect = ({ key }) => {
+    console.log('key', key);
+    switch (key) {
+      case 'logout':
+        this.props.logout();
+        this.props.navigateTo('/login');
+        break;
+      default:
+        break;
+    }
+  };
 
   render() {
     const { collapsed } = this.state;
@@ -35,7 +48,7 @@ class Comp extends React.Component {
           collapsible
           collapsed={this.state.collapsed}
         >
-          <div className="App-logo" />
+          <div className="App-logo">{collapsed ? 'B' : 'Boxlinker'}</div>
           <Menu
             theme="dark"
             mode="inline"
@@ -60,26 +73,38 @@ class Comp extends React.Component {
             </Menu.Item>
           </Menu>
         </Sider>
+        <Header className="App-header" style={{ left: collapsed ? 80 : 200 }}>
+          <Icon
+            className="trigger"
+            type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+            onClick={this.toggle}
+          />
+          <ul className="header-menu">
+            <li>
+              <Dropdown
+                placement="bottomLeft"
+                overlay={
+                  <Menu onClick={this.handleHeaderMenuSelect}>
+                    <Menu.Item key="logout">退出</Menu.Item>
+                  </Menu>
+                }
+              >
+                <a href="javascript:void(0)" className="ant-dropdown-link">
+                  cabernety
+                </a>
+              </Dropdown>
+            </li>
+          </ul>
+        </Header>
         <Layout
           className="App-layout"
           style={{ marginLeft: collapsed ? 80 : 200 }}
         >
-          <Header
-            className="App-header"
-            style={{ background: '#fff', padding: 0 }}
-          >
-            <Icon
-              className="trigger"
-              type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-              onClick={this.toggle}
-            />
-          </Header>
           <Content
             style={{
               margin: '24px 16px',
               padding: 24,
               background: '#fff',
-              minHeight: 1280,
             }}
           >
             {this.props.children}
@@ -93,6 +118,9 @@ class Comp extends React.Component {
 const Container = connect(null, dispatch => ({
   navigateTo: path => {
     dispatch(push(path));
+  },
+  logout: () => {
+    cookie.remove('X-Access-Token');
   },
 }))(Comp);
 

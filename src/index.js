@@ -5,19 +5,42 @@ import { Router, Route, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
 import registerServiceWorker from './registerServiceWorker';
-import { Dashboard, Services, Volumes, Images } from './containers';
+import {
+  Dashboard,
+  Services,
+  ServiceDetail,
+  Volumes,
+  Images,
+  Login,
+} from './containers';
+import { auth } from './middleware';
 
 import store from './store';
 
 const history = syncHistoryWithStore(browserHistory, store);
 
+function requireAuth(nextState, replace) {
+  if (!auth()) {
+    replace({
+      pathname: '/login',
+      state: { nextPathname: nextState.location.pathname },
+    });
+  }
+}
+
 render(
   <Provider store={store}>
     <Router history={history}>
-      <Route path="/" component={Dashboard} />
-      <Route path="/services" component={Services} />
-      <Route path="/volumes" component={Volumes} />
-      <Route path="/images" component={Images} />
+      <Route path="/" component={Dashboard} onEnter={requireAuth} />
+      <Route path="/login" component={Login} />
+      <Route path="/services" component={Services} onEnter={requireAuth} />
+      <Route
+        path="/services/:id"
+        component={ServiceDetail}
+        onEnter={requireAuth}
+      />
+      <Route path="/volumes" component={Volumes} onEnter={requireAuth} />
+      <Route path="/images" component={Images} onEnter={requireAuth} />
     </Router>
   </Provider>,
   document.getElementById('root'),

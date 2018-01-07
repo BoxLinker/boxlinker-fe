@@ -1,6 +1,5 @@
 import React from 'react';
 import { Form, Row, Col, Input, Icon, Select, Modal } from 'antd';
-import PortsItem from './ports';
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -22,8 +21,8 @@ export default Form.create()(props => {
   };
   return (
     <Modal
-      width={640}
-      title="新建服务"
+      width={480}
+      title="新建数据卷"
       visible={visible}
       onOk={onCreate}
       onCancel={onCancel}
@@ -31,9 +30,9 @@ export default Form.create()(props => {
       <Form layout="horizontal">
         <Row gutter={16}>
           <Col span={24}>
-            <FormItem label="服务名称" {...formItemLayout}>
+            <FormItem label="名称" {...formItemLayout}>
               {getFieldDecorator('name', {
-                rules: [{ required: true, message: '请填写应用名称!' }],
+                rules: [{ required: true, message: '请填写数据卷名称!' }],
               })(
                 <Input
                   prefix={
@@ -47,9 +46,9 @@ export default Form.create()(props => {
         </Row>
         <Row gutter={16}>
           <Col span={24}>
-            <FormItem label="内存大小" {...formItemLayout}>
-              {getFieldDecorator('memory', {
-                rules: [{ required: true, message: '请选择内存大小!' }],
+            <FormItem label="大小" {...formItemLayout}>
+              {getFieldDecorator('size', {
+                rules: [{ required: true, message: '请选择数据卷大小!' }],
                 initialValue: 'lucy',
               })(
                 <Select onChange={this.onAppMemoryChange}>
@@ -59,35 +58,6 @@ export default Form.create()(props => {
                   <Option value="Yiminghe">yiminghe</Option>
                 </Select>,
               )}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={24}>
-            <FormItem label="镜像" {...formItemLayout}>
-              {getFieldDecorator('image', {
-                rules: [{ required: true, message: '请选择镜像!' }],
-                initialValue: 'lucy',
-              })(
-                <Select onChange={this.onAppImageChange}>
-                  <Option value="jack">Jack</Option>
-                  <Option value="lucy">Lucy</Option>
-                  <Option value="disabled">Disabled</Option>
-                  <Option value="Yiminghe">yiminghe</Option>
-                </Select>,
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={24}>
-            <FormItem label="端口" {...formItemLayout}>
-              {getFieldDecorator('ports', {
-                rules: [],
-                initialValue: [
-                  { key: '0', port: 80, protocol: 'tcp', path: '/' },
-                ],
-              })(<PortsItem onChange={this.onAppPortsChange} />)}
             </FormItem>
           </Col>
         </Row>
