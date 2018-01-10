@@ -12,6 +12,7 @@ export const API = {
   },
   IMAGES: {
     QUERY: '/v1/registry/auth/image/list',
+    QUERY_PUB: '/v1/registry/pub/image/list',
   },
   VOLUMES: {
     QUERY: '/v1/application/auth/volume',
