@@ -76,6 +76,7 @@ class Comp extends React.Component {
       }
       message.success(`服务 [${values.name}] 创建成功!`);
       logger.log('create service', { res });
+      this.props.navigateTo(`/services/${values.name}`);
     });
   };
   render() {
@@ -110,13 +111,13 @@ class Comp extends React.Component {
             <FormItem label="内存大小" {...formItemLayout}>
               {getFieldDecorator('memory', {
                 rules: [{ required: true, message: '请选择内存大小!' }],
-                initialValue: '1',
+                initialValue: '64Mi',
               })(
                 <Select onChange={this.onAppMemoryChange}>
-                  <Option value="1">64M</Option>
-                  <Option value="2">128M</Option>
-                  <Option value="3">256M</Option>
-                  <Option value="4">512M</Option>
+                  <Option value="64Mi">64M</Option>
+                  <Option value="128Mi">128M</Option>
+                  <Option value="256Mi">256M</Option>
+                  <Option value="512Mi">512M</Option>
                 </Select>,
               )}
             </FormItem>

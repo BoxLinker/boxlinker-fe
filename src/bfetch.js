@@ -4,6 +4,7 @@
 import 'isomorphic-fetch';
 import cookies from 'js-cookie';
 import { isString, isFunction } from 'lodash';
+import cookie from 'js-cookie';
 import { BaseURL } from './const';
 
 const logger = console;
@@ -141,9 +142,11 @@ const bFetch = async (url, options = {}) => {
         message: json.msg || json.message,
       });
     }
+    case 6: // api status code 6 = unauthorized
     case 401: {
+      cookie.remove('X-Access-Token');
       if (window.location.path !== '/login') {
-        // history.go('/login');
+        window.location.href = '/login';
       }
       throw new ErrUnauthroized();
     }
