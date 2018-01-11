@@ -12,7 +12,7 @@ const logger = console;
 class Comp extends React.Component {
   static displayName = 'Layout';
   state = {
-    collapsed: false,
+    collapsed: true,
   };
   componentDidMount() {
     this.props.getUserInfo();

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Form, Row, Col, Input, Icon, Select, Button } from 'antd';
+import { Form, Row, Col, Input, Icon, Select, Button, message } from 'antd';
 import { push } from 'react-router-redux';
 
 import CreateForm from './form';
@@ -12,6 +12,28 @@ import PortsItem from './ports';
 const logger = console;
 const { Option } = Select;
 const FormItem = Form.Item;
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 4 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 16 },
+  },
+};
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0,
+    },
+    sm: {
+      span: 16,
+      offset: 4,
+    },
+  },
+};
 class Comp extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func,
@@ -24,80 +46,42 @@ class Comp extends React.Component {
     loading: false,
   };
   createService = async data => {
+    const result = {};
     try {
-      await bFetch(API.SERVICE.CREATE, {
+      data.cpu = '200m';
+      result.res = await bFetch(API.SERVICE.CREATE, {
         method: 'post',
         body: JSON.stringify(data),
       });
-      return null;
     } catch (err) {
-      return err;
+      result.err = err;
     }
+    return result;
   };
   onSubmit = e => {
     e.preventDefault();
-    this.props.form.validateFields(async (err, values) => {
-      if (err) {
+    this.props.form.validateFields(async (fErr, values) => {
+      if (fErr) {
         return;
       }
       this.setState({ loading: true });
-      const eErr = await this.createService(values);
-      if (!eErr) {
-        this.setState({ loading: false });
-        // 跳转 service list
-        this.props.navigateTo('/services');
+      const { err, res } = await this.createService(values);
+      this.setState({ loading: false });
+      if (err) {
+        message.error(err.error());
+        logger.error('create service', {
+          err,
+        });
         return;
       }
-      logger.error('create service', {
-        err: eErr,
-      });
-      // toast err
+      message.success(`服务 [${values.name}] 创建成功!`);
+      logger.log('create service', { res });
     });
-  };
-  createService = async data => {
-    try {
-      await bFetch(API.SERVICE.CREATE, {
-        method: 'post',
-        body: JSON.stringify(data),
-      });
-      return true;
-    } catch (err) {
-      logger.error('Service create', {
-        err,
-      });
-    }
-    return false;
   };
   render() {
     const { form } = this.props;
     const { loading } = this.state;
     const { getFieldDecorator } = form;
-    // const formItemLayout = {
-    //   labelCol: { span: 4 },
-    //   wrapperCol: { span: 20 },
-    // };
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 4 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
-      },
-    };
-    const tailFormItemLayout = {
-      wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0,
-        },
-        sm: {
-          span: 16,
-          offset: 4,
-        },
-      },
-    };
     return (
       <Form
         onSubmit={this.onSubmit}
