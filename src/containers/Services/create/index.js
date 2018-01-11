@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Form, Row, Col, Input, Icon, Select, Button } from 'antd';
+import { push } from 'react-router-redux';
+
 import CreateForm from './form';
 import { API } from '../../../const';
 import bFetch from '../../../bfetch';
@@ -29,17 +31,12 @@ class Comp extends React.Component {
       });
       return null;
     } catch (err) {
-      logger.error('Service create', {
-        err,
-      });
       return err;
     }
   };
-  onSubmit = () => {
-    if (!this.formRef) {
-      return;
-    }
-    this.formRef.validateFields(async (err, values) => {
+  onSubmit = e => {
+    e.preventDefault();
+    this.props.form.validateFields(async (err, values) => {
       if (err) {
         return;
       }
@@ -48,7 +45,12 @@ class Comp extends React.Component {
       if (!eErr) {
         this.setState({ loading: false });
         // 跳转 service list
+        this.props.navigateTo('/services');
+        return;
       }
+      logger.error('create service', {
+        err: eErr,
+      });
       // toast err
     });
   };
@@ -107,6 +109,7 @@ class Comp extends React.Component {
             <FormItem label="服务名称" {...formItemLayout}>
               {getFieldDecorator('name', {
                 rules: [{ required: true, message: '请填写应用名称!' }],
+                initialValue: 'nginx-test',
               })(
                 <Input
                   prefix={
@@ -140,7 +143,7 @@ class Comp extends React.Component {
             <FormItem label="镜像" {...formItemLayout}>
               {getFieldDecorator('image', {
                 rules: [{ required: true, message: '请输入镜像!' }],
-                initialValue: '',
+                initialValue: 'index.boxlinker.com/library/nginx:latest',
               })(<Input placeholder="这里输入镜像名称" />)}
             </FormItem>
           </Col>
@@ -169,20 +172,12 @@ class Comp extends React.Component {
       </Form>
     );
   }
-  render1() {
-    const { visible, loading } = this.state;
-    return (
-      <CreateForm
-        ref={ref => {
-          this.formRef = ref;
-        }}
-        loading={loading}
-        visible={visible}
-        onCreate={this.onSubmit}
-        onCancel={this.onCancel}
-      />
-    );
-  }
 }
 
-export default Form.create()(Comp);
+const Container = connect(null, dispatch => ({
+  navigateTo: path => {
+    dispatch(push(path));
+  },
+}))(Form.create()(Comp));
+
+export default Container;
