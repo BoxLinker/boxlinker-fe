@@ -4,15 +4,19 @@ import { Layout, Menu, Icon, Dropdown } from 'antd';
 import { connect } from 'react-redux';
 import cookie from 'js-cookie';
 import { push } from 'react-router-redux';
+import { getUserInfoAction } from '../../actions/auth';
 import './App.css';
 
 const { Header, Sider, Content } = Layout;
-
+const logger = console;
 class Comp extends React.Component {
+  static displayName = 'Layout';
   state = {
     collapsed: false,
   };
-
+  componentDidMount() {
+    this.props.getUserInfo();
+  }
   onClickItem = ({ key }) => {
     this.props.navigateTo(key);
   };
@@ -35,6 +39,7 @@ class Comp extends React.Component {
 
   render() {
     const { collapsed } = this.state;
+    const { userinfo = {} } = this.props;
     return (
       <Layout>
         <Sider
@@ -90,7 +95,7 @@ class Comp extends React.Component {
                 }
               >
                 <a href="javascript:void(0)" className="ant-dropdown-link">
-                  cabernety
+                  {userinfo.name}
                 </a>
               </Dropdown>
             </li>
@@ -115,13 +120,24 @@ class Comp extends React.Component {
   }
 }
 
-const Container = connect(null, dispatch => ({
-  navigateTo: path => {
-    dispatch(push(path));
+const Container = connect(
+  state => {
+    return {
+      userinfo: state.userinfo,
+    };
   },
-  logout: () => {
-    cookie.remove('X-Access-Token');
-  },
-}))(Comp);
+  dispatch => ({
+    navigateTo: path => {
+      dispatch(push(path));
+    },
+    logout: () => {
+      cookie.remove('X-Access-Token');
+      dispatch(push('/login'));
+    },
+    getUserInfo: () => {
+      dispatch(getUserInfoAction());
+    },
+  }),
+)(Comp);
 
 export default Container;

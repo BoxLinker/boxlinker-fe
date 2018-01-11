@@ -67,7 +67,7 @@ export default class extends React.Component {
   }
   addRow = () => {
     const { value, count } = this.state;
-    value.push({ key: count + 1, port: '', protocol: 'tcp', path: '/' });
+    value.push({ key: count + 1, port: '', protocol: 'http', path: '/' });
     this.setState({ value, count: count + 1 });
   };
   removeRow = key => {

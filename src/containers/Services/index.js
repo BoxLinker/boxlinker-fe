@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { Button } from 'antd';
 
-import CreateModal from './create';
 import QueryTable from './list';
 
+const logger = console;
+
 class Comp extends React.Component {
+  static displayName = 'Services';
   openCreate = () => {
-    if (this.createRef) {
-      this.createRef.toggle(true);
-    }
+    this.props.navigateTo('/services/create');
   };
   render() {
     return (
@@ -21,11 +21,6 @@ class Comp extends React.Component {
           </Button>
         </p>
         <QueryTable />
-        <CreateModal
-          ref={ref => {
-            this.createRef = ref;
-          }}
-        />
       </div>
     );
   }

@@ -16,11 +16,15 @@ class Comp extends React.Component {
   }
   getList() {
     const { data } = this.state;
-    if (!data || !data.length) {
+    if (!data) {
       return (
         <div style={{ textAlign: 'center', padding: '20px 0' }}>
           <Spin />
         </div>
+      );
+    } else if (!data.length) {
+      return (
+        <div style={{ textAlign: 'center', padding: '20px 0' }}>暂无数据</div>
       );
     }
     return (

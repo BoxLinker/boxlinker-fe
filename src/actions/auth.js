@@ -1,31 +1,11 @@
 import cookie from 'js-cookie';
+import { createAction } from 'redux-actions';
 import bFetch from '../bfetch';
 import { API } from '../const';
 
-const login1 = data =>
-  new Promise((resolve, reject) => {
-    bFetch(API.USER.LOGIN, {
-      method: 'POST',
-      body: JSON.stringify(data),
-    })
-      .then(res => {
-        const token = res.results['X-Access-Token'];
-        if (token) {
-          const { hostname } = window.location;
-          cookie.set('X-Access-Token', token, {
-            domain: hostname !== 'localhost' ? '.boxlinker.com' : 'localhost',
-          });
-          resolve();
-        } else {
-          reject();
-        }
-      })
-      .catch(() => {
-        reject();
-      });
-  });
+const logger = console;
 
-const login = async data => {
+export const login = async data => {
   try {
     const res = await bFetch(API.USER.LOGIN, {
       method: 'POST',
@@ -43,6 +23,18 @@ const login = async data => {
   }
 };
 
-export { login };
+export const getUserInfoAction = createAction('GET_USERINFO', async () => {
+  try {
+    const res = await bFetch(API.USER.USERINFO, {
+      method: 'get',
+    });
+    return res.results;
+  } catch (err) {
+    logger.error('Get UserInfo', {
+      err,
+    });
+  }
+  return null;
+});
 
 export default {};

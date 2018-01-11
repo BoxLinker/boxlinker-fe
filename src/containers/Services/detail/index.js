@@ -11,6 +11,7 @@ import { API } from '../../../const';
 const { TabPane } = Tabs;
 
 class Comp extends React.Component {
+  static displayName = 'ServiceDetail';
   onPortsSubmit = data => {
     console.log('onPortsSubmit', data);
   };

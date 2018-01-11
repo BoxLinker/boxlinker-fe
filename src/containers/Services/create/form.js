@@ -14,7 +14,7 @@ const FormItem = Form.Item;
 // }
 
 export default Form.create()(props => {
-  const { visible, form, onCreate, onCancel } = props;
+  const { visible, form, onCreate, onCancel, loading } = props;
   const { getFieldDecorator } = form;
   const formItemLayout = {
     labelCol: { span: 4 },
@@ -50,13 +50,13 @@ export default Form.create()(props => {
             <FormItem label="内存大小" {...formItemLayout}>
               {getFieldDecorator('memory', {
                 rules: [{ required: true, message: '请选择内存大小!' }],
-                initialValue: 'lucy',
+                initialValue: '1',
               })(
                 <Select onChange={this.onAppMemoryChange}>
-                  <Option value="jack">Jack</Option>
-                  <Option value="lucy">Lucy</Option>
-                  <Option value="disabled">Disabled</Option>
-                  <Option value="Yiminghe">yiminghe</Option>
+                  <Option value="1">64M</Option>
+                  <Option value="2">128M</Option>
+                  <Option value="3">256M</Option>
+                  <Option value="4">512M</Option>
                 </Select>,
               )}
             </FormItem>
@@ -66,16 +66,9 @@ export default Form.create()(props => {
           <Col span={24}>
             <FormItem label="镜像" {...formItemLayout}>
               {getFieldDecorator('image', {
-                rules: [{ required: true, message: '请选择镜像!' }],
-                initialValue: 'lucy',
-              })(
-                <Select onChange={this.onAppImageChange}>
-                  <Option value="jack">Jack</Option>
-                  <Option value="lucy">Lucy</Option>
-                  <Option value="disabled">Disabled</Option>
-                  <Option value="Yiminghe">yiminghe</Option>
-                </Select>,
-              )}
+                rules: [{ required: true, message: '请输入镜像!' }],
+                initialValue: '',
+              })(<Input placeholder="这里输入镜像名称" />)}
             </FormItem>
           </Col>
         </Row>
@@ -85,7 +78,7 @@ export default Form.create()(props => {
               {getFieldDecorator('ports', {
                 rules: [],
                 initialValue: [
-                  { key: '0', port: 80, protocol: 'tcp', path: '/' },
+                  { key: '0', port: 80, protocol: 'http', path: '/' },
                 ],
               })(<PortsItem onChange={this.onAppPortsChange} />)}
             </FormItem>

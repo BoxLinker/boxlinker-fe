@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 const FormItem = Form.Item;
 
 class NormalLoginForm extends React.Component {
+  static displayName = 'LoginForm';
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {

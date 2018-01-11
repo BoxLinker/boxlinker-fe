@@ -6,6 +6,7 @@ import LoginForm from './form';
 import { login } from '../../actions/auth';
 
 class Comp extends React.Component {
+  static displayName = 'Login';
   state = {
     loading: false,
     err: null,
@@ -16,13 +17,12 @@ class Comp extends React.Component {
     });
     try {
       await login(data);
-      this.setState({ err: null }, () => {
+      this.setState({ err: null, loading: false }, () => {
         this.props.navigateTo('/');
       });
     } catch (err) {
-      this.setState({ err });
+      this.setState({ err, loading: false });
     }
-    this.setState({ loading: false });
   };
 
   getAlert() {

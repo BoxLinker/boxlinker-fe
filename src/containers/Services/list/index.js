@@ -38,6 +38,7 @@ const columns = [
   },
 ];
 class Comp extends React.Component {
+  static displayName = 'ServiceList';
   render() {
     return <Table rowKey="name" url={API.SERVICE.QUERY} columns={columns} />;
   }

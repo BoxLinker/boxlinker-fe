@@ -31,6 +31,7 @@ const load = (asyncImport, props = { layout: true }) => {
 
 export const Services = load(() => import('./Services'));
 export const ServiceDetail = load(() => import('./Services/detail'));
+export const ServiceCreate = load(() => import('./Services/create'));
 export const Dashboard = load(() => import('./Dashboard'));
 export const Images = load(() => import('./Images'));
 export const Volumes = load(() => import('./Volumes'));

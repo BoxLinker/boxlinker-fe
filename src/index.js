@@ -9,6 +9,7 @@ import {
   Dashboard,
   Services,
   ServiceDetail,
+  ServiceCreate,
   Volumes,
   Images,
   Login,
@@ -34,6 +35,11 @@ render(
       <Route path="/" component={Dashboard} onEnter={requireAuth} />
       <Route path="/login" component={Login} />
       <Route path="/services" component={Services} onEnter={requireAuth} />
+      <Route
+        path="/services/create"
+        component={ServiceCreate}
+        onEnter={requireAuth}
+      />
       <Route
         path="/services/:id"
         component={ServiceDetail}
