@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import { push } from 'react-router-redux';
 import { Collapse, List, Avatar, Spin, Tag } from 'antd';
 import bFetch from '../../../bfetch';
@@ -38,7 +39,7 @@ class Comp extends React.Component {
               title={
                 <span>
                   <Tag color="green">运行中</Tag>
-                  <a href="https://ant.design">{item.name}</a>
+                  <Link to={`/services/${item.name}`}>{item.name}</Link>
                 </span>
               }
               description=""

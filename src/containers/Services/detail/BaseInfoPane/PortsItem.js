@@ -11,6 +11,7 @@ const EditableCell = ({ value, onChange, type }) => {
 };
 
 export default class extends React.Component {
+  static displayName = 'PortsItem';
   constructor(props) {
     super(props);
     this.columns = [
@@ -26,6 +27,7 @@ export default class extends React.Component {
         dataIndex: 'protocol',
         key: 'protocol',
         width: 70,
+        render: text => (text ? text.toUpperCase() : ''),
       },
       {
         title: '路径',
@@ -56,7 +58,9 @@ export default class extends React.Component {
       },
     ];
     const value = this.props.value || [];
-    this.state = { value, count: 0 };
+    console.log('PortsItem>>>', value);
+
+    this.state = { value, count: value.length };
   }
   componentWillReceiveProps(nextProps) {
     // Should be a controlled component.

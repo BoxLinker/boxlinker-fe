@@ -2,24 +2,26 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { Alert } from 'antd';
-import LoginForm from './form';
-import { login } from '../../actions/auth';
-import { getUrlParameter } from '../../utils';
-//reg_confirmed_username
+import RegForm from './form';
+import { reg } from '../../actions/auth';
+
 class Comp extends React.Component {
   static displayName = 'Login';
   state = {
     loading: false,
     err: null,
+    confirm: null,
   };
   onSubmit = async data => {
     this.setState({
       loading: true,
     });
     try {
-      await login(data);
+      await reg(data);
       this.setState({ err: null, loading: false }, () => {
-        this.props.navigateTo('/');
+        this.setState({
+          confirm: data,
+        });
       });
     } catch (err) {
       this.setState({ err, loading: false });
@@ -41,10 +43,9 @@ class Comp extends React.Component {
       />
     );
   }
-  getLoginSuccessAlert() {
-    const name = getUrlParameter('reg_confirmed_username');
-
-    if (!name) {
+  getConfirm() {
+    const { confirm } = this.state;
+    if (!confirm) {
       return null;
     }
     return (
@@ -52,7 +53,9 @@ class Comp extends React.Component {
         style={{ marginBottom: 20 }}
         message={
           <div>
-            恭喜 <strong>{name}</strong> 注册成功，请登录！
+            <span>验证邮件已经发送到您的邮箱</span>
+            <a>{confirm.email}</a>
+            <br />请您到邮箱点击验证链接
           </div>
         }
         type="success"
@@ -60,7 +63,7 @@ class Comp extends React.Component {
     );
   }
   render() {
-    const { loading } = this.state;
+    const { loading, confirm } = this.state;
     return (
       <div
         style={{
@@ -78,10 +81,14 @@ class Comp extends React.Component {
           }}
         >
           <h1 style={{ textAlign: 'center' }}>Boxlinker</h1>
-          <p style={{ textAlign: 'center' }}>从这里开始，请登录您的账号</p>
-          {this.getLoginSuccessAlert()}
+          <p style={{ textAlign: 'center' }}>从这里开始，注册一个账号</p>
+          {this.getConfirm()}
           {this.getAlert()}
-          <LoginForm loading={loading} onSubmit={this.onSubmit} />
+          <RegForm
+            disabled={confirm !== null}
+            loading={loading}
+            onSubmit={this.onSubmit}
+          />
         </div>
       </div>
     );

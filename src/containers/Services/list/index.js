@@ -20,9 +20,22 @@ const columns = [
     render: () => <Tag color="green">运行中</Tag>,
   },
   {
-    title: '镜像',
-    dataIndex: 'image',
-    key: 'image',
+    title: '访问域名',
+    dataIndex: 'host',
+    key: 'host',
+    render: text => {
+      if (!text) {
+        return null;
+      }
+      if (!/^http:\/\/|https:\/\//.test(text)) {
+        text = `http://${text}`;
+      }
+      return (
+        <a href={text} target="_blank">
+          {text}
+        </a>
+      );
+    },
   },
   {
     title: '端口',

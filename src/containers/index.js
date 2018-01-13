@@ -18,11 +18,11 @@ const load = (asyncImport, props = { layout: true }) => {
     render() {
       const { layout } = props;
       if (!layout) {
-        return <Comp />;
+        return <Comp {...this.props} />;
       }
       return (
         <Layout>
-          <Comp />
+          <Comp {...this.props} />
         </Layout>
       );
     }
@@ -36,3 +36,4 @@ export const Dashboard = load(() => import('./Dashboard'));
 export const Images = load(() => import('./Images'));
 export const Volumes = load(() => import('./Volumes'));
 export const Login = load(() => import('./Login'), { layout: false });
+export const Reg = load(() => import('./Reg'), { layout: false });

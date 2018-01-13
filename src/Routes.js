@@ -1,40 +1,37 @@
-import createHistory from 'history/createBrowserHistory'
-import { Router, Route, Switch } from 'react-router'
-import { Redirect } from 'react-router-dom'
-import { Provider } from 'react-redux'
+import createHistory from 'history/createBrowserHistory';
+import { Router, Route, Switch } from 'react-router';
+import { Redirect } from 'react-router-dom';
+import { Provider } from 'react-redux';
 
-const history = createHistory()
-
+const history = createHistory();
 
 class PrivateRouteContainer extends React.Component {
   render() {
-    const {
-      isAuthenticated,
-      component: Component,
-      ...props
-    } = this.props
+    const { isAuthenticated, component: Component, ...props } = this.props;
 
     return (
       <Route
         {...props}
         render={props =>
-          isAuthenticated
-            ? <Component {...props} />
-            : (
-            <Redirect to={{
-              pathname: '/login',
-              state: { from: props.location }
-            }} />
+          isAuthenticated ? (
+            <Component {...props} />
+          ) : (
+            <Redirect
+              to={{
+                pathname: '/login',
+                state: { from: props.location },
+              }}
+            />
           )
         }
       />
-    )
+    );
   }
 }
 
 const PrivateRoute = connect(state => ({
-  isAuthenticated: state.authReducer.isAuthenticated
-}))(PrivateRouteContainer)
+  isAuthenticated: state.authReducer.isAuthenticated,
+}))(PrivateRouteContainer);
 
 export default (
   <Provider store={store}>

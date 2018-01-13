@@ -23,6 +23,17 @@ export const login = async data => {
   }
 };
 
+export const reg = async data => {
+  try {
+    await bFetch(API.USER.REG, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const getUserInfoAction = createAction('GET_USERINFO', async () => {
   try {
     const res = await bFetch(API.USER.USERINFO, {

@@ -13,6 +13,7 @@ import {
   Volumes,
   Images,
   Login,
+  Reg,
 } from './containers';
 import { auth } from './middleware';
 
@@ -34,6 +35,7 @@ render(
     <Router history={history}>
       <Route path="/" component={Dashboard} onEnter={requireAuth} />
       <Route path="/login" component={Login} />
+      <Route path="/reg" component={Reg} />
       <Route path="/services" component={Services} onEnter={requireAuth} />
       <Route
         path="/services/create"
@@ -41,7 +43,7 @@ render(
         onEnter={requireAuth}
       />
       <Route
-        path="/services/:id"
+        path="/services/:name"
         component={ServiceDetail}
         onEnter={requireAuth}
       />

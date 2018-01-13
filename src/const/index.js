@@ -33,4 +33,11 @@ export const API = {
 
 export const BaseURL = 'https://api.boxlinker.com';
 
+export const MemoryConfig = [
+  { label: '64M', value: '64Mi' },
+  { label: '128M', value: '128Mi' },
+  { label: '256M', value: '256Mi' },
+  { label: '512M', value: '512Mi' },
+];
+
 export default {};
