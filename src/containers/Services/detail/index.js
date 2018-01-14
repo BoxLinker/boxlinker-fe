@@ -4,6 +4,7 @@ import { push } from 'react-router-redux';
 import { Tabs } from 'antd';
 import BaseInfoPane from './BaseInfoPane';
 import LogPane from './LogPane';
+import MonitorPane from './MonitorPane';
 
 const { TabPane } = Tabs;
 
@@ -29,7 +30,7 @@ class Comp extends React.Component {
           <BaseInfoPane svcName={name} />
         </TabPane>
         <TabPane tab="监控" key="2">
-          123
+          <MonitorPane />
         </TabPane>
         <TabPane tab="日志" key="3" forceRender>
           <LogPane
