@@ -21,6 +21,13 @@ class Comp extends React.Component {
   }
   onTabChange = index => {
     this.toogleLog(index === '3');
+    if (index === '2') {
+      if (this.monitorRef) {
+        this.monitorRef.focus();
+      } else {
+        console.log('this.monitorRef null');
+      }
+    }
   };
   render() {
     const { name } = this.props.params;
@@ -29,11 +36,17 @@ class Comp extends React.Component {
         <TabPane tab="基础信息" key="1">
           <BaseInfoPane svcName={name} />
         </TabPane>
-        <TabPane tab="监控" key="2">
-          <MonitorPane />
+        <TabPane tab="监控" key="2" forceRender>
+          <MonitorPane
+            svcName={name}
+            ref={ref => {
+              this.monitorRef = ref;
+            }}
+          />
         </TabPane>
         <TabPane tab="日志" key="3" forceRender>
           <LogPane
+            svcName={name}
             ref={ref => {
               this.logRef = ref;
             }}

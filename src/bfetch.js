@@ -2,9 +2,9 @@
  * @author cabernety
  */
 import 'isomorphic-fetch';
-import cookies from 'js-cookie';
 import { isString, isFunction } from 'lodash';
 import cookie from 'js-cookie';
+import { message } from 'antd';
 import { BaseURL } from './const';
 
 const logger = console;
@@ -98,7 +98,7 @@ const bFetch = async (url, options = {}) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'X-Access-Token': cookies.get('X-Access-Token'),
+      'X-Access-Token': cookie.get('X-Access-Token'),
     },
   };
   const params = {
@@ -137,6 +137,7 @@ const bFetch = async (url, options = {}) => {
       if (json.status === STATUS.OK) {
         return json;
       }
+      message.error(json.msg || json.message);
       throw new ErrAPI({
         status: json.status,
         message: json.msg || json.message,
