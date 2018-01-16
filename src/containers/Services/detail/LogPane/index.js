@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'js-cookie';
-import { API, BaseURL } from '../../../const';
+import { API, BaseURL } from '../../../../const';
+import './style.css';
 
 const logger = console;
 const MAX_LEN = 50;
@@ -135,11 +136,20 @@ export default class extends React.Component {
     const { rowKey, rowValue } = this.props;
     const { lines } = this.state;
     return (
-      <ul>
-        {lines.map((line, k) => (
-          <li key={line[rowKey] || k}>{line[rowValue]}</li>
-        ))}
-      </ul>
+      <div
+        style={{
+          backgroundColor: '#000',
+          color: '#fff',
+        }}
+      >
+        <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
+          {lines.map((line, k) => (
+            <li className="log-item" key={line[rowKey] || k}>
+              {line[rowValue]}
+            </li>
+          ))}
+        </ul>
+      </div>
     );
   }
 }
