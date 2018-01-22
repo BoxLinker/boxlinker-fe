@@ -6,10 +6,16 @@ import BaseInfoPane from './BaseInfoPane';
 import LogPane from './LogPane';
 import MonitorPane from './MonitorPane';
 
+import { API, BaseURL } from '../../../const';
+import bFetch from '../../../bfetch';
+
 const { TabPane } = Tabs;
 
 class Comp extends React.Component {
   static displayName = 'ServiceDetail';
+  state = {
+    baseinfo: null,
+  };
   toogleLog(flag) {
     if (this.logRef) {
       if (flag) {
@@ -29,16 +35,44 @@ class Comp extends React.Component {
       }
     }
   };
+  componentDidMount() {
+    this.onLoad();
+  }
+  async onLoad() {
+    const { name } = this.props.params;
+    try {
+      const res = await bFetch(API.SERVICE.GET(name));
+      const ports = res.results.ports;
+      if (ports) {
+        res.results.ports = ports.map((port, key) => {
+          return {
+            ...port,
+            key: `${key}`,
+          };
+        });
+      }
+      this.setState({
+        baseinfo: res.results,
+      });
+    } catch (err) {
+      console.error('dashboard services panel ', err);
+    }
+  }
   render() {
+    const { baseinfo } = this.state;
+    if (!baseinfo) {
+      return <div>加载中...</div>;
+    }
     const { name } = this.props.params;
     return (
       <Tabs defaultActiveKey="1" onTabClick={this.onTabChange}>
         <TabPane tab="基础信息" key="1">
-          <BaseInfoPane svcName={name} />
+          <BaseInfoPane svcDetail={baseinfo} />
         </TabPane>
         <TabPane tab="监控" key="2" forceRender>
           <MonitorPane
             svcName={name}
+            svcDetail={baseinfo}
             ref={ref => {
               this.monitorRef = ref;
             }}
@@ -47,6 +81,7 @@ class Comp extends React.Component {
         <TabPane tab="日志" key="3" forceRender>
           <LogPane
             svcName={name}
+            svcDetail={baseinfo}
             ref={ref => {
               this.logRef = ref;
             }}

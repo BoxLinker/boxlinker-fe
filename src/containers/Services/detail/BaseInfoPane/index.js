@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'js-cookie';
-import { API, BaseURL } from '../../../../const';
-import bFetch from '../../../../bfetch';
 import MemoryForm from './Memory';
 import ImageForm from './Image';
 import PortsForm from './Ports';
@@ -19,29 +17,7 @@ export default class extends React.Component {
   state = {
     baseinfo: null,
   };
-  componentDidMount() {
-    this.onLoad();
-  }
-  async onLoad() {
-    const { svcName } = this.props;
-    try {
-      const res = await bFetch(API.SERVICE.GET(svcName));
-      const ports = res.results.ports;
-      if (ports) {
-        res.results.ports = ports.map((port, key) => {
-          return {
-            ...port,
-            key: `${key}`,
-          };
-        });
-      }
-      this.setState({
-        baseinfo: res.results,
-      });
-    } catch (err) {
-      console.error('dashboard services panel ', err);
-    }
-  }
+
   onPortsSubmit = data => {
     console.log('onPortsSubmit', data);
   };
@@ -52,15 +28,15 @@ export default class extends React.Component {
     console.log('onMemorySubmit', data);
   };
   render() {
-    const { baseinfo } = this.state;
-    if (!baseinfo) {
+    const { svcDetail } = this.props;
+    if (!svcDetail) {
       return <div>加载中...</div>;
     }
     return (
       <div>
-        <MemoryForm value={baseinfo.memory} onSubmit={this.onMemorySubmit} />
-        <ImageForm value={baseinfo.image} onSubmit={this.onImageSubmit} />
-        <PortsForm value={baseinfo.ports} onSubmit={this.onPortsSubmit} />
+        <MemoryForm value={svcDetail.memory} onSubmit={this.onMemorySubmit} />
+        <ImageForm value={svcDetail.image} onSubmit={this.onImageSubmit} />
+        <PortsForm value={svcDetail.ports} onSubmit={this.onPortsSubmit} />
       </div>
     );
   }

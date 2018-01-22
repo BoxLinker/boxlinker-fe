@@ -36,6 +36,7 @@ class FetchLog {
       }
       onProgress(responseText.substring(this.total));
       this.total = responseText.length;
+      console.log('this.total', this.total);
     };
     xhr.onerror = ({ target: { status, statusText } }) => {
       if (this.isAbort) {
@@ -77,11 +78,29 @@ export default class extends React.Component {
     this.stop();
   }
   start() {
+    const { svcDetail } = this.props;
+    if (!svcDetail) {
+      console.error('LogPane:> no svcDetail');
+      return;
+    }
     logger.log('start fetch log');
+    const { pods } = svcDetail;
+    if (!pods || pods.length !== 1) {
+      console.error('LogPane:> no svcDetail.pods');
+      return;
+    }
+    const pod = pods[0];
+    if (!pod.container_id) {
+      console.error('LogPane:> mutilple svcDetail.pods');
+      return;
+    }
+    let cid = pod.container_id;
+    if (pod.container_id.startsWith('docker://')) {
+      cid = pod.container_id.substring('docker://'.length);
+    }
     const self = this;
     this.logFetcher = fetchServicePodLog({
-      containerID:
-        '17af5da76bc1c863d45696a6c3e5c250329ee8a3fa17cd5bb401800b2e4a4350',
+      containerID: cid,
       onProgress: this.moreLog,
       onTimeout() {
         logger.warn('fetch log timeout');
@@ -124,6 +143,7 @@ export default class extends React.Component {
       this.addLines([lines]);
       return;
     }
+    console.log('lines', lines);
     let arr = [].concat(this.state.lines).concat(lines);
     if (arr.length > MAX_LEN) {
       arr = arr.slice(arr.length - MAX_LEN);
@@ -140,6 +160,8 @@ export default class extends React.Component {
         style={{
           backgroundColor: '#000',
           color: '#fff',
+          maxHeight: '500px',
+          overflow: 'auto',
         }}
       >
         <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
