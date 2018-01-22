@@ -35,5 +35,7 @@ export const ServiceCreate = load(() => import('./Services/create'));
 export const Dashboard = load(() => import('./Dashboard'));
 export const Images = load(() => import('./Images'));
 export const Volumes = load(() => import('./Volumes'));
+export const User = load(() => import('./User'));
+
 export const Login = load(() => import('./Login'), { layout: false });
 export const Reg = load(() => import('./Reg'), { layout: false });

@@ -76,6 +76,10 @@ class Comp extends React.Component {
               <Icon type="upload" />
               <span>镜像</span>
             </Menu.Item>
+            <Menu.Item key="/user">
+              <Icon type="upload" />
+              <span>用户</span>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Header className="App-header" style={{ left: collapsed ? 80 : 200 }}>

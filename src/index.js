@@ -14,6 +14,7 @@ import {
   Images,
   Login,
   Reg,
+  User,
 } from './containers';
 import { auth } from './middleware';
 
@@ -36,6 +37,7 @@ render(
       <Route path="/" component={Dashboard} onEnter={requireAuth} />
       <Route path="/login" component={Login} />
       <Route path="/reg" component={Reg} />
+      <Route path="/user" component={User} />
       <Route path="/services" component={Services} onEnter={requireAuth} />
       <Route
         path="/services/create"
