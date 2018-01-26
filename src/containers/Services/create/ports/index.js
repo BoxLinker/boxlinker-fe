@@ -1,6 +1,7 @@
 import React from 'react';
-import { Table, Input, Button, Icon } from 'antd';
+import { Table, Input, Button, Icon, Select } from 'antd';
 
+const { Option } = Select;
 const EditableCell = ({ value, onChange, type }) => {
   switch (type) {
     case 'input':
@@ -19,20 +20,67 @@ export default class extends React.Component {
         dataIndex: 'port',
         key: 'port',
         render: (text, record) =>
-          this.renderColumn(text, record, 'port', 'input'),
+          this.renderColumn(
+            isNaN(text) ? 0 : parseInt(text || 0, 10),
+            record,
+            'port',
+            'input',
+          ),
       },
       {
         title: '协议',
         dataIndex: 'protocol',
         key: 'protocol',
-        width: 70,
+        width: 120,
+        render: (text, record) => {
+          return (
+            <Select
+              defaultValue="HTTP"
+              onChange={value => {
+                this.handleChange(value, record.key, 'protocol');
+              }}
+            >
+              <Option value="HTTP">HTTP</Option>
+              <Option value="TCP">TCP</Option>
+            </Select>
+          );
+        },
+      },
+      {
+        title: '外网访问',
+        dataIndex: 'is_private',
+        key: 'is_private',
+        width: 120,
+        render: (text, record) => {
+          return (
+            <Select
+              value={text}
+              onChange={value => {
+                this.handleChange(value, record.key, 'is_private');
+              }}
+            >
+              <Option value="0">是</Option>
+              <Option value="1">否</Option>
+            </Select>
+          );
+        },
       },
       {
         title: '路径',
         dataIndex: 'path',
         key: 'path',
-        render: (text, record) =>
-          this.renderColumn(text, record, 'path', 'input'),
+        render: (text, record) => {
+          return (
+            <Input
+              disabled={record.is_private === '1'}
+              value={text}
+              onChange={({ target: { value } }) =>
+                this.handleChange(value, record.key, 'path')
+              }
+            />
+          );
+        },
+        // this.renderColumn(text, record, 'path', 'input'),
       },
       {
         title: '操作',
@@ -67,12 +115,21 @@ export default class extends React.Component {
   }
   addRow = () => {
     const { value, count } = this.state;
-    value.push({ key: count + 1, port: '', protocol: 'http', path: '/' });
+    value.push({
+      key: count + 1,
+      port: 0,
+      is_private: '1',
+      protocol: 'HTTP',
+      path: '/',
+    });
     this.setState({ value, count: count + 1 });
+    this.props.onChange(value);
   };
   removeRow = key => {
     const value = [...this.state.value];
-    this.setState({ value: value.filter(item => item.key !== key) });
+    const ds = value.filter(item => item.key !== key);
+    this.setState({ value: ds });
+    this.props.onChange(ds);
   };
   handleChange(value, key, column) {
     const ds = [...this.state.value];

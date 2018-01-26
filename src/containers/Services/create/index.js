@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Form, Row, Col, Input, Icon, Select, Button, message } from 'antd';
 import { push } from 'react-router-redux';
 
-import CreateForm from './form';
 import { API } from '../../../const';
 import bFetch from '../../../bfetch';
 import PortsItem from './ports';
@@ -33,6 +32,34 @@ const tailFormItemLayout = {
       offset: 4,
     },
   },
+};
+
+const filterValues = values => {
+  const { ports } = values;
+  const p = ports.map(item => {
+    return {
+      ...item,
+      name: `p-${item.port}`,
+      port: parseInt(item.port, 10),
+      is_private: item.is_private === '1',
+    };
+  });
+  return {
+    ...values,
+    ports: p,
+  };
+};
+const isPortDuplicated = ports => {
+  const arr = [];
+  for (let i = 0; i < ports.length; i++) {
+    const port = ports[i];
+    if (arr.indexOf(port.port) >= 0) {
+      return true;
+    } else {
+      arr.push(port.port);
+    }
+  }
+  return false;
 };
 class Comp extends React.Component {
   static propTypes = {
@@ -64,8 +91,14 @@ class Comp extends React.Component {
       if (fErr) {
         return;
       }
+      const data = filterValues(values);
+      if (isPortDuplicated(data.ports)) {
+        message.error('端口不能重复');
+        return;
+      }
+      logger.log('create service data: ', data);
       this.setState({ loading: true });
-      const { err, res } = await this.createService(values);
+      const { err, res } = await this.createService(data);
       this.setState({ loading: false });
       if (err) {
         message.error(err.error());
@@ -74,9 +107,9 @@ class Comp extends React.Component {
         });
         return;
       }
-      message.success(`服务 [${values.name}] 创建成功!`);
+      message.success(`服务 [${data.name}] 创建成功!`);
       logger.log('create service', { res });
-      this.props.navigateTo(`/services/${values.name}`);
+      this.props.navigateTo(`/services/${data.name}`);
     });
   };
   render() {
@@ -94,7 +127,7 @@ class Comp extends React.Component {
             <FormItem label="服务名称" {...formItemLayout}>
               {getFieldDecorator('name', {
                 rules: [{ required: true, message: '请填写应用名称!' }],
-                initialValue: 'nginx-test',
+                initialValue: 'ci-server',
               })(
                 <Input
                   prefix={
@@ -128,8 +161,19 @@ class Comp extends React.Component {
             <FormItem label="镜像" {...formItemLayout}>
               {getFieldDecorator('image', {
                 rules: [{ required: true, message: '请输入镜像!' }],
-                initialValue: 'index.boxlinker.com/library/nginx:latest',
+                initialValue:
+                  'index.boxlinker.com/boxlinker/boxci-server:v0.1-dev-0-g1553276',
               })(<Input placeholder="这里输入镜像名称" />)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={24}>
+            <FormItem label="绑定域名" {...formItemLayout}>
+              {getFieldDecorator('host', {
+                rules: [{ required: true, message: '请输入域名!' }],
+                initialValue: 'api.boxlinker.com',
+              })(<Input placeholder="这里输入域名" />)}
             </FormItem>
           </Col>
         </Row>
@@ -139,9 +183,15 @@ class Comp extends React.Component {
               {getFieldDecorator('ports', {
                 rules: [],
                 initialValue: [
-                  { key: '0', port: 80, protocol: 'http', path: '/' },
+                  {
+                    key: '0',
+                    port: 80,
+                    protocol: 'HTTP',
+                    path: '/',
+                    is_private: '1',
+                  },
                 ],
-              })(<PortsItem onChange={this.onAppPortsChange} />)}
+              })(<PortsItem />)}
             </FormItem>
           </Col>
         </Row>
