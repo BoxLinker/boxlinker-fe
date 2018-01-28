@@ -20,8 +20,9 @@ const load = (asyncImport, props = { layout: true }) => {
       if (!layout) {
         return <Comp {...this.props} />;
       }
+      const { location } = this.props;
       return (
-        <Layout>
+        <Layout location={location}>
           <Comp {...this.props} />
         </Layout>
       );
@@ -29,13 +30,15 @@ const load = (asyncImport, props = { layout: true }) => {
   };
 };
 
-export const Services = load(() => import('./Services'));
+export const Services = load(() => import('./Services/list'));
 export const ServiceDetail = load(() => import('./Services/detail'));
 export const ServiceCreate = load(() => import('./Services/create'));
 export const Dashboard = load(() => import('./Dashboard'));
 export const Images = load(() => import('./Images'));
 export const Volumes = load(() => import('./Volumes'));
 export const User = load(() => import('./User'));
+export const CICD = load(() => import('./CICD/list'));
+export const CICDBuilding = load(() => import('./CICD/building'));
 
 export const Login = load(() => import('./Login'), { layout: false });
 export const Reg = load(() => import('./Reg'), { layout: false });

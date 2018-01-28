@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { Tabs } from 'antd';
+import { breadCrumbAction } from '../../../actions';
 import BaseInfoPane from './BaseInfoPane';
 import LogPane from './LogPane';
 import MonitorPane from './MonitorPane';
@@ -54,6 +55,19 @@ class Comp extends React.Component {
       this.setState({
         baseinfo: res.results,
       });
+      this.props.breadCrumb([
+        {
+          label: '控制台',
+          path: '/',
+        },
+        {
+          label: '服务列表',
+          path: '/services',
+        },
+        {
+          label: 'application',
+        },
+      ]);
     } catch (err) {
       console.error('dashboard services panel ', err);
     }
@@ -95,6 +109,9 @@ class Comp extends React.Component {
 const Container = connect(null, dispatch => ({
   list: path => {
     dispatch(push(path));
+  },
+  breadCrumb: bc => {
+    dispatch(breadCrumbAction(bc));
   },
 }))(Comp);
 

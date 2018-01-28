@@ -1,13 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
-import { Button, Tag } from 'antd';
 import { Link } from 'react-router';
+import { push } from 'react-router-redux';
+import { Tag } from 'antd';
 import Table from '../../../components/Table';
 import { API } from '../../../const';
-// import QueryTable from './list';
-
-const logger = console;
 
 const columns = [
   {
@@ -54,26 +51,14 @@ const columns = [
   },
 ];
 class Comp extends React.Component {
-  static displayName = 'Services';
-  openCreate = () => {
-    this.props.navigateTo('/services/create');
-  };
+  static displayName = 'ServiceList';
   render() {
-    return (
-      <div>
-        <p>
-          <Button type="primary" onClick={this.openCreate}>
-            新建服务
-          </Button>
-        </p>
-        <Table rowKey="name" url={API.SERVICE.QUERY} columns={columns} />
-      </div>
-    );
+    return <Table rowKey="name" url={API.SERVICE.QUERY} columns={columns} />;
   }
 }
 
 const Container = connect(null, dispatch => ({
-  navigateTo: path => {
+  list: path => {
     dispatch(push(path));
   },
 }))(Comp);

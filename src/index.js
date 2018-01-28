@@ -15,6 +15,8 @@ import {
   Login,
   Reg,
   User,
+  CICD,
+  CICDBuilding,
 } from './containers';
 import { auth } from './middleware';
 
@@ -51,6 +53,12 @@ render(
       />
       <Route path="/volumes" component={Volumes} onEnter={requireAuth} />
       <Route path="/images" component={Images} onEnter={requireAuth} />
+      <Route path="/cicd" component={CICD} onEnter={requireAuth} />
+      <Route
+        path="/cicd/:scm/:name"
+        component={CICDBuilding}
+        onEnter={requireAuth}
+      />
     </Router>
   </Provider>,
   document.getElementById('root'),
