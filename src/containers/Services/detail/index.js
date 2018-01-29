@@ -7,7 +7,7 @@ import BaseInfoPane from './BaseInfoPane';
 import LogPane from './LogPane';
 import MonitorPane from './MonitorPane';
 
-import { API, BaseURL } from '../../../const';
+import { API } from '../../../const';
 import bFetch from '../../../bfetch';
 
 const { TabPane } = Tabs;

@@ -5,9 +5,6 @@ import { Button, Tag } from 'antd';
 import { Link } from 'react-router';
 import Table from '../../../components/Table';
 import { API } from '../../../const';
-// import QueryTable from './list';
-
-const logger = console;
 
 const columns = [
   {

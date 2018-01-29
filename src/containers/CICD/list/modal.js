@@ -1,10 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { Modal, Tabs, List, Button } from 'antd';
-import { Link } from 'react-router';
-import Table from '../../../components/Table';
-import { API } from '../../../const';
 
 const listData = [];
 
@@ -14,7 +9,6 @@ for (let i = 0; i < 0; i++) {
   });
 }
 const { TabPane } = Tabs;
-const logger = console;
 class Comp extends React.Component {
   static displayName = 'CICDModal';
   getList() {
@@ -41,11 +35,14 @@ class Comp extends React.Component {
     return (
       <div>
         <p>
-          您还没有绑定 Github, 点击{' '}
-          <a href="https://github.com" target="_blank">
+          您还没有绑定 Github, 点击&nbsp;
+          <a
+            href="https://github.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             这里
-          </a>{' '}
-          绑定。
+          </a>&nbsp; 绑定。
         </p>
         <p>
           已经绑定了？点击 <a>刷新</a> 试试。

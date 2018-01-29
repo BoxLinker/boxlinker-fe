@@ -1,6 +1,5 @@
 // eslint-disable no-script-url, jsx-a11y/anchor-is-valid
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import { Layout, Menu, Icon, Dropdown, Breadcrumb } from 'antd';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -9,30 +8,12 @@ import { push } from 'react-router-redux';
 import { getUserInfoAction } from '../../actions/auth';
 import './App.css';
 
-const RbacTree = [
-  {
-    name: '控制台',
-    path: '/',
-    children: [],
-  },
-  {
-    name: '服务',
-    path: '/services',
-    children: [
-      {
-        name: '服务详情',
-        path: '/services/{svcName}',
-      },
-    ],
-  },
-];
-
 const { Header, Sider, Content } = Layout;
-const logger = console;
+
 class Comp extends React.Component {
   static displayName = 'Layout';
   state = {
-    collapsed: false,
+    collapsed: true,
   };
   componentDidMount() {
     this.props.getUserInfo();
@@ -185,9 +166,7 @@ class Comp extends React.Component {
                   </Menu>
                 }
               >
-                <a href="javascript:void(0)" className="ant-dropdown-link">
-                  {userinfo.name}
-                </a>
+                <a className="ant-dropdown-link">{userinfo.name}</a>
               </Dropdown>
             </li>
           </ul>

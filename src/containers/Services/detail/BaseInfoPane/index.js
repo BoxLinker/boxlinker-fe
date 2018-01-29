@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cookie from 'js-cookie';
 import MemoryForm from './Memory';
 import ImageForm from './Image';
 import PortsForm from './Ports';

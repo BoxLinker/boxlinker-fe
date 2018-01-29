@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Icon, Table } from 'antd';
-import PortsItem from './PortsItem';
 
 const FormItem = Form.Item;
 

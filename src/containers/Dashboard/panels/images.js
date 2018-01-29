@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { Collapse, List, Spin, Tag } from 'antd';
+import { Collapse, List, Spin } from 'antd';
 import bFetch from '../../../bfetch';
 import { API } from '../../../const';
 

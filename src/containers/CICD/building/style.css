@@ -1,0 +1,26 @@
+.build-history5 {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: -webkit-flex;
+  height: 100%;
+}
+.build-history5 > .build-item {
+  width: 100px;
+  height: 100px;
+  margin-left: 1px;
+}
+.build-history5 > .build-item > a {
+  text-align: center;
+  line-height: 100px;
+  display: block;
+  background: #eee;
+}
+
+.build-history5 > .build-item.success > a {
+}
+.build-history5 > .build-item.failed > a {
+  background: rgb(255, 224, 206);
+}
+
+

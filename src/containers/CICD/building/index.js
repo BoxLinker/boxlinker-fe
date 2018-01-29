@@ -1,17 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { Button, Tag, Row, Col, Collapse, Input, List, Tabs } from 'antd';
-import { Link } from 'react-router';
-import Table from '../../../components/Table';
-import { API } from '../../../const';
+import { Button, Row, Col, Collapse, Input, List, Tabs } from 'antd';
 
-const logger = console;
+import BranchBuildTab from './BranchBuildTab';
+import BuildingInfo from './Info';
+import './style.css';
+
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 
 class Comp extends React.Component {
   static displayName = 'CICDBuilding';
+  state = {
+    buildTabs: [],
+    activeTab: 'lastBuild',
+  };
   getLogProc() {
     return (
       <Panel header="Clone" key="1">
@@ -33,41 +37,78 @@ class Comp extends React.Component {
       </Panel>
     );
   }
+  getBuildTabs() {
+    const { buildTabs } = this.state;
+    return buildTabs.map(item => {
+      return (
+        <TabPane tab={item.tab} key={item.tab} closable={true}>
+          <BuildingInfo />
+        </TabPane>
+      );
+    });
+  }
+  onOpenBuildTab = data => {
+    const { buildTabs } = this.state;
+    for (let i = 0; i < buildTabs.length; i++) {
+      if (buildTabs[i].tab === data.tab) {
+        this.setState({ activeTab: data.tab });
+        return;
+      }
+    }
+    this.setState({
+      activeTab: data.tab,
+      buildTabs: [].concat(buildTabs).concat([data]),
+    });
+  };
+  onTabChange = activeTab => {
+    this.setState({ activeTab });
+  };
+  onTabEdit = (targetKey, action) => {
+    const { buildTabs, activeTab } = this.state;
+    let newActiveTab = activeTab;
+    switch (action) {
+      case 'remove':
+        for (let i = 0; i < buildTabs.length; i++) {
+          console.log('buildTabs[i]', buildTabs[i], targetKey);
+          if (buildTabs[i].tab == targetKey) { //eslint-disable-line
+            buildTabs.splice(i, 1);
+            if (activeTab === targetKey) {
+              if (i === 0) {
+                newActiveTab = 'branch';
+              } else if (buildTabs[i - 1]) {
+                newActiveTab = buildTabs[i - 1].tab;
+              } else {
+                newActiveTab = activeTab;
+              }
+            }
+            this.setState({ buildTabs, activeTab: `${newActiveTab}` });
+            break;
+          }
+        }
+
+        break;
+      default:
+        break;
+    }
+  };
   render() {
+    const { activeTab } = this.state;
     return (
       <Row gutter={16}>
         <Col span={18}>
-          <Tabs defaultActiveKey="lastBuild">
-            <TabPane tab="最近构建" key="lastBuild">
-              <Row
-                style={{
-                  background: 'orange',
-                  marginBottom: 16,
-                  padding: 16,
-                  color: '#fff',
-                }}
-              >
-                <Col span={18}>
-                  <p>Branch: master</p>
-                  <p>Commit: uid87f97s</p>
-                  <p>这个是上一次的提交 message</p>
-                </Col>
-                <Col span={6}>
-                  <p>1个月以前</p>
-                  <p>2 分 15 秒</p>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <Collapse defaultActiveKey={['1']} bordered={false}>
-                    {this.getLogProc()}
-                  </Collapse>
-                </Col>
-              </Row>
+          <Tabs
+            activeKey={activeTab}
+            onChange={this.onTabChange}
+            onEdit={this.onTabEdit}
+            type="editable-card"
+          >
+            <TabPane tab="最近构建" key="lastBuild" closable={false}>
+              <BuildingInfo />
             </TabPane>
-            <TabPane tab="分支构建" key="branch">
-              <p>分支构建</p>
+            <TabPane tab="分支构建" key="branch" closable={false}>
+              <BranchBuildTab onOpenBuildTab={this.onOpenBuildTab} />
             </TabPane>
+            {this.getBuildTabs()}
           </Tabs>
         </Col>
 

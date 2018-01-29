@@ -7,8 +7,6 @@ import Table from '../../../components/Table';
 import { API } from '../../../const';
 import AddProjectModal from './modal';
 
-const logger = console;
-
 const columns = [
   {
     title: '项目名称',
