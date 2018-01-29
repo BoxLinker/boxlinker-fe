@@ -69,7 +69,6 @@ class Comp extends React.Component {
     switch (action) {
       case 'remove':
         for (let i = 0; i < buildTabs.length; i++) {
-          console.log('buildTabs[i]', buildTabs[i], targetKey);
           if (buildTabs[i].tab == targetKey) { //eslint-disable-line
             buildTabs.splice(i, 1);
             if (activeTab === targetKey) {
@@ -97,6 +96,7 @@ class Comp extends React.Component {
       <Row gutter={16}>
         <Col span={18}>
           <Tabs
+            hideAdd
             activeKey={activeTab}
             onChange={this.onTabChange}
             onEdit={this.onTabEdit}

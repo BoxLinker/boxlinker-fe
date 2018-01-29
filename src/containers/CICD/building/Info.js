@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Collapse, Tabs } from 'antd';
+import { Row, Col, Collapse } from 'antd';
 
 const { Panel } = Collapse;
 
