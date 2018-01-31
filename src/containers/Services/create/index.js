@@ -7,6 +7,7 @@ import { push } from 'react-router-redux';
 import { API } from '../../../const';
 import bFetch from '../../../bfetch';
 import PortsItem from './ports';
+import HostVolumes from './hostVolumes';
 
 const logger = console;
 const { Option } = Select;
@@ -61,6 +62,15 @@ const isPortDuplicated = ports => {
   }
   return false;
 };
+const validateVolumes = volumes => {
+  for (let field in volumes) {
+    if (/Err$/.test(field) && volumes[field]) {
+      message.error(volumes[field]);
+      return false;
+    }
+  }
+  return true;
+};
 class Comp extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func,
@@ -96,6 +106,9 @@ class Comp extends React.Component {
         message.error('端口不能重复');
         return;
       }
+      if (!validateVolumes(data.volumes)) {
+        return;
+      }
       logger.log('create service data: ', data);
       this.setState({ loading: true });
       const { err, res } = await this.createService(data);
@@ -127,7 +140,7 @@ class Comp extends React.Component {
             <FormItem label="服务名称" {...formItemLayout}>
               {getFieldDecorator('name', {
                 rules: [{ required: true, message: '请填写应用名称!' }],
-                initialValue: 'ci-server',
+                initialValue: 'ci-agent',
               })(
                 <Input
                   prefix={
@@ -162,7 +175,7 @@ class Comp extends React.Component {
               {getFieldDecorator('image', {
                 rules: [{ required: true, message: '请输入镜像!' }],
                 initialValue:
-                  'index.boxlinker.com/boxlinker/boxci-server:v0.1-dev-0-g1553276',
+                  'index.boxlinker.com/boxlinker/boxci-agent:v0.1-dev-6-g934c95a',
               })(<Input placeholder="这里输入镜像名称" />)}
             </FormItem>
           </Col>
@@ -171,9 +184,27 @@ class Comp extends React.Component {
           <Col span={24}>
             <FormItem label="绑定域名" {...formItemLayout}>
               {getFieldDecorator('host', {
-                rules: [{ required: true, message: '请输入域名!' }],
-                initialValue: 'api.boxlinker.com',
+                rules: [],
+                initialValue: '',
               })(<Input placeholder="这里输入域名" />)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={24}>
+            <FormItem label="挂载宿主机路径" {...formItemLayout}>
+              {getFieldDecorator('hostVolumes', {
+                rules: [],
+                initialValue: [
+                  {
+                    key: '0',
+                    name: 'docker',
+                    hostPath: '/var/run/docker.sock',
+                    path: '/var/run/docker.sock',
+                    readonly: true,
+                  },
+                ],
+              })(<HostVolumes />)}
             </FormItem>
           </Col>
         </Row>
@@ -183,13 +214,13 @@ class Comp extends React.Component {
               {getFieldDecorator('ports', {
                 rules: [],
                 initialValue: [
-                  {
-                    key: '0',
-                    port: 80,
-                    protocol: 'HTTP',
-                    path: '/',
-                    is_private: '1',
-                  },
+                  // {
+                  //   key: '0',
+                  //   port: 80,
+                  //   protocol: 'HTTP',
+                  //   path: '/',
+                  //   is_private: '1',
+                  // },
                 ],
               })(<PortsItem />)}
             </FormItem>

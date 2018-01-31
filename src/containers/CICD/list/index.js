@@ -65,7 +65,7 @@ class Comp extends React.Component {
             添加项目
           </Button>
         </p>
-        <Table rowKey="name" url={API.SERVICE.QUERY} columns={columns} />
+        <Table rowKey="name" url={API.USER.REPOS('github')} columns={columns} />
         <AddProjectModal
           visible={this.state.showModal}
           onClose={this.closeModal}

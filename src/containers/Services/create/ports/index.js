@@ -87,10 +87,6 @@ export default class extends React.Component {
         key: 'operate',
         width: 80,
         render: (text, record) => {
-          const { value } = this.state;
-          if (value.length === 1) {
-            return null;
-          }
           return (
             <Button
               onClick={() => {

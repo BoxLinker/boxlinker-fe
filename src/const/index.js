@@ -28,6 +28,7 @@ export const API = {
     RESET_PASS: '/v1/user/account/pass_reset',
     USERINFO: '/v1/user/account/userinfo',
     LOGIN: '/v1/user/auth/login',
+    REPOS: scm => `/v1/cicd/user/repos/${scm}`,
   },
 };
 
