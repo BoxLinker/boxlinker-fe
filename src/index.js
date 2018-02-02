@@ -55,7 +55,7 @@ render(
       <Route path="/images" component={Images} onEnter={requireAuth} />
       <Route path="/cicd" component={CICD} onEnter={requireAuth} />
       <Route
-        path="/cicd/:scm/:name"
+        path="/cicd/:scm/:owner/:name"
         component={CICDBuilding}
         onEnter={requireAuth}
       />

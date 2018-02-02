@@ -3,9 +3,12 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { Button, Row, Col, Collapse, Input, List, Tabs } from 'antd';
 
+import { API } from '../../../const';
+
 import BranchBuildTab from './BranchBuildTab';
 import BuildingInfo from './Info';
 import './style.css';
+import bfetch from '../../../bfetch';
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -13,9 +16,22 @@ const { TabPane } = Tabs;
 class Comp extends React.Component {
   static displayName = 'CICDBuilding';
   state = {
+    repoData: null,
     buildTabs: [],
     activeTab: 'lastBuild',
   };
+  componentDidMount() {
+    this.fetchRepo();
+  }
+  async fetchRepo() {
+    const { scm, owner, name } = this.props.params;
+    try {
+      const res = await bfetch(API.CICD.GET_REPO(scm, owner, name));
+      this.setState({ repoData: res.results });
+    } catch (e) {
+      console.error(e);
+    }
+  }
   getLogProc() {
     return (
       <Panel header="Clone" key="1">
@@ -35,6 +51,29 @@ class Comp extends React.Component {
           </div>
         </div>
       </Panel>
+    );
+  }
+  getTabs() {
+    const { activeTab, repoData } = this.state;
+    if (!repoData) {
+      return <p>加载中...</p>;
+    }
+    return (
+      <Tabs
+        hideAdd
+        activeKey={activeTab}
+        onChange={this.onTabChange}
+        onEdit={this.onTabEdit}
+        type="editable-card"
+      >
+        <TabPane tab="最近构建" key="lastBuild" closable={false}>
+          <BuildingInfo data={repoData} />
+        </TabPane>
+        <TabPane tab="分支构建" key="branch" closable={false}>
+          <BranchBuildTab onOpenBuildTab={this.onOpenBuildTab} />
+        </TabPane>
+        {this.getBuildTabs()}
+      </Tabs>
     );
   }
   getBuildTabs() {
@@ -91,26 +130,9 @@ class Comp extends React.Component {
     }
   };
   render() {
-    const { activeTab } = this.state;
     return (
       <Row gutter={16}>
-        <Col span={18}>
-          <Tabs
-            hideAdd
-            activeKey={activeTab}
-            onChange={this.onTabChange}
-            onEdit={this.onTabEdit}
-            type="editable-card"
-          >
-            <TabPane tab="最近构建" key="lastBuild" closable={false}>
-              <BuildingInfo />
-            </TabPane>
-            <TabPane tab="分支构建" key="branch" closable={false}>
-              <BranchBuildTab onOpenBuildTab={this.onOpenBuildTab} />
-            </TabPane>
-            {this.getBuildTabs()}
-          </Tabs>
-        </Col>
+        <Col span={18}>{this.getTabs()}</Col>
 
         <Col span={6}>
           <p>

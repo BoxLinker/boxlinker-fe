@@ -1,10 +1,17 @@
 import React from 'react';
 import { Row, Col, Collapse } from 'antd';
+import { getDuration } from '../../../utils';
+import { API } from '../../../const';
+import bfetch from '../../../bfetch';
 
 const { Panel } = Collapse;
 
 class Comp extends React.Component {
   static displayName = 'CICDBuilding';
+  state = {
+    buildData: null,
+    procsData: null,
+  };
   getLogProc() {
     return (
       <Panel header="Clone" key="1">
@@ -26,7 +33,42 @@ class Comp extends React.Component {
       </Panel>
     );
   }
+  componentDidMount() {
+    this.fetch();
+  }
+  async fetchLog() {
+    const { buildData } = this.state;
+    const { data } = this.props;
+    try {
+      const res = await bfetch(
+        API.CICD.PROCS(data.scm, data.owner, data.name, buildData.id),
+      );
+      this.setState({ procsData: res.results });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  async fetch() {
+    const { data } = this.props;
+    if (!data) {
+      return;
+    }
+    try {
+      const res = await bfetch(
+        API.CICD.GET_BUILD(data.scm, data.owner, data.name, data.last_build),
+      );
+      this.setState({ buildData: res.results }, () => {
+        this.fetchLog();
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
   render() {
+    const { buildData } = this.state;
+    if (!buildData) {
+      return <p>加载中...</p>;
+    }
     return (
       <div>
         <Row
@@ -38,13 +80,13 @@ class Comp extends React.Component {
           }}
         >
           <Col span={18}>
-            <p>Branch: master</p>
-            <p>Commit: uid87f97s</p>
-            <p>这个是上一次的提交 message</p>
+            <p>Branch: {buildData.branch}</p>
+            <p>Commit: {buildData.commit}</p>
+            <p>{buildData.message}</p>
           </Col>
           <Col span={6}>
-            <p>1个月以前</p>
-            <p>2 分 15 秒</p>
+            <p>{buildData.created_at}</p>
+            <p>{getDuration(buildData.started_at, buildData.finished_at)}</p>
           </Col>
         </Row>
         <Row>

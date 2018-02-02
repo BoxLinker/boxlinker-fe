@@ -106,8 +106,12 @@ const bFetch = async (url, options = {}) => {
     ...options.pagination,
   };
   let res = null;
+  let baseURL = '';
+  if (!/^https?:/.test(url)) {
+    baseURL = BaseURL;
+  }
   try {
-    const uUrl = addParams(`${BaseURL}${url}`, params);
+    const uUrl = addParams(`${baseURL}${url}`, params);
     logger.log(`fetch: ${uUrl}`);
     res = await fetch(uUrl, {
       ...defaults,

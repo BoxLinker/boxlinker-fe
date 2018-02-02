@@ -6,4 +6,10 @@ export function getUrlParameter(name) {
     ? ''
     : decodeURIComponent(results[1].replace(/\+/g, ' '));
 }
+
+export function getDuration(start, end) {
+  const sec = end - start;
+  return `${Math.floor(sec / 60)} 分 ${sec % 60} 秒`;
+}
+
 export default {};

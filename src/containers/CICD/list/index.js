@@ -6,19 +6,18 @@ import { Link } from 'react-router';
 import Table from '../../../components/Table';
 import { API } from '../../../const';
 import AddProjectModal from './modal';
+import LastBuild from './LastBuild';
 
 const columns = [
   {
     title: '项目名称',
     dataIndex: 'name',
     key: 'name',
-    render: name => <Link to={`/cicd/github/${name}`}>{name}</Link>,
-  },
-  {
-    title: '状态',
-    dataIndex: 'status',
-    key: 'status',
-    render: () => <Tag color="green">运行中</Tag>,
+    render: (name, record) => (
+      <Link to={`/cicd/${record.scm}/${record.owner}/${name}`}>{`${
+        record.scm
+      }/${record.owner}/${name}`}</Link>
+    ),
   },
   {
     title: '代码仓库',
@@ -29,12 +28,8 @@ const columns = [
     title: '最近构建',
     dataIndex: 'lastBuilding',
     key: 'lastBuilding',
-    render: () => {
-      return (
-        <span>
-          <Tag>成功</Tag>, 用时 1 分 30 秒。
-        </span>
-      );
+    render: (text, record) => {
+      return <LastBuild data={record} />;
     },
   },
   {
@@ -46,6 +41,7 @@ const columns = [
     },
   },
 ];
+
 class Comp extends React.Component {
   static displayName = 'CICDList';
   state = {
@@ -65,7 +61,12 @@ class Comp extends React.Component {
             添加项目
           </Button>
         </p>
-        <Table rowKey="name" url={API.USER.REPOS('github')} columns={columns} />
+        <Table
+          rowKey="name"
+          url={API.CICD.REPOS('github')}
+          params={{ active: true }}
+          columns={columns}
+        />
         <AddProjectModal
           visible={this.state.showModal}
           onClose={this.closeModal}

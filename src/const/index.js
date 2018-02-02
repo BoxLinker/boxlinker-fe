@@ -28,7 +28,16 @@ export const API = {
     RESET_PASS: '/v1/user/account/pass_reset',
     USERINFO: '/v1/user/account/userinfo',
     LOGIN: '/v1/user/auth/login',
-    REPOS: scm => `/v1/cicd/user/repos/${scm}`,
+  },
+  CICD: {
+    PROCS: (scm, owner, name, build_id) =>
+      `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/procs/${build_id}`,
+    PROC_LOG: () => `/v1/cicd/{scm}/repos/{owner}/{name}/logs/{number}/{pid}`,
+    GET_REPO: (scm, owner, name) =>
+      `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}`,
+    REPOS: scm => `http://localhost:8083/v1/cicd/${scm}/user/repos`,
+    GET_BUILD: (scm, owner, name, number) =>
+      `/v1/cicd/${scm}/repos/${owner}/${name}/build/${number}`,
   },
 };
 

@@ -1,5 +1,7 @@
 import React from 'react';
 import { Modal, Tabs, List, Button } from 'antd';
+import Table from '../../../components/Table';
+import { API } from '../../../const';
 
 const listData = [];
 
@@ -9,28 +11,34 @@ for (let i = 0; i < 0; i++) {
   });
 }
 const { TabPane } = Tabs;
-class Comp extends React.Component {
-  static displayName = 'CICDModal';
-  getList() {
-    return (
-      <List
-        style={{ maxHeight: 350, overflow: 'auto' }}
-        dataSource={listData}
-        loading
-        pagination={{
-          pageSize: 10,
-          current: 1,
-          total: listData.length,
-          onChange: () => {},
+
+const columns = [
+  {
+    title: '项目名称',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: '操作',
+    dataIndex: 'status',
+    key: 'status',
+    render: (text, record) => (
+      <Button
+        onClick={() => {
+          this.addProject(record.name);
         }}
-        renderItem={item => {
-          return (
-            <List.Item actions={[<Button>添加</Button>]}>{item.name}</List.Item>
-          );
-        }}
-      />
-    );
-  }
+      >
+        添加
+      </Button>
+    ),
+  },
+];
+
+class GithubTab extends React.Component {
+  static displayName = 'CICDAddRepoGithubTab';
+  state = {
+    unauthorized: false,
+  };
   getUnbound() {
     return (
       <div>
@@ -45,11 +53,49 @@ class Comp extends React.Component {
           </a>&nbsp; 绑定。
         </p>
         <p>
-          已经绑定了？点击 <a>刷新</a> 试试。
+          已经绑定了？点击{' '}
+          <Button size="small" onClick={this.refresh}>
+            刷新
+          </Button>{' '}
+          试试。
         </p>
       </div>
     );
   }
+  refresh = () => {
+    this.setState({
+      unauthorized: false,
+    });
+  };
+  getList() {
+    return (
+      <Table
+        size="small"
+        ref={ref => {
+          this.tableRef = ref;
+        }}
+        rowKey="name"
+        url={API.CICD.REPOS('github')}
+        params={{ active: false }}
+        columns={columns}
+        onLoad={this.onDataLoad}
+      />
+    );
+  }
+  onDataLoad = err => {
+    this.setState({
+      unauthorized: !!err,
+    });
+  };
+  render() {
+    const { unauthorized } = this.state;
+
+    return unauthorized ? this.getUnbound() : this.getList();
+  }
+}
+
+class Comp extends React.Component {
+  static displayName = 'CICDAddRepoModal';
   render() {
     return (
       <Modal
@@ -59,7 +105,7 @@ class Comp extends React.Component {
       >
         <Tabs defaultActiveKey="github">
           <TabPane key="github" tab="Github">
-            {this.getList()}
+            <GithubTab />
           </TabPane>
         </Tabs>
       </Modal>
