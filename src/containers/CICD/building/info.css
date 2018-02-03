@@ -1,0 +1,25 @@
+.log-line{
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: flex;
+}
+.log-index{
+      min-width: 30px;
+    margin-right: 10px;
+  color: #bbb;
+}
+.log-index:before {
+  content: attr(data-log-index);
+}
+.log-content{
+  flex: 1;
+}
+.log-ts {
+  min-width: 30px;
+    margin-left: 10px;
+  max-width: 50px;
+}
+.log-ts:before{
+  content: attr(data-log-time);
+}

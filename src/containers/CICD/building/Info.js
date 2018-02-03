@@ -3,8 +3,90 @@ import { Row, Col, Collapse } from 'antd';
 import { getDuration } from '../../../utils';
 import { API } from '../../../const';
 import bfetch from '../../../bfetch';
+import './info.css';
 
 const { Panel } = Collapse;
+
+class ProcLog extends React.Component {
+  state = {
+    logData: null,
+  };
+  componentDidMount() {
+    this.fetch();
+  }
+  async fetch() {
+    const { metadata, procData } = this.props;
+    const { scm, owner, name, last_build } = metadata;
+    const { pid } = procData;
+    console.log('==>', metadata, procData);
+    try {
+      const res = await bfetch(
+        API.CICD.PROC_LOG(scm, owner, name, last_build, pid),
+        {
+          disableDefaultHandler: true,
+        },
+      );
+      this.setState({ logData: res });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  getLogComp1(data) {
+    console.log(data);
+    const { pos, time = 0, out } = data;
+    return (
+      <tr key={pos}>
+        <td>
+          <span style={{ float: 'left', width: 30, color: '#bbb' }}>
+            {pos + 1}
+          </span>
+        </td>
+        <td>{out}</td>
+        <td>{time}s</td>
+      </tr>
+    );
+  }
+  getLogComp(data) {
+    console.log(data);
+    const { pos, time = 0, out } = data;
+    return (
+      <div key={pos} className="log-line">
+        <span className="log-index" data-log-index={pos + 1} />
+        <span
+          className="log-content"
+          dangerouslySetInnerHTML={{ __html: out }}
+        />
+        <span className="log-ts" data-log-time={`${time}s`} />
+      </div>
+    );
+  }
+  getLogData() {
+    const { logData } = this.state;
+    if (!logData) {
+      return <div>加载中...</div>;
+    }
+    return logData.map(log => this.getLogComp(log));
+    // const trs = logData.map(log => this.getLogComp(log));
+    // return (
+    //   <table>
+    //     <tbody>{trs}</tbody>
+    //   </table>
+    // );
+  }
+  render() {
+    return (
+      <div
+        style={{
+          padding: '8px 16px',
+          borderRadius: '5px',
+          backgroundColor: '#eee',
+        }}
+      >
+        {this.getLogData()}
+      </div>
+    );
+  }
+}
 
 class Comp extends React.Component {
   static displayName = 'CICDBuilding';
@@ -12,27 +94,6 @@ class Comp extends React.Component {
     buildData: null,
     procsData: null,
   };
-  getLogProc() {
-    return (
-      <Panel header="Clone" key="1">
-        <div
-          style={{
-            padding: '8px 16px',
-            borderRadius: '5px',
-            backgroundColor: '#eee',
-          }}
-        >
-          <div>
-            <span style={{ float: 'left', width: 30, color: '#bbb' }}>1</span>
-            <span>
-              + git clone https://github.com/cabernety/application.git
-            </span>
-            <span style={{ float: 'right' }}>8s</span>
-          </div>
-        </div>
-      </Panel>
-    );
-  }
   componentDidMount() {
     this.fetch();
   }
@@ -64,6 +125,32 @@ class Comp extends React.Component {
       console.error(e);
     }
   }
+  getLogProc() {
+    const { procsData } = this.state;
+    const { data } = this.props;
+    if (!procsData || procsData.length <= 1) {
+      return (
+        <Panel>
+          <p>日志加载中...</p>
+        </Panel>
+      );
+    }
+    return (
+      <Collapse defaultActiveKey={procsData[1].name} bordered={false}>
+        {procsData.map((proc, i) => {
+          // 第一条 proc 不作为日志记录，而是全局日志状态记录
+          if (i === 0) {
+            return null;
+          }
+          return (
+            <Panel header={proc.name} key={proc.name}>
+              <ProcLog key={proc.id} procData={proc} metadata={data} />
+            </Panel>
+          );
+        })}
+      </Collapse>
+    );
+  }
   render() {
     const { buildData } = this.state;
     if (!buildData) {
@@ -90,11 +177,7 @@ class Comp extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col>
-            <Collapse defaultActiveKey={['1']} bordered={false}>
-              {this.getLogProc()}
-            </Collapse>
-          </Col>
+          <Col>{this.getLogProc()}</Col>
         </Row>
       </div>
     );

@@ -32,7 +32,8 @@ export const API = {
   CICD: {
     PROCS: (scm, owner, name, build_id) =>
       `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/procs/${build_id}`,
-    PROC_LOG: () => `/v1/cicd/{scm}/repos/{owner}/{name}/logs/{number}/{pid}`,
+    PROC_LOG: (scm, owner, name, number, pid) =>
+      `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/logs/${number}/${pid}`,
     GET_REPO: (scm, owner, name) =>
       `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}`,
     REPOS: scm => `http://localhost:8083/v1/cicd/${scm}/user/repos`,

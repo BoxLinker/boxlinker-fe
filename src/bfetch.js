@@ -138,6 +138,9 @@ const bFetch = async (url, options = {}) => {
       } catch (err) {
         throw new ErrJSONParse(`JSON 解析失败: ${txt}`);
       }
+      if (options.disableDefaultHandler) {
+        return json;
+      }
       if (json.status === STATUS.OK) {
         return json;
       }
