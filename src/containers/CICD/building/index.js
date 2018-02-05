@@ -6,7 +6,7 @@ import { Button, Row, Col, Collapse, Input, List, Tabs } from 'antd';
 import { API } from '../../../const';
 
 import BranchBuildTab from './BranchBuildTab';
-import BuildingInfo from './Info';
+import BuildingInfo from './InfoTab';
 import BuildsHistory from './BuildHisotry';
 import './style.css';
 import bfetch from '../../../bfetch';
@@ -68,7 +68,7 @@ class Comp extends React.Component {
         type="editable-card"
       >
         <TabPane tab="最近构建" key="lastBuild" closable={false}>
-          <BuildingInfo data={repoData} />
+          <BuildingInfo repoData={repoData} />
         </TabPane>
         <TabPane tab="分支构建" key="branch" closable={false}>
           <BranchBuildTab
@@ -85,7 +85,7 @@ class Comp extends React.Component {
     return buildTabs.map(item => {
       return (
         <TabPane tab={item.tab} key={item.tab} closable={true}>
-          <BuildingInfo data={repoData} buildData={item} />
+          <BuildingInfo repoData={repoData} buildData={item} />
         </TabPane>
       );
     });

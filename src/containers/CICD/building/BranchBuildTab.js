@@ -4,29 +4,6 @@ import { List, Button } from 'antd';
 import bfetch from '../../../bfetch';
 import { API } from '../../../const/index';
 
-const recent5BuildingData = [
-  {
-    status: 'success',
-    buildNum: 1,
-  },
-  {
-    status: 'success',
-    buildNum: 2,
-  },
-  {
-    status: 'failed',
-    buildNum: 3,
-  },
-  {
-    status: 'success',
-    buildNum: 4,
-  },
-  {
-    status: 'success',
-    buildNum: 5,
-  },
-];
-
 class BuildHistory5 extends React.Component {
   static propTypes = {
     data: PropTypes.object.isRequired,
@@ -85,12 +62,12 @@ class BuildHistory5 extends React.Component {
         </li>
       );
     });
-    return <ul className="build-history5">{lis.reverse()}</ul>;
+    return <ul className="build-history5">{lis}</ul>;
   }
 }
 
 class Comp extends React.Component {
-  static displayName = 'CICDBuilding';
+  static displayName = 'CICDBuildingBranch';
   static propTypes = {
     onOpenBuildTab: PropTypes.func,
   };

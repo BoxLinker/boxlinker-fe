@@ -3,6 +3,8 @@ import { Row, Col, Collapse } from 'antd';
 import { getDuration } from '../../../utils';
 import { API } from '../../../const';
 import bfetch from '../../../bfetch';
+import InfoPane from './InfoPane';
+import InfoLog from './InfoLog';
 import './info.css';
 
 const { Panel } = Collapse;
@@ -74,65 +76,64 @@ class Comp extends React.Component {
   componentDidMount() {
     this.fetch();
   }
-  async fetchLog() {
-    const { buildData } = this.state;
-    const { data } = this.props;
-    try {
-      const res = await bfetch(
-        API.CICD.PROCS(data.scm, data.owner, data.name, buildData.id),
-      );
-      this.setState({ procsData: res.results });
-    } catch (e) {
-      console.error(e);
-    }
-  }
+  // async fetchLog() {
+  //   const { buildData } = this.state;
+  //   const { data } = this.props;
+  //   try {
+  //     const res = await bfetch(
+  //       API.CICD.PROCS(data.scm, data.owner, data.name, buildData.id),
+  //     );
+  //     this.setState({ procsData: res.results });
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }
   async fetch() {
-    const { data, buildData } = this.props;
-    if (!data) {
+    const { repoData, buildData } = this.props;
+    if (!repoData) {
       return;
     }
+    const { scm, owner, name, last_build } = repoData;
     try {
       const res = await bfetch(
         API.CICD.GET_BUILD(
-          data.scm,
-          data.owner,
-          data.name,
-          buildData ? buildData.number : data.last_build,
+          scm,
+          owner,
+          name,
+          buildData ? buildData.number : last_build,
         ),
       );
-      this.setState({ buildData: res.results }, () => {
-        this.fetchLog();
-      });
+      this.setState({ buildData: res.results });
     } catch (e) {
       console.error(e);
     }
   }
-  getLogProc() {
-    const { procsData } = this.state;
-    const { data } = this.props;
-    if (!procsData || procsData.length <= 1) {
-      return (
-        <Panel>
-          <p>日志加载中...</p>
-        </Panel>
-      );
-    }
-    return (
-      <Collapse defaultActiveKey={procsData[1].name} bordered={false}>
-        {procsData.map((proc, i) => {
-          // 第一条 proc 不作为日志记录，而是全局日志状态记录
-          if (i === 0) {
-            return null;
-          }
-          return (
-            <Panel header={proc.name} key={proc.name}>
-              <ProcLog key={proc.id} procData={proc} metadata={data} />
-            </Panel>
-          );
-        })}
-      </Collapse>
-    );
-  }
+  // getLogProc() {
+  //   const { procsData } = this.state;
+  //   const { data } = this.props;
+  //   if (!procsData || procsData.length <= 1) {
+  //     return (
+  //       <Panel>
+  //         <p>日志加载中...</p>
+  //       </Panel>
+  //     );
+  //   }
+  //   return (
+  //     <Collapse defaultActiveKey={procsData[1].name} bordered={false}>
+  //       {procsData.map((proc, i) => {
+  //         // 第一条 proc 不作为日志记录，而是全局日志状态记录
+  //         if (i === 0) {
+  //           return null;
+  //         }
+  //         return (
+  //           <Panel header={proc.name} key={proc.name}>
+  //             <ProcLog key={proc.id} procData={proc} metadata={data} />
+  //           </Panel>
+  //         );
+  //       })}
+  //     </Collapse>
+  //   );
+  // }
   render() {
     const { buildData } = this.state;
     if (!buildData) {
@@ -140,27 +141,9 @@ class Comp extends React.Component {
     }
     return (
       <div>
-        <Row
-          style={{
-            background: 'orange',
-            marginBottom: 16,
-            padding: 16,
-            color: '#fff',
-          }}
-        >
-          <Col span={18}>
-            <p>Branch: {buildData.branch}</p>
-            <p>Commit: {buildData.commit}</p>
-            <p>{buildData.message}</p>
-          </Col>
-          <Col span={6}>
-            <p>{buildData.created_at}</p>
-            <p>{getDuration(buildData.started_at, buildData.finished_at)}</p>
-          </Col>
-        </Row>
-        <Row>
-          <Col>{this.getLogProc()}</Col>
-        </Row>
+        <InfoPane repoData={this.props.repoData} buildData={buildData} />
+        <InfoLog repoData={this.props.repoData} buildData={buildData} />
+        {/* <Row><Col>{this.getLogProc()}</Col></Row> */}
       </div>
     );
   }
