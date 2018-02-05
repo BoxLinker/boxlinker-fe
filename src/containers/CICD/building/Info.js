@@ -18,7 +18,6 @@ class ProcLog extends React.Component {
     const { metadata, procData } = this.props;
     const { scm, owner, name, last_build } = metadata;
     const { pid } = procData;
-    console.log('==>', metadata, procData);
     try {
       const res = await bfetch(
         API.CICD.PROC_LOG(scm, owner, name, last_build, pid),
@@ -31,23 +30,7 @@ class ProcLog extends React.Component {
       console.error(e);
     }
   }
-  getLogComp1(data) {
-    console.log(data);
-    const { pos, time = 0, out } = data;
-    return (
-      <tr key={pos}>
-        <td>
-          <span style={{ float: 'left', width: 30, color: '#bbb' }}>
-            {pos + 1}
-          </span>
-        </td>
-        <td>{out}</td>
-        <td>{time}s</td>
-      </tr>
-    );
-  }
   getLogComp(data) {
-    console.log(data);
     const { pos, time = 0, out } = data;
     return (
       <div key={pos} className="log-line">
@@ -66,12 +49,6 @@ class ProcLog extends React.Component {
       return <div>加载中...</div>;
     }
     return logData.map(log => this.getLogComp(log));
-    // const trs = logData.map(log => this.getLogComp(log));
-    // return (
-    //   <table>
-    //     <tbody>{trs}</tbody>
-    //   </table>
-    // );
   }
   render() {
     return (

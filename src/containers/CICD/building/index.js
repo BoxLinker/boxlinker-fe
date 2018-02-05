@@ -7,6 +7,7 @@ import { API } from '../../../const';
 
 import BranchBuildTab from './BranchBuildTab';
 import BuildingInfo from './Info';
+import BuildsHistory from './BuildHisotry';
 import './style.css';
 import bfetch from '../../../bfetch';
 
@@ -130,52 +131,13 @@ class Comp extends React.Component {
     }
   };
   render() {
+    const { repoData } = this.state;
     return (
       <Row gutter={16}>
         <Col span={18}>{this.getTabs()}</Col>
 
         <Col span={6}>
-          <p>
-            <Input placeholder="搜索" />
-          </p>
-          <List itemLayout="vertical">
-            <List.Item extra={<Button shape="circle" icon="reload" />}>
-              <List.Item.Meta
-                title="cabernety/application"
-                description={
-                  <div>
-                    <div>branch: master</div>
-                    <div>3 天以前</div>
-                    <div>2 分 15 秒</div>
-                  </div>
-                }
-              />
-            </List.Item>
-            <List.Item extra={<Button shape="circle" icon="reload" />}>
-              <List.Item.Meta
-                title="cabernety/application"
-                description={
-                  <div>
-                    <div>branch: master</div>
-                    <div>3 天以前</div>
-                    <div>2 分 15 秒</div>
-                  </div>
-                }
-              />
-            </List.Item>
-            <List.Item extra={<Button shape="circle" icon="reload" />}>
-              <List.Item.Meta
-                title="cabernety/application"
-                description={
-                  <div>
-                    <div>branch: master</div>
-                    <div>3 天以前</div>
-                    <div>2 分 15 秒</div>
-                  </div>
-                }
-              />
-            </List.Item>
-          </List>
+          {repoData ? <BuildsHistory repoData={repoData} /> : null}
         </Col>
       </Row>
     );
