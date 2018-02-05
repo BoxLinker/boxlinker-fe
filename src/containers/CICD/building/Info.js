@@ -87,13 +87,18 @@ class Comp extends React.Component {
     }
   }
   async fetch() {
-    const { data } = this.props;
+    const { data, buildData } = this.props;
     if (!data) {
       return;
     }
     try {
       const res = await bfetch(
-        API.CICD.GET_BUILD(data.scm, data.owner, data.name, data.last_build),
+        API.CICD.GET_BUILD(
+          data.scm,
+          data.owner,
+          data.name,
+          buildData ? buildData.number : data.last_build,
+        ),
       );
       this.setState({ buildData: res.results }, () => {
         this.fetchLog();

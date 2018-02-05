@@ -71,18 +71,21 @@ class Comp extends React.Component {
           <BuildingInfo data={repoData} />
         </TabPane>
         <TabPane tab="分支构建" key="branch" closable={false}>
-          <BranchBuildTab onOpenBuildTab={this.onOpenBuildTab} />
+          <BranchBuildTab
+            repoData={repoData}
+            onOpenBuildTab={this.onOpenBuildTab}
+          />
         </TabPane>
         {this.getBuildTabs()}
       </Tabs>
     );
   }
   getBuildTabs() {
-    const { buildTabs } = this.state;
+    const { buildTabs, repoData } = this.state;
     return buildTabs.map(item => {
       return (
         <TabPane tab={item.tab} key={item.tab} closable={true}>
-          <BuildingInfo />
+          <BuildingInfo data={repoData} buildData={item} />
         </TabPane>
       );
     });

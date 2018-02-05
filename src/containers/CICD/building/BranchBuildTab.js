@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button } from 'antd';
+import bfetch from '../../../bfetch';
+import { API } from '../../../const/index';
 
 const recent5BuildingData = [
   {
@@ -29,45 +31,63 @@ class BuildHistory5 extends React.Component {
   static propTypes = {
     data: PropTypes.object.isRequired,
   };
+  state = {
+    list: null,
+  };
   render() {
-    const { branch, data } = this.props.data;
+    const { name } = this.props.data;
     return (
-      <List.Item extra={this.getBuildHistory(data)}>
-        <List.Item.Meta title={branch} />
+      <List.Item extra={this.getBuildHistory()}>
+        <List.Item.Meta title={name} />
         <Button type="primary">开始构建</Button>
       </List.Item>
     );
   }
+  componentDidMount() {
+    this.getBuilds5();
+  }
   openBuildTab = item => {
-    console.log('item', item, this.props.data);
     this.props.onOpenBuildTab(item);
   };
-  getBuildHistory(data) {
-    const lis = data.map((item, i) => {
-      const { branch } = this.props.data;
-      const dData = {
-        ...item,
-        branch,
-        tab: `${branch}#${item.buildNum}`,
-      };
+  async getBuilds5() {
+    const branch = this.props.data.name;
+    try {
+      const { scm, owner, name } = this.props.repoData;
+      const res = await bfetch(API.CICD.QUERY_BRANCH_BUILDS(scm, owner, name), {
+        params: {
+          branch,
+        },
+      });
+      this.setState({
+        list: res.results,
+      });
+    } catch (e) {
+      console.error('getBuilds5 err: ', e);
+    }
+  }
+  getBuildHistory() {
+    const { list } = this.state;
+    if (!list) {
+      return <p>加载中...</p>;
+    }
+    const lis = list.map((item, i) => {
+      const { number, branch, status } = item;
       return (
-        <li className={`build-item ${dData.status}`} key={dData.buildNum}>
+        <li className={`build-item ${status}`} key={number}>
           <a
             onClick={() => {
-              this.openBuildTab(dData);
+              this.openBuildTab({
+                ...item,
+                tab: `${branch}#${number}`,
+              });
             }}
-          >{`#${i + 1}`}</a>
+          >{`#${number}`}</a>
         </li>
       );
     });
     return <ul className="build-history5">{lis.reverse()}</ul>;
   }
 }
-
-const branchList = [
-  { branch: 'master', data: recent5BuildingData },
-  { branch: 'v0.1-dev-1-8d0djduyd', data: recent5BuildingData },
-];
 
 class Comp extends React.Component {
   static displayName = 'CICDBuilding';
@@ -77,8 +97,29 @@ class Comp extends React.Component {
   static defaultProps = {
     onOpenBuildTab: () => {},
   };
+  state = {
+    branchList: null,
+  };
+  componentDidMount() {
+    this.fetch();
+  }
+  async fetch() {
+    const { scm, owner, name } = this.props.repoData || {};
+    try {
+      const res = await bfetch(API.CICD.QUERY_BRANCHES(scm, owner, name));
+      this.setState({
+        branchList: res.results.data,
+      });
+    } catch (e) {
+      console.log('fetch branches err: ', e);
+    }
+  }
   getBuildHistory(branch) {}
   render() {
+    const { branchList } = this.state;
+    if (!branchList) {
+      return <p>加载中...</p>;
+    }
     return (
       <List
         bordered
@@ -89,6 +130,7 @@ class Comp extends React.Component {
           <BuildHistory5
             onOpenBuildTab={this.props.onOpenBuildTab}
             data={item}
+            repoData={this.props.repoData}
           />
         )}
       >

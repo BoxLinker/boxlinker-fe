@@ -30,8 +30,12 @@ export const API = {
     LOGIN: '/v1/user/auth/login',
   },
   CICD: {
+    QUERY_BRANCHES: (scm, owner, name) =>
+      `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/branches`,
     QUERY_BUILDS: (scm, owner, name) =>
       `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/builds`,
+    QUERY_BRANCH_BUILDS: (scm, owner, name) =>
+      `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/query_branch_build`,
     PROCS: (scm, owner, name, build_id) =>
       `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/procs/${build_id}`,
     PROC_LOG: (scm, owner, name, number, pid) =>
