@@ -1,9 +1,81 @@
 import React from 'react';
-import { Button, Row, Col, Collapse, Input, List, Tabs } from 'antd';
+import PropTypes from 'prop-types';
+import { Button, Tag, Input, List } from 'antd';
 
-import { API } from '../../../const';
-import { getDuration } from '../../../utils';
+import { API, BuildColorMap } from '../../../const';
+import { getDuration, fromNow } from '../../../utils';
 import bfetch from '../../../bfetch';
+
+class HistoryItem extends React.Component {
+  static propTypes = {
+    onPostBuild: PropTypes.func,
+  };
+  static defaultProps = {
+    onPostBuild: () => {},
+  };
+  state = {
+    loading: false,
+  };
+  postBuild = async () => {
+    this.setState({ loading: true });
+    const { buildData, repoData } = this.props;
+    const { owner, scm, name } = repoData;
+    const { number } = buildData;
+    try {
+      await bfetch(API.CICD.POST_BUILD(scm, owner, name, number), {
+        method: 'POST',
+      });
+      this.props.onPostBuild();
+    } catch (e) {
+      console.log('postbuild err: ', e);
+    }
+    this.setState({ loading: false });
+  };
+  render() {
+    const { loading } = this.state;
+    const { buildData, repoData } = this.props;
+    const { owner, name } = repoData;
+    const {
+      branch,
+      created_at,
+      started_at,
+      finished_at,
+      status,
+      event,
+      sender,
+    } = buildData;
+    return (
+      <List.Item
+        extra={
+          <Button
+            loading={loading}
+            onClick={() => {
+              this.postBuild();
+            }}
+            shape="circle"
+            icon="reload"
+          />
+        }
+      >
+        <List.Item.Meta
+          title={`${owner}/${name}`}
+          description={
+            <div>
+              <div>分支: {branch}</div>
+              <div>创建于: {fromNow(created_at)}</div>
+              <div>构建用时: {getDuration(started_at, finished_at)}</div>
+              <div>
+                状态: <Tag color={BuildColorMap[status]}>{status}</Tag>
+              </div>
+              <div>事件: {event}</div>
+              <div>构建人: {sender}</div>
+            </div>
+          }
+        />
+      </List.Item>
+    );
+  }
+}
 
 class Comp extends React.Component {
   static displayName = 'CICDBuildingHistory';
@@ -36,7 +108,7 @@ class Comp extends React.Component {
   }
   getList() {
     const { buildsData } = this.state;
-    const { owner, name } = this.props.repoData;
+    const { repoData } = this.props;
     if (!buildsData) {
       return <p>加载中...</p>;
     }
@@ -45,32 +117,7 @@ class Comp extends React.Component {
         itemLayout="vertical"
         dataSource={buildsData}
         renderItem={item => {
-          const {
-            branch,
-            created_at,
-            started_at,
-            finished_at,
-            status,
-            event,
-            sender,
-          } = item;
-          return (
-            <List.Item extra={<Button shape="circle" icon="reload" />}>
-              <List.Item.Meta
-                title={`${owner}/${name}`}
-                description={
-                  <div>
-                    <div>branch: {branch}</div>
-                    <div>{created_at}</div>
-                    <div>{getDuration(started_at, finished_at)}</div>
-                    <div>status: {status}</div>
-                    <div>event: {event}</div>
-                    <div>sender: {sender}</div>
-                  </div>
-                }
-              />
-            </List.Item>
-          );
+          return <HistoryItem buildData={item} repoData={repoData} />;
         }}
       />
     );

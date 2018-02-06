@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { Button, Row, Col, Collapse, Input, List, Tabs } from 'antd';
+import { Row, Col, Tabs } from 'antd';
 
 import { API } from '../../../const';
 
@@ -11,7 +11,6 @@ import BuildsHistory from './BuildHisotry';
 import './style.css';
 import bfetch from '../../../bfetch';
 
-const { Panel } = Collapse;
 const { TabPane } = Tabs;
 
 class Comp extends React.Component {
@@ -24,6 +23,9 @@ class Comp extends React.Component {
   componentDidMount() {
     this.fetchRepo();
   }
+  onPostBuild() {
+    this.fetchRepo();
+  }
   async fetchRepo() {
     const { scm, owner, name } = this.props.params;
     try {
@@ -32,27 +34,6 @@ class Comp extends React.Component {
     } catch (e) {
       console.error(e);
     }
-  }
-  getLogProc() {
-    return (
-      <Panel header="Clone" key="1">
-        <div
-          style={{
-            padding: '8px 16px',
-            borderRadius: '5px',
-            backgroundColor: '#eee',
-          }}
-        >
-          <div>
-            <span style={{ float: 'left', width: 30, color: '#bbb' }}>1</span>
-            <span>
-              + git clone https://github.com/cabernety/application.git
-            </span>
-            <span style={{ float: 'right' }}>8s</span>
-          </div>
-        </div>
-      </Panel>
-    );
   }
   getTabs() {
     const { activeTab, repoData } = this.state;
@@ -68,7 +49,7 @@ class Comp extends React.Component {
         type="editable-card"
       >
         <TabPane tab="最近构建" key="lastBuild" closable={false}>
-          <BuildingInfo repoData={repoData} />
+          <BuildingInfo repoData={repoData} refreshAble />
         </TabPane>
         <TabPane tab="分支构建" key="branch" closable={false}>
           <BranchBuildTab
@@ -140,7 +121,9 @@ class Comp extends React.Component {
         <Col span={18}>{this.getTabs()}</Col>
 
         <Col span={6}>
-          {repoData ? <BuildsHistory repoData={repoData} /> : null}
+          {repoData ? (
+            <BuildsHistory repoData={repoData} onPostBuild={this.onPostBuild} />
+          ) : null}
         </Col>
       </Row>
     );

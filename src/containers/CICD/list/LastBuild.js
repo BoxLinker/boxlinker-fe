@@ -1,12 +1,7 @@
 import React from 'react';
 import { Tag } from 'antd';
 import bFetch from '../../../bfetch';
-import { API } from '../../../const';
-
-const colorMap = {
-  success: 'green',
-  failure: 'red',
-};
+import { API, BuildColorMap } from '../../../const';
 
 export default class extends React.Component {
   state = {
@@ -41,7 +36,7 @@ export default class extends React.Component {
     }
     return (
       <span>
-        <Tag color={colorMap[data.status]}>{data.status}</Tag> 用时{' '}
+        <Tag color={BuildColorMap[data.status]}>{data.status}</Tag> 用时{' '}
         {this.getBuildDuration(data)}。
       </span>
     );

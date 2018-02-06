@@ -10,11 +10,23 @@ class ProcLog extends React.Component {
     logData: null,
   };
   componentDidMount() {
+    // if (this.props.repoData.status === 'running') {
+    //   this.fetchStream();
+    //   return;
+    // }
     this.fetch();
   }
+  // async fetchStream() {
+  //   const { repoData, procData } = this.props;
+  //   const { scm, owner, name, last_build } = repoData;
+  //   const { pid } = procData;
+  //   try {
+  //     await bfetch(API.CICD.PROC_STREAM_LOG(scm, owner, name, last_build))
+  //   }
+  // }
   async fetch() {
-    const { metadata, procData } = this.props;
-    const { scm, owner, name, last_build } = metadata;
+    const { repoData, procData } = this.props;
+    const { scm, owner, name, last_build } = repoData;
     const { pid } = procData;
     try {
       const res = await bfetch(
@@ -100,7 +112,7 @@ class Comp extends React.Component {
           }
           return (
             <Panel header={proc.name} key={proc.name}>
-              <ProcLog key={proc.id} procData={proc} metadata={repoData} />
+              <ProcLog key={proc.id} procData={proc} repoData={repoData} />
             </Panel>
           );
         })}

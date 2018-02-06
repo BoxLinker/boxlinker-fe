@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Tabs, List, Button } from 'antd';
+import { Modal, Tabs, Button } from 'antd';
 import Table from '../../../components/Table';
 import { API } from '../../../const';
 

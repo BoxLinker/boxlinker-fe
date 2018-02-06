@@ -1,95 +1,38 @@
 import React from 'react';
-import { Row, Col, Collapse } from 'antd';
-import { getDuration } from '../../../utils';
+import PropTypes from 'prop-types';
 import { API } from '../../../const';
 import bfetch from '../../../bfetch';
 import InfoPane from './InfoPane';
 import InfoLog from './InfoLog';
 import './info.css';
 
-const { Panel } = Collapse;
-
-class ProcLog extends React.Component {
-  state = {
-    logData: null,
-  };
-  componentDidMount() {
-    this.fetch();
-  }
-  async fetch() {
-    const { metadata, procData } = this.props;
-    const { scm, owner, name, last_build } = metadata;
-    const { pid } = procData;
-    try {
-      const res = await bfetch(
-        API.CICD.PROC_LOG(scm, owner, name, last_build, pid),
-        {
-          disableDefaultHandler: true,
-        },
-      );
-      this.setState({ logData: res });
-    } catch (e) {
-      console.error(e);
-    }
-  }
-  getLogComp(data) {
-    const { pos, time = 0, out } = data;
-    return (
-      <div key={pos} className="log-line">
-        <span className="log-index" data-log-index={pos + 1} />
-        <span
-          className="log-content"
-          dangerouslySetInnerHTML={{ __html: out }}
-        />
-        <span className="log-ts" data-log-time={`${time}s`} />
-      </div>
-    );
-  }
-  getLogData() {
-    const { logData } = this.state;
-    if (!logData) {
-      return <div>加载中...</div>;
-    }
-    return logData.map(log => this.getLogComp(log));
-  }
-  render() {
-    return (
-      <div
-        style={{
-          padding: '8px 16px',
-          borderRadius: '5px',
-          backgroundColor: '#eee',
-        }}
-      >
-        {this.getLogData()}
-      </div>
-    );
-  }
-}
-
 class Comp extends React.Component {
-  static displayName = 'CICDBuilding';
+  static displayName = 'CICDBuildingInfo';
+  static propTypes = {
+    refreshAble: PropTypes.bool,
+  };
+  static defaultProps = {
+    refreshAble: false,
+  };
   state = {
     buildData: null,
     procsData: null,
   };
   componentDidMount() {
-    this.fetch();
-  }
-  // async fetchLog() {
-  //   const { buildData } = this.state;
-  //   const { data } = this.props;
-  //   try {
-  //     const res = await bfetch(
-  //       API.CICD.PROCS(data.scm, data.owner, data.name, buildData.id),
-  //     );
-  //     this.setState({ procsData: res.results });
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
-  async fetch() {
     const { repoData, buildData } = this.props;
+    this.fetch(repoData, buildData);
+  }
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.refreshAble) {
+      return;
+    }
+    if ('buildData' in nextProps && 'repoData' in nextProps) {
+      const { repoData, buildData } = nextProps;
+      this.fetch(repoData, buildData);
+    }
+  }
+  async fetch(repoData, buildData) {
+    // const { repoData, buildData } = this.props;
     if (!repoData) {
       return;
     }
@@ -108,32 +51,6 @@ class Comp extends React.Component {
       console.error(e);
     }
   }
-  // getLogProc() {
-  //   const { procsData } = this.state;
-  //   const { data } = this.props;
-  //   if (!procsData || procsData.length <= 1) {
-  //     return (
-  //       <Panel>
-  //         <p>日志加载中...</p>
-  //       </Panel>
-  //     );
-  //   }
-  //   return (
-  //     <Collapse defaultActiveKey={procsData[1].name} bordered={false}>
-  //       {procsData.map((proc, i) => {
-  //         // 第一条 proc 不作为日志记录，而是全局日志状态记录
-  //         if (i === 0) {
-  //           return null;
-  //         }
-  //         return (
-  //           <Panel header={proc.name} key={proc.name}>
-  //             <ProcLog key={proc.id} procData={proc} metadata={data} />
-  //           </Panel>
-  //         );
-  //       })}
-  //     </Collapse>
-  //   );
-  // }
   render() {
     const { buildData } = this.state;
     if (!buildData) {
@@ -143,7 +60,6 @@ class Comp extends React.Component {
       <div>
         <InfoPane repoData={this.props.repoData} buildData={buildData} />
         <InfoLog repoData={this.props.repoData} buildData={buildData} />
-        {/* <Row><Col>{this.getLogProc()}</Col></Row> */}
       </div>
     );
   }

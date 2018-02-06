@@ -1,7 +1,7 @@
 import React from 'react';
-import { Row, Col } from 'antd';
-import { getDuration } from '../../../utils';
-import { API } from '../../../const';
+import { Row, Col, Tag } from 'antd';
+import { getDuration, fromNow } from '../../../utils';
+import { API, BuildColorMap } from '../../../const';
 import bfetch from '../../../bfetch';
 
 class Comp extends React.Component {
@@ -41,20 +41,26 @@ class Comp extends React.Component {
     return (
       <Row
         style={{
-          background: 'orange',
-          marginBottom: 16,
           padding: 16,
-          color: '#fff',
         }}
+        gutter={16}
       >
         <Col span={18}>
-          <p>Branch: {buildData.branch}</p>
+          <p>分支: {buildData.branch}</p>
           <p>Commit: {buildData.commit}</p>
-          <p>{buildData.message}</p>
+          <p>提交信息: {buildData.message}</p>
         </Col>
         <Col span={6}>
-          <p>{buildData.created_at}</p>
-          <p>{getDuration(buildData.started_at, buildData.finished_at)}</p>
+          <p>创建于: {fromNow(buildData.created_at)}</p>
+          <p>
+            构建用时: {getDuration(buildData.started_at, buildData.finished_at)}
+          </p>
+          <div>
+            状态:{' '}
+            <Tag color={BuildColorMap[buildData.status]}>
+              {buildData.status}
+            </Tag>
+          </div>
         </Col>
       </Row>
     );

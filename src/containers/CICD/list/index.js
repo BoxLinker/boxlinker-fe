@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { Button, Tag } from 'antd';
+import { Button } from 'antd';
 import { Link } from 'react-router';
 import Table from '../../../components/Table';
 import { API } from '../../../const';

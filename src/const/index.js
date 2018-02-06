@@ -40,11 +40,15 @@ export const API = {
       `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/procs/${build_id}`,
     PROC_LOG: (scm, owner, name, number, pid) =>
       `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/logs/${number}/${pid}`,
+    PROC_STREAM_LOG: (scm, owner, name, number) =>
+      `http://localhost:8083/v1/cicd/${scm}/stream/logs/${owner}/${name}/${number}/1`,
     GET_REPO: (scm, owner, name) =>
       `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}`,
     REPOS: scm => `http://localhost:8083/v1/cicd/${scm}/user/repos`,
     GET_BUILD: (scm, owner, name, number) =>
-      `/v1/cicd/${scm}/repos/${owner}/${name}/build/${number}`,
+      `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/builds/${number}`,
+    POST_BUILD: (scm, owner, name, number) =>
+      `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/builds/${number}`,
   },
 };
 
@@ -56,5 +60,10 @@ export const MemoryConfig = [
   { label: '256M', value: '256Mi' },
   { label: '512M', value: '512Mi' },
 ];
+
+export const BuildColorMap = {
+  success: 'green',
+  failure: 'red',
+};
 
 export default {};
