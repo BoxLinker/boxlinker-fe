@@ -45,4 +45,12 @@ export function fromNow(ts) {
   return `${Math.floor(d / Year)} 年以前`;
 }
 
+export function getPagination(pagination) {
+  return {
+    current: pagination.currentPage,
+    total: pagination.totalCount,
+    pageSize: pagination.pageCount,
+  };
+}
+
 export default {};

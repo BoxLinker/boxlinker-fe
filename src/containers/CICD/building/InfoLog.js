@@ -1,29 +1,20 @@
 import React from 'react';
-import { Row, Col, Collapse } from 'antd';
+import { Row, Col, Collapse, Spin, Icon } from 'antd';
+import fetchStream from 'fetch-stream';
+import cookies from 'js-cookie';
 import { API } from '../../../const';
 import bfetch from '../../../bfetch';
 
 const { Panel } = Collapse;
 
 class ProcLog extends React.Component {
+  static displayName = 'ProcLog';
   state = {
     logData: null,
   };
   componentDidMount() {
-    // if (this.props.repoData.status === 'running') {
-    //   this.fetchStream();
-    //   return;
-    // }
     this.fetch();
   }
-  // async fetchStream() {
-  //   const { repoData, procData } = this.props;
-  //   const { scm, owner, name, last_build } = repoData;
-  //   const { pid } = procData;
-  //   try {
-  //     await bfetch(API.CICD.PROC_STREAM_LOG(scm, owner, name, last_build))
-  //   }
-  // }
   async fetch() {
     const { repoData, procData } = this.props;
     const { scm, owner, name, last_build } = repoData;
@@ -42,12 +33,13 @@ class ProcLog extends React.Component {
   }
   getLogComp(data) {
     const { pos, time = 0, out } = data;
+    const out1 = out.split('\r');
     return (
       <div key={pos} className="log-line">
         <span className="log-index" data-log-index={pos + 1} />
         <span
           className="log-content"
-          dangerouslySetInnerHTML={{ __html: out }}
+          dangerouslySetInnerHTML={{ __html: out1[out1.length - 1] }}
         />
         <span className="log-ts" data-log-time={`${time}s`} />
       </div>
@@ -75,58 +67,166 @@ class ProcLog extends React.Component {
   }
 }
 
+class RunningProcLog extends React.Component {
+  static displayName = 'RunningProcLog';
+  getLogComp(data) {
+    const { pos, time = 0, out } = data;
+    return (
+      <div key={pos} className="log-line">
+        <span className="log-index" data-log-index={pos + 1} />
+        <span
+          className="log-content"
+          dangerouslySetInnerHTML={{ __html: out }}
+        />
+        <span className="log-ts" data-log-time={`${time}s`} />
+      </div>
+    );
+  }
+  getLogData() {
+    const { logData } = this.props;
+    if (!logData) {
+      return <div>加载中...</div>;
+    }
+    return logData.map(log => this.getLogComp(log));
+  }
+  render() {
+    const { procData } = this.props;
+    const { state } = procData;
+    return (
+      <div
+        style={{
+          padding: '8px 16px',
+          borderRadius: '5px',
+          backgroundColor: '#eee',
+        }}
+      >
+        {this.getLogData()}
+
+        {state === 'pending' ? (
+          <div className="log-line">
+            <span className="log-index" />
+            <span className="log-content">
+              <Spin
+                indicator={
+                  <Icon type="loading" style={{ fontSize: 24 }} spin />
+                }
+              />
+            </span>
+          </div>
+        ) : null}
+      </div>
+    );
+  }
+}
+
 class Comp extends React.Component {
   static displayName = 'CICDBuildingInfoLog';
   state = {
     procsData: null,
+    logDatas: {},
   };
   componentDidMount() {
-    this.fetchLog();
+    this.fetchProcs();
   }
-  async fetchLog() {
+  async fetchProcs() {
     const { repoData, buildData } = this.props;
     const { scm, owner, name } = repoData;
     try {
       const res = await bfetch(API.CICD.PROCS(scm, owner, name, buildData.id));
       this.setState({ procsData: res.results });
+      if (buildData.status === 'running') {
+        this.fetchStream();
+      }
     } catch (e) {
       console.error(e);
     }
   }
-  getLogProc() {
-    const { procsData } = this.state;
-    const { repoData } = this.props;
-    if (!procsData || procsData.length <= 1) {
-      return (
-        <Panel>
-          <p>日志加载中...</p>
-        </Panel>
-      );
+  parseLogLine(str) {
+    const { logDatas } = this.state;
+    try {
+      const logData = JSON.parse(str);
+      const dLog = JSON.parse(logData.data);
+      if (!logDatas[dLog.proc]) {
+        logDatas[dLog.proc] = [];
+      }
+      logDatas[dLog.proc].push(dLog);
+      this.setState({
+        logDatas,
+      });
+    } catch (e) {
+      console.error('parseLogLine err: ', e);
     }
-    return (
-      <Collapse defaultActiveKey={procsData[1].name} bordered={false}>
-        {procsData.map((proc, i) => {
-          // 第一条 proc 不作为日志记录，而是全局日志状态记录
-          if (i === 0) {
-            return null;
-          }
-          return (
-            <Panel header={proc.name} key={proc.name}>
-              <ProcLog key={proc.id} procData={proc} repoData={repoData} />
-            </Panel>
-          );
-        })}
-      </Collapse>
+  }
+  async fetchStream() {
+    const { repoData } = this.props;
+    const { scm, owner, name, last_build } = repoData;
+
+    const handler = result => {
+      if (!result) {
+        return false;
+      }
+      if (result.done) {
+        console.log('completed');
+        return;
+      }
+      const str = String(result.value);
+      switch (str) {
+        case 'eof':
+          return false;
+        case 'ping':
+          return true;
+        default:
+          this.parseLogLine(str);
+      }
+      return true; // return false to cancel
+    };
+
+    fetchStream(
+      {
+        url: API.CICD.PROC_STREAM_LOG(scm, owner, name, last_build),
+        headers: {
+          'X-Access-Token': cookies.get('X-Access-Token'),
+        },
+      },
+      handler,
     );
   }
   render() {
-    const { procsData } = this.state;
+    const { procsData, logDatas } = this.state;
+    const { repoData, buildData } = this.props;
+    const isRunning = buildData.status === 'running';
     if (!procsData) {
       return <p>加载中...</p>;
     }
     return (
       <Row>
-        <Col>{this.getLogProc()}</Col>
+        <Col>
+          <Collapse defaultActiveKey={procsData[1].name} bordered={false}>
+            {procsData.map((proc, i) => {
+              // 第一条 proc 不作为日志记录，而是全局日志状态记录
+              if (i === 0) {
+                return null;
+              }
+              return (
+                <Panel header={proc.name} key={proc.name}>
+                  {isRunning ? (
+                    <RunningProcLog
+                      key={proc.id}
+                      logData={logDatas[proc.name]}
+                      procData={proc}
+                    />
+                  ) : (
+                    <ProcLog
+                      key={proc.id}
+                      procData={proc}
+                      repoData={repoData}
+                    />
+                  )}
+                </Panel>
+              );
+            })}
+          </Collapse>
+        </Col>
       </Row>
     );
   }

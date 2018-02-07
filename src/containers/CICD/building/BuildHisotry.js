@@ -9,9 +9,11 @@ import bfetch from '../../../bfetch';
 class HistoryItem extends React.Component {
   static propTypes = {
     onPostBuild: PropTypes.func,
+    onClickItem: PropTypes.func,
   };
   static defaultProps = {
     onPostBuild: () => {},
+    onClickItem: () => {},
   };
   state = {
     loading: false,
@@ -30,6 +32,10 @@ class HistoryItem extends React.Component {
       console.log('postbuild err: ', e);
     }
     this.setState({ loading: false });
+  };
+  openTab = () => {
+    const { buildData } = this.props;
+    this.props.onClickItem(buildData);
   };
   render() {
     const { loading } = this.state;
@@ -58,7 +64,7 @@ class HistoryItem extends React.Component {
         }
       >
         <List.Item.Meta
-          title={`${owner}/${name}`}
+          title={<a onClick={this.openTab}>{`${owner}/${name}`}</a>}
           description={
             <div>
               <div>分支: {branch}</div>
@@ -79,15 +85,31 @@ class HistoryItem extends React.Component {
 
 class Comp extends React.Component {
   static displayName = 'CICDBuildingHistory';
+  static propTypes = {
+    onClickItem: PropTypes.func,
+  };
+  static defaultProps = {
+    onClickItem: () => {},
+  };
   state = {
     buildsData: null,
     pagination: {
       currentPage: 1,
-      pageCount: 10,
+      pageCount: 5,
     },
   };
   componentDidMount() {
     this.fetch();
+  }
+  componentWillUnmount() {
+    if (this.sid) {
+      clearTimeout(this.sid);
+    }
+  }
+  refetch() {
+    this.sid = setTimeout(() => {
+      this.fetch();
+    }, 5000);
   }
   async fetch() {
     const { repoData } = this.props;
@@ -98,12 +120,18 @@ class Comp extends React.Component {
           ...this.state.pagination,
         },
       });
-      this.setState({
-        buildsData: res.results.data,
-        pagination: res.results.pagination,
-      });
+      this.setState(
+        {
+          buildsData: res.results.data,
+          pagination: res.results.pagination,
+        },
+        () => {
+          this.refetch();
+        },
+      );
     } catch (e) {
       console.log('query buidls err: ', e);
+      this.refetch();
     }
   }
   getList() {
@@ -117,7 +145,13 @@ class Comp extends React.Component {
         itemLayout="vertical"
         dataSource={buildsData}
         renderItem={item => {
-          return <HistoryItem buildData={item} repoData={repoData} />;
+          return (
+            <HistoryItem
+              onClickItem={this.props.onClickItem}
+              buildData={item}
+              repoData={repoData}
+            />
+          );
         }}
       />
     );

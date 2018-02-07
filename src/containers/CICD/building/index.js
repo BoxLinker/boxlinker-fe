@@ -71,17 +71,20 @@ class Comp extends React.Component {
       );
     });
   }
-  onOpenBuildTab = data => {
+  onOpenBuildTab = buildData => {
     const { buildTabs } = this.state;
+    if (!buildData.tab) {
+      buildData.tab = `${buildData.branch}#${buildData.number}`;
+    }
     for (let i = 0; i < buildTabs.length; i++) {
-      if (buildTabs[i].tab === data.tab) {
-        this.setState({ activeTab: data.tab });
+      if (buildTabs[i].tab === buildData.tab) {
+        this.setState({ activeTab: buildData.tab });
         return;
       }
     }
     this.setState({
-      activeTab: data.tab,
-      buildTabs: [].concat(buildTabs).concat([data]),
+      activeTab: buildData.tab,
+      buildTabs: [].concat(buildTabs).concat([buildData]),
     });
   };
   onTabChange = activeTab => {
@@ -122,7 +125,11 @@ class Comp extends React.Component {
 
         <Col span={6}>
           {repoData ? (
-            <BuildsHistory repoData={repoData} onPostBuild={this.onPostBuild} />
+            <BuildsHistory
+              onClickItem={this.onOpenBuildTab}
+              repoData={repoData}
+              onPostBuild={this.onPostBuild}
+            />
           ) : null}
         </Col>
       </Row>

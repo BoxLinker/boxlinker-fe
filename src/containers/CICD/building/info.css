@@ -14,6 +14,7 @@
 }
 .log-content{
   flex: 1;
+  white-space: pre-wrap;
 }
 .log-ts {
   min-width: 30px;
