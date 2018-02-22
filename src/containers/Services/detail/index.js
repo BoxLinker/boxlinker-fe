@@ -10,7 +10,9 @@ import MonitorPane from './MonitorPane';
 import { API } from '../../../const';
 import bFetch from '../../../bfetch';
 
+const tabIndexes = ['baseinfo', 'monitor', 'log'];
 const { TabPane } = Tabs;
+const logger = console;
 
 class Comp extends React.Component {
   static displayName = 'ServiceDetail';
@@ -27,14 +29,19 @@ class Comp extends React.Component {
     }
   }
   onTabChange = index => {
-    this.toogleLog(index === '3');
-    if (index === '2') {
-      if (this.monitorRef) {
-        this.monitorRef.focus();
-      } else {
-        console.log('this.monitorRef null');
-      }
+    const refE = this[`${index}Ref`];
+    if (!refE) {
+      logger.warn(`tab ref ${index} not found.`);
+      return;
     }
+    tabIndexes.forEach(item => {
+      const refF = this[`${item}Ref`];
+      if (index === item) {
+        refF.focus();
+      } else {
+        refF.blur();
+      }
+    });
   };
   componentDidMount() {
     this.onLoad();
@@ -79,11 +86,16 @@ class Comp extends React.Component {
     }
     const { name } = this.props.params;
     return (
-      <Tabs defaultActiveKey="1" onTabClick={this.onTabChange}>
-        <TabPane tab="基础信息" key="1">
-          <BaseInfoPane svcDetail={baseinfo} />
+      <Tabs defaultActiveKey="baseinfo" onTabClick={this.onTabChange}>
+        <TabPane tab="基础信息" key="baseinfo">
+          <BaseInfoPane
+            ref={ref => {
+              this.baseinfoRef = ref;
+            }}
+            svcDetail={baseinfo}
+          />
         </TabPane>
-        <TabPane tab="监控" key="2" forceRender>
+        <TabPane tab="监控" key="monitor" forceRender>
           <MonitorPane
             svcName={name}
             svcDetail={baseinfo}
@@ -92,7 +104,7 @@ class Comp extends React.Component {
             }}
           />
         </TabPane>
-        <TabPane tab="日志" key="3" forceRender>
+        <TabPane tab="日志" key="log" forceRender>
           <LogPane
             svcName={name}
             svcDetail={baseinfo}

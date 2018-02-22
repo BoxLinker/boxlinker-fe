@@ -77,6 +77,12 @@ export default class extends React.Component {
   componentWillUnmount() {
     this.stop();
   }
+  focus() {
+    this.start();
+  }
+  blur() {
+    this.stop();
+  }
   start() {
     const { svcDetail } = this.props;
     if (!svcDetail) {

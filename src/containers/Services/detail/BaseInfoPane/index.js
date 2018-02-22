@@ -16,7 +16,8 @@ export default class extends React.Component {
   state = {
     baseinfo: null,
   };
-
+  focus() {}
+  blur() {}
   onPortsSubmit = data => {
     console.log('onPortsSubmit', data);
   };
