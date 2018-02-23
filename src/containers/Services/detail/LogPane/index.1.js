@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'js-cookie';
-import fetchStream from 'fetch-stream';
-import cookies from 'js-cookie';
 import { API, BaseURL } from '../../../../const';
 import './style.css';
 
@@ -76,7 +74,6 @@ export default class extends React.Component {
       lines: [],
     };
   }
-  fetching = false;
   componentWillUnmount() {
     this.stop();
   }
@@ -85,42 +82,6 @@ export default class extends React.Component {
   }
   blur() {
     this.stop();
-  }
-  parseLogLine(str) {
-    const data = JSON.parse(str);
-    logger.log('log:>', data);
-  }
-  fetchLog(containerID) {
-    return fetchStream(
-      {
-        url: `${API.SERVICE.LOG(containerID)}`,
-        headers: {
-          'X-Access-Token': cookies.get('X-Access-Token'),
-        },
-      },
-      (result, err) => {
-        if (err) {
-          logger.error('fetch err', err);
-          return false;
-        }
-        if (!result || !this.fetching) {
-          logger.log('cancel fetch ...');
-          return false;
-        }
-        if (result.done) {
-          console.log('completed');
-          return;
-        }
-        const str = String(result.value);
-        switch (str) {
-          case 'ping':
-            return true;
-          default:
-            this.parseLogLine(str);
-        }
-        return true; // return false to cancel
-      },
-    );
   }
   start() {
     const { svcDetail } = this.props;
@@ -143,26 +104,22 @@ export default class extends React.Component {
     if (pod.container_id.startsWith('docker://')) {
       cid = pod.container_id.substring('docker://'.length);
     }
-    this.fetching = true;
-    this.logFetcher = this.fetchLog(cid);
-    // const self = this;
-    // this.logFetcher = fetchServicePodLog({
-    //   containerID: cid,
-    //   onProgress: this.moreLog,
-    //   onTimeout() {
-    //     logger.warn('fetch log timeout');
-    //     self.start();
-    //   },
-    //   onError(status, statusText) {
-    //     logger.error('fetch log error', status, statusText);
-    //     self.start();
-    //   },
-    //   timeout: 30000,
-    // });
+    const self = this;
+    this.logFetcher = fetchServicePodLog({
+      containerID: cid,
+      onProgress: this.moreLog,
+      onTimeout() {
+        logger.warn('fetch log timeout');
+        self.start();
+      },
+      onError(status, statusText) {
+        logger.error('fetch log error', status, statusText);
+        self.start();
+      },
+      timeout: 30000,
+    });
   }
   stop() {
-    this.fetching = false;
-    logger.log('log stop');
     this.setState({
       lines: [],
     });
@@ -170,7 +127,7 @@ export default class extends React.Component {
       return;
     }
     logger.log('logFetcher abort');
-    this.logFetcher.cancel();
+    this.logFetcher.abort();
     this.logFetcher = null;
   }
   moreLog = text => {

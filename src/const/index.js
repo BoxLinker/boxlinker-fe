@@ -6,7 +6,8 @@ export const API = {
     UPDATE: name => `/v1/application/auth/service/${name}`,
     DELETE: name => `/v1/application/auth/service/${name}`,
     EXISTS: name => `/v1/application/auth/service/${name}/exists`,
-    LOG: containerID => `/v1/application/auth/log/${containerID}`,
+    LOG: containerID =>
+      `http://localhost:8888/v1/application/auth/log/${containerID}`,
     MON_MEMORY: name => `/v1/application/auth/monitor/${name}`,
     TOTAL_MATRIC: name => `/v1/application/auth/monitor/${name}`,
   },
