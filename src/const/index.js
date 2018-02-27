@@ -1,13 +1,13 @@
 export const API = {
   SERVICE: {
     CREATE: '/v1/application/auth/service',
-    QUERY: '/v1/application/auth/service',
-    GET: name => `/v1/application/auth/service/${name}`,
+    QUERY: 'http://localhost:8889/v1/application/auth/service',
+    GET: name => `http://localhost:8889/v1/application/auth/service/${name}`,
     UPDATE: name => `/v1/application/auth/service/${name}`,
     DELETE: name => `/v1/application/auth/service/${name}`,
     EXISTS: name => `/v1/application/auth/service/${name}/exists`,
     LOG: containerID =>
-      `http://localhost:8888/v1/application/auth/log/${containerID}`,
+      `http://localhost:8889/v1/application/auth/log/${containerID}`,
     MON_MEMORY: name => `/v1/application/auth/monitor/${name}`,
     TOTAL_MATRIC: name => `/v1/application/auth/monitor/${name}`,
   },

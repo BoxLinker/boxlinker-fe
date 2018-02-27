@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cookie from 'js-cookie';
 import fetchStream from 'fetch-stream';
 import cookies from 'js-cookie';
+import moment from 'moment';
 import { API, BaseURL } from '../../../../const';
 import './style.css';
 
@@ -77,6 +78,7 @@ export default class extends React.Component {
     };
   }
   fetching = false;
+  startTime = '';
   componentWillUnmount() {
     this.stop();
   }
@@ -87,13 +89,31 @@ export default class extends React.Component {
     this.stop();
   }
   parseLogLine(str) {
-    const data = JSON.parse(str);
-    logger.log('log:>', data);
+    if (str === 'eof' || str === 'ping') return;
+    try {
+      const data = JSON.parse(str);
+      if (data.hits && Array.isArray(data.hits.hits)) {
+        const hits = data.hits.hits;
+        hits.forEach(hit => {
+          const source = hit._source;
+          const ts = source['@timestamp'];
+          this.addLines({
+            id: hit._id,
+            ts: moment(ts).format('YYYY-MM-DD HH:mm:ss'),
+            value: source.log,
+          });
+        });
+        if (hits.length > 0) {
+          logger.log('log:>', data);
+          this.startTime = hits[hits.length - 1]._source['@timestamp'];
+        }
+      }
+    } catch (e) {}
   }
   fetchLog(containerID) {
     return fetchStream(
       {
-        url: `${API.SERVICE.LOG(containerID)}`,
+        url: `${API.SERVICE.LOG(containerID)}?start_time=${this.startTime}`,
         headers: {
           'X-Access-Token': cookies.get('X-Access-Token'),
         },
@@ -113,6 +133,9 @@ export default class extends React.Component {
         }
         const str = String(result.value);
         switch (str) {
+          case 'eof':
+            this.start();
+            return false;
           case 'ping':
             return true;
           default:
@@ -173,7 +196,7 @@ export default class extends React.Component {
     this.logFetcher.cancel();
     this.logFetcher = null;
   }
-  moreLog = text => {
+  moreLog = (ts, text) => {
     const arr = text.split('\n');
     if (arr[arr.length - 1] === '') {
       arr.pop();
@@ -192,20 +215,29 @@ export default class extends React.Component {
       this.addLines([lines]);
       return;
     }
-    console.log('lines', lines);
     let arr = [].concat(this.state.lines).concat(lines);
     if (arr.length > MAX_LEN) {
       arr = arr.slice(arr.length - MAX_LEN);
     }
-    this.setState({
-      lines: arr,
-    });
+    this.setState(
+      {
+        lines: arr,
+      },
+      () => {
+        if (this.logPanelRef) {
+          this.logPanelRef.scrollTop = 10000000;
+        }
+      },
+    );
   }
   render() {
     const { rowKey, rowValue } = this.props;
     const { lines } = this.state;
     return (
       <div
+        ref={ref => {
+          this.logPanelRef = ref;
+        }}
         style={{
           backgroundColor: '#000',
           color: '#fff',
@@ -215,7 +247,8 @@ export default class extends React.Component {
       >
         <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
           {lines.map((line, k) => (
-            <li className="log-item" key={line[rowKey] || k}>
+            <li className="log-item" key={line[rowKey] + k}>
+              <span className="log-item-ts">{line.ts}</span>
               {line[rowValue]}
             </li>
           ))}

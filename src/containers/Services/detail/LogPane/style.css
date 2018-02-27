@@ -1,3 +1,7 @@
 .log-item{
   padding: 5px 10px;
 }
+.log-item-ts{
+  margin: 0 3px;
+  color: #999;
+}
