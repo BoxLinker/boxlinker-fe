@@ -125,27 +125,27 @@ class Comp extends React.Component {
             onSelect={this.onClickItem}
           >
             <Menu.Item key="/">
-              <Icon type="user" />
+              <Icon type="dashboard" />
               <span>控制台</span>
             </Menu.Item>
             <Menu.Item key="/services">
-              <Icon type="video-camera" />
+              <Icon type="laptop" />
               <span>服务</span>
             </Menu.Item>
             <Menu.Item key="/volumes">
-              <Icon type="upload" />
+              <Icon type="hdd" />
               <span>数据卷</span>
             </Menu.Item>
             <Menu.Item key="/images">
-              <Icon type="upload" />
+              <Icon type="cloud-o" />
               <span>镜像</span>
             </Menu.Item>
             <Menu.Item key="/cicd">
-              <Icon type="upload" />
+              <Icon type="api" />
               <span>CICD</span>
             </Menu.Item>
             <Menu.Item key="/user">
-              <Icon type="upload" />
+              <Icon type="user" />
               <span>用户</span>
             </Menu.Item>
           </Menu>
