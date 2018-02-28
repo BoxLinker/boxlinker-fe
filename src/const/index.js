@@ -1,3 +1,5 @@
+export const BaseURL = 'https://api.boxlinker.com';
+
 export const API = {
   SERVICE: {
     CREATE: getURL('/v1/application/auth/service', 'SERVICE'),
@@ -68,8 +70,6 @@ export const API = {
   },
 };
 
-export const BaseURL = 'https://api.boxlinker.com';
-
 const ports = {
   CICD: 8083,
   VOLUMES: 8889,
@@ -82,7 +82,12 @@ const ports = {
 const dev = process.env.NODE_ENV === 'development';
 
 function getURL(url, moduler) {
-  return `${dev ? `http://localhost:${ports[moduler]}` : BaseURL}${url}`;
+  let host = BaseURL;
+  if (dev) {
+    host = `http://localhost:${ports[moduler]}`;
+  }
+  console.log('host', host);
+  return `${host}${url}`;
 }
 
 export const MemoryConfig = [
