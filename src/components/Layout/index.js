@@ -175,6 +175,10 @@ class Comp extends React.Component {
           className="App-layout"
           style={{ marginLeft: collapsed ? 80 : 200 }}
         >
+          <small>
+            You are running this application in <b>{process.env.NODE_ENV}</b>{' '}
+            mode.
+          </small>
           {this.getBreadcrumb()}
           <Content
             style={{

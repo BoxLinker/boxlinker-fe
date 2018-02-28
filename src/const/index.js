@@ -1,59 +1,89 @@
 export const API = {
   SERVICE: {
-    CREATE: '/v1/application/auth/service',
-    QUERY: 'http://localhost:8889/v1/application/auth/service',
-    GET: name => `http://localhost:8889/v1/application/auth/service/${name}`,
-    UPDATE: name => `/v1/application/auth/service/${name}`,
-    DELETE: name => `/v1/application/auth/service/${name}`,
-    EXISTS: name => `/v1/application/auth/service/${name}/exists`,
+    CREATE: getURL('/v1/application/auth/service', 'SERVICE'),
+    QUERY: getURL('/v1/application/auth/service', 'SERVICE'),
+    GET: name => getURL(`/v1/application/auth/service/${name}`, 'SERVICE'),
+    UPDATE: name => getURL(`/v1/application/auth/service/${name}`, 'SERVICE'),
+    DELETE: name => getURL(`/v1/application/auth/service/${name}`, 'SERVICE'),
+    EXISTS: name =>
+      getURL(`/v1/application/auth/service/${name}/exists`, 'SERVICE'),
     LOG: containerID =>
-      `http://localhost:8889/v1/application/auth/log/${containerID}`,
-    MON_MEMORY: name => `/v1/application/auth/monitor/${name}`,
-    TOTAL_MATRIC: name => `/v1/application/auth/monitor/${name}`,
+      getURL(`/v1/application/auth/log/${containerID}`, 'SERVICE'),
+    MON_MEMORY: name =>
+      getURL(`/v1/application/auth/monitor/${name}`, 'SERVICE'),
+    TOTAL_MATRIC: name =>
+      getURL(`/v1/application/auth/monitor/${name}`, 'SERVICE'),
   },
   IMAGES: {
-    QUERY: '/v1/registry/auth/image/list',
-    QUERY_PUB: '/v1/registry/pub/image/list',
+    QUERY: getURL('/v1/registry/auth/image/list', 'IMAGES'),
+    QUERY_PUB: getURL('/v1/registry/pub/image/list', 'IMAGES'),
   },
   VOLUMES: {
-    QUERY: '/v1/application/auth/volume',
-    CREATE: '/v1/application/auth/volume',
+    QUERY: getURL('/v1/application/auth/volume', 'VOLUMES'),
+    CREATE: getURL('/v1/application/auth/volume', 'VOLUMES'),
   },
   REGISTRY: {
-    SEARCH_IMAGE: '/v1/registry/pub/image/list',
+    SEARCH_IMAGE: getURL('/v1/registry/pub/image/list', 'REGISTRY'),
   },
   USER: {
-    REG: '/v1/user/auth/reg',
-    CHANGE_PASS: '/v1/user/account/changepassword',
-    SEND_RESET_PASS_EMAIL: '/v1/user/pub/pass/send_email',
-    RESET_PASS: '/v1/user/account/pass_reset',
-    USERINFO: '/v1/user/account/userinfo',
-    LOGIN: '/v1/user/auth/login',
+    REG: getURL('/v1/user/auth/reg', 'USER'),
+    CHANGE_PASS: getURL('/v1/user/account/changepassword', 'USER'),
+    SEND_RESET_PASS_EMAIL: getURL('/v1/user/pub/pass/send_email', 'USER'),
+    RESET_PASS: getURL('/v1/user/account/pass_reset', 'USER'),
+    USERINFO: getURL('/v1/user/account/userinfo', 'USER'),
+    LOGIN: getURL('/v1/user/auth/login', 'USER'),
   },
   CICD: {
     QUERY_BRANCHES: (scm, owner, name) =>
-      `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/branches`,
+      getURL(`/v1/cicd/${scm}/repos/${owner}/${name}/branches`, 'CICD'),
     QUERY_BUILDS: (scm, owner, name) =>
-      `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/builds`,
+      getURL(`/v1/cicd/${scm}/repos/${owner}/${name}/builds`, 'CICD'),
     QUERY_BRANCH_BUILDS: (scm, owner, name) =>
-      `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/query_branch_build`,
+      getURL(
+        `/v1/cicd/${scm}/repos/${owner}/${name}/query_branch_build`,
+        'CICD',
+      ),
     PROCS: (scm, owner, name, build_id) =>
-      `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/procs/${build_id}`,
+      getURL(
+        `/v1/cicd/${scm}/repos/${owner}/${name}/procs/${build_id}`,
+        'CICD',
+      ),
     PROC_LOG: (scm, owner, name, number, pid) =>
-      `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/logs/${number}/${pid}`,
+      getURL(
+        `/v1/cicd/${scm}/repos/${owner}/${name}/logs/${number}/${pid}`,
+        'CICD',
+      ),
     PROC_STREAM_LOG: (scm, owner, name, number) =>
-      `http://localhost:8083/v1/cicd/${scm}/stream/logs/${owner}/${name}/${number}/1`,
+      getURL(
+        `/v1/cicd/${scm}/stream/logs/${owner}/${name}/${number}/1`,
+        'CICD',
+      ),
     GET_REPO: (scm, owner, name) =>
-      `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}`,
-    REPOS: scm => `http://localhost:8083/v1/cicd/${scm}/user/repos`,
+      getURL(`/v1/cicd/${scm}/repos/${owner}/${name}`, 'CICD'),
+    REPOS: scm => getURL(`/v1/cicd/${scm}/user/repos`, 'CICD'),
     GET_BUILD: (scm, owner, name, number) =>
-      `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/builds/${number}`,
+      getURL(`/v1/cicd/${scm}/repos/${owner}/${name}/builds/${number}`, 'CICD'),
     POST_BUILD: (scm, owner, name, number) =>
-      `http://localhost:8083/v1/cicd/${scm}/repos/${owner}/${name}/builds/${number}`,
+      getURL(`/v1/cicd/${scm}/repos/${owner}/${name}/builds/${number}`, 'CICD'),
   },
 };
 
 export const BaseURL = 'https://api.boxlinker.com';
+
+const ports = {
+  CICD: 8083,
+  VOLUMES: 8889,
+  IMAGES: 8889,
+  USER: 8889,
+  REGISTRY: 8889,
+  SERVICE: 8889,
+};
+
+const dev = process.env.NODE_ENV === 'development';
+
+function getURL(url, moduler) {
+  return `${dev ? `http://localhost:${ports[moduler]}` : BaseURL}${url}`;
+}
 
 export const MemoryConfig = [
   { label: '64M', value: '64Mi' },
