@@ -27,7 +27,10 @@ class Comp extends React.Component {
   componentDidMount() {
     this.fetch();
   }
-  async fetch({ current, pageSize } = {}) {
+  reload(opt) {
+    this.fetch(opt);
+  }
+  async fetch({ current, pageSize, params } = {}) {
     this.setState({
       loading: true,
     });
@@ -38,6 +41,7 @@ class Comp extends React.Component {
           currentPage: current,
           pageCount: pageSize,
           ...this.props.params,
+          ...params,
         },
         ...this.props.fetchOptions,
       });
