@@ -45,7 +45,7 @@ class GithubTab extends React.Component {
         <p>
           您还没有绑定 Github, 点击&nbsp;
           <a
-            href="https://github.com"
+            href="http://localhost:8083/v1/cicd/github/authorize"
             target="_blank"
             rel="noopener noreferrer"
           >

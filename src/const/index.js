@@ -86,7 +86,6 @@ function getURL(url, moduler) {
   if (dev) {
     host = `http://localhost:${ports[moduler]}`;
   }
-  console.log('host', host);
   return `${host}${url}`;
 }
 

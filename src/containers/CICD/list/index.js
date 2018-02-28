@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { Button } from 'antd';
+import { Button, Icon } from 'antd';
 import { Link } from 'react-router';
 import Table from '../../../components/Table';
 import { API } from '../../../const';
@@ -53,6 +53,15 @@ class Comp extends React.Component {
   closeModal = () => {
     this.setState({ showModal: false });
   };
+  reload = () => {
+    if (this.tableRef) {
+      this.tableRef.reload({
+        param: {
+          flush: true,
+        },
+      });
+    }
+  };
   render() {
     return (
       <div>
@@ -60,8 +69,14 @@ class Comp extends React.Component {
           <Button type="primary" onClick={this.openModal}>
             添加项目
           </Button>
+          <Button type="primary" onClick={this.reload}>
+            <Icon type="reload" />
+          </Button>
         </p>
         <Table
+          ref={ref => {
+            this.tableRef = ref;
+          }}
           rowKey="name"
           url={API.CICD.REPOS('github')}
           params={{ active: true }}
