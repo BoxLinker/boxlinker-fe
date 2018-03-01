@@ -9,3 +9,7 @@ container:
 
 push: container
 	docker push ${IMAGE_NAME}
+
+test: container
+	docker rm -f test-boxlinker-fe || true
+	docker run -it --name test-boxlinker-fe -p 8080:80 ${IMAGE_NAME}

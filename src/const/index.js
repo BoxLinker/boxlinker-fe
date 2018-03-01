@@ -82,7 +82,6 @@ export const API = {
 };
 
 function getURL(url, moduler) {
-  console.log('DEV', DEV, process.env.NODE_ENV);
   if (DEV) {
     return `http://localhost:${ports[moduler]}${url}`;
   }
