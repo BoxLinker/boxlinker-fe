@@ -5,6 +5,7 @@ import { API, BuildColorMap } from '../../../const';
 
 export default class extends React.Component {
   state = {
+    loading: true,
     data: null,
   };
   componentDidMount() {
@@ -19,7 +20,7 @@ export default class extends React.Component {
       const res = await bFetch(
         API.CICD.GET_BUILD(data.scm, data.owner, data.name, data.last_build),
       );
-      this.setState({ data: res.results });
+      this.setState({ data: res.results, loading: false });
     } catch (e) {
       console.error(e);
     }
@@ -30,9 +31,12 @@ export default class extends React.Component {
     return `${Math.floor(sec / 60)} 分 ${sec % 60} 秒`;
   }
   render() {
-    const { data } = this.state;
-    if (!data) {
+    const { data, loading } = this.state;
+    if (loading) {
       return <span>加载中...</span>;
+    }
+    if (!data) {
+      return <span>暂无构建历史</span>;
     }
     return (
       <span>

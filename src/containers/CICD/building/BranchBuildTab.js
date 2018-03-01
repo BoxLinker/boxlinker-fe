@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Button } from 'antd';
+import { List, Button, Icon } from 'antd';
 import bfetch from '../../../bfetch';
 import { API } from '../../../const/index';
 
@@ -16,10 +16,13 @@ class BuildHistory5 extends React.Component {
     return (
       <List.Item extra={this.getBuildHistory()}>
         <List.Item.Meta title={name} />
-        <Button type="primary">开始构建</Button>
+        <Button type="primary" onClick={this.startBuild}>
+          开始构建
+        </Button>
       </List.Item>
     );
   }
+  startBuild = () => {};
   componentDidMount() {
     this.getBuilds5();
   }
@@ -80,10 +83,14 @@ class Comp extends React.Component {
   componentDidMount() {
     this.fetch();
   }
-  async fetch() {
+  async fetch(params = {}) {
     const { scm, owner, name } = this.props.repoData || {};
     try {
-      const res = await bfetch(API.CICD.QUERY_BRANCHES(scm, owner, name));
+      const res = await bfetch(API.CICD.QUERY_BRANCHES(scm, owner, name), {
+        params: {
+          ...params,
+        },
+      });
       this.setState({
         branchList: res.results.data,
       });
@@ -92,35 +99,35 @@ class Comp extends React.Component {
     }
   }
   getBuildHistory(branch) {}
+  reload = () => {
+    this.fetch({ refresh: 1 });
+  };
   render() {
     const { branchList } = this.state;
     if (!branchList) {
       return <p>加载中...</p>;
     }
     return (
-      <List
-        bordered
-        itemLayout="vertical"
-        style={{ padding: '8px 0' }}
-        dataSource={branchList}
-        renderItem={item => (
-          <BuildHistory5
-            onOpenBuildTab={this.props.onOpenBuildTab}
-            data={item}
-            repoData={this.props.repoData}
-          />
-        )}
-      >
-        {/* 
-        <List.Item extra={this.getBuildHistory('master')}>
-          <List.Item.Meta title="master" />
-          <Button type="primary">开始构建</Button>
-        </List.Item>
-        <List.Item extra={this.getBuildHistory('v0.1-dev-1-8d0djduyd')}>
-          <List.Item.Meta title="v0.1-dev-1-8d0djduyd" />
-          <Button type="primary">开始构建</Button>
-        </List.Item> */}
-      </List>
+      <div>
+        <p>
+          <Button onClick={this.reload}>
+            <Icon type="reload" />
+          </Button>
+        </p>
+        <List
+          bordered
+          itemLayout="vertical"
+          style={{ padding: '8px 0' }}
+          dataSource={branchList}
+          renderItem={item => (
+            <BuildHistory5
+              onOpenBuildTab={this.props.onOpenBuildTab}
+              data={item}
+              repoData={this.props.repoData}
+            />
+          )}
+        />
+      </div>
     );
   }
 }

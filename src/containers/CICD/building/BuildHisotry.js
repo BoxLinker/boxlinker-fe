@@ -83,6 +83,7 @@ class HistoryItem extends React.Component {
   }
 }
 
+const enableReFetch = false;
 class Comp extends React.Component {
   static displayName = 'CICDBuildingHistory';
   static propTypes = {
@@ -107,9 +108,11 @@ class Comp extends React.Component {
     }
   }
   refetch() {
-    this.sid = setTimeout(() => {
-      this.fetch();
-    }, 5000);
+    if (enableReFetch) {
+      this.sid = setTimeout(() => {
+        this.fetch();
+      }, 5000);
+    }
   }
   async fetch() {
     const { repoData } = this.props;

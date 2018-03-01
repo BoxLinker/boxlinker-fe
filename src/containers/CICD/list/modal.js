@@ -1,41 +1,43 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Modal, Tabs, Button } from 'antd';
 import Table from '../../../components/Table';
 import { API } from '../../../const';
 
-const listData = [];
-
-for (let i = 0; i < 0; i++) {
-  listData.push({
-    name: `name${i}`,
-  });
-}
 const { TabPane } = Tabs;
-
-const columns = [
-  {
-    title: '项目名称',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: '操作',
-    dataIndex: 'status',
-    key: 'status',
-    render: (text, record) => (
-      <Button
-        onClick={() => {
-          this.addProject(record.name);
-        }}
-      >
-        添加
-      </Button>
-    ),
-  },
-];
 
 class GithubTab extends React.Component {
   static displayName = 'CICDAddRepoGithubTab';
+  static propTypes = {
+    onAddProject: PropTypes.func,
+  };
+  static defaultProps = {
+    onAddProject: () => {},
+  };
+  constructor(props) {
+    super(props);
+    this.columns = [
+      {
+        title: '项目名称',
+        dataIndex: 'full_name',
+        key: 'full_name',
+      },
+      {
+        title: '操作',
+        dataIndex: 'status',
+        key: 'status',
+        render: (text, record) => (
+          <Button
+            onClick={() => {
+              this.props.onAddProject('github', record);
+            }}
+          >
+            添加
+          </Button>
+        ),
+      },
+    ];
+  }
   state = {
     unauthorized: false,
   };
@@ -74,10 +76,10 @@ class GithubTab extends React.Component {
         ref={ref => {
           this.tableRef = ref;
         }}
-        rowKey="name"
+        rowKey="full_name"
         url={API.CICD.REPOS('github')}
         params={{ active: false }}
-        columns={columns}
+        columns={this.columns}
         onLoad={this.onDataLoad}
       />
     );
@@ -96,6 +98,12 @@ class GithubTab extends React.Component {
 
 class Comp extends React.Component {
   static displayName = 'CICDAddRepoModal';
+  static propTypes = {
+    onAddProject: PropTypes.func,
+  };
+  static defaultProps = {
+    onAddProject: () => {},
+  };
   render() {
     return (
       <Modal
@@ -105,7 +113,7 @@ class Comp extends React.Component {
       >
         <Tabs defaultActiveKey="github">
           <TabPane key="github" tab="Github">
-            <GithubTab />
+            <GithubTab onAddProject={this.props.onAddProject} />
           </TabPane>
         </Tabs>
       </Modal>

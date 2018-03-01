@@ -15,6 +15,7 @@ class Comp extends React.Component {
     refreshAble: false,
   };
   state = {
+    loading: true,
     buildData: null,
     procsData: null,
   };
@@ -46,15 +47,18 @@ class Comp extends React.Component {
           buildData ? buildData.number : last_build,
         ),
       );
-      this.setState({ buildData: res.results });
+      this.setState({ buildData: res.results, loading: false });
     } catch (e) {
       console.error(e);
     }
   }
   render() {
-    const { buildData } = this.state;
-    if (!buildData) {
+    const { buildData, loading } = this.state;
+    if (loading) {
       return <p>加载中...</p>;
+    }
+    if (!buildData) {
+      return <p>暂无数据</p>;
     }
     return (
       <div>

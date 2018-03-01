@@ -7,6 +7,7 @@ import Table from '../../../components/Table';
 import { API } from '../../../const';
 import AddProjectModal from './modal';
 import LastBuild from './LastBuild';
+import bFetch from '../../../bfetch';
 
 const columns = [
   {
@@ -53,10 +54,19 @@ class Comp extends React.Component {
   closeModal = () => {
     this.setState({ showModal: false });
   };
+  onAddProject = async (vcs, record) => {
+    this.closeModal();
+    try {
+      await bFetch(API.CICD.POST_REPO(vcs, record.owner, record.name), {
+        method: 'post',
+      });
+      this.tableRef.reload();
+    } catch (e) {}
+  };
   reload = () => {
     if (this.tableRef) {
       this.tableRef.reload({
-        param: {
+        params: {
           flush: true,
         },
       });
@@ -66,10 +76,14 @@ class Comp extends React.Component {
     return (
       <div>
         <p>
-          <Button type="primary" onClick={this.openModal}>
+          <Button
+            style={{ marginRight: 10 }}
+            type="primary"
+            onClick={this.openModal}
+          >
             添加项目
           </Button>
-          <Button type="primary" onClick={this.reload}>
+          <Button onClick={this.reload}>
             <Icon type="reload" />
           </Button>
         </p>
@@ -83,6 +97,7 @@ class Comp extends React.Component {
           columns={columns}
         />
         <AddProjectModal
+          onAddProject={this.onAddProject}
           visible={this.state.showModal}
           onClose={this.closeModal}
         />
