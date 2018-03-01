@@ -5,6 +5,7 @@ import { Alert } from 'antd';
 import LoginForm from './form';
 import { login } from '../../actions/auth';
 import { getUrlParameter } from '../../utils';
+import './style.css';
 //reg_confirmed_username
 class Comp extends React.Component {
   static displayName = 'Login';
@@ -63,13 +64,14 @@ class Comp extends React.Component {
     const { loading } = this.state;
     return (
       <div
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          marginLeft: '-150px',
-          marginTop: '-265px',
-        }}
+        className="login-pack"
+        // style={{
+        //   position: 'absolute',
+        //   top: '50%',
+        //   left: '50%',
+        //   marginLeft: '-150px',
+        //   marginTop: '-265px',
+        // }}
       >
         <div
           style={{

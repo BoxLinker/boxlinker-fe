@@ -13,6 +13,7 @@ const logger = console;
 
 const STATUS = {
   OK: 0,
+  Unauthorized: 6,
 };
 
 class Err {
@@ -143,6 +144,12 @@ const bFetch = async (url, options = {}) => {
       }
       if (json.status === STATUS.OK) {
         return json;
+      } else if (json.status === STATUS.Unauthorized) {
+        cookie.remove('X-Access-Token');
+        if (window.location.path !== '/login') {
+          window.location.href = '/login';
+        }
+        return new ErrUnauthroized();
       }
       message.error(json.msg || json.message);
       throw new ErrAPI({
