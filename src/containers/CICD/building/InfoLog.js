@@ -198,6 +198,9 @@ class Comp extends React.Component {
     if (!procsData) {
       return <p>加载中...</p>;
     }
+    if (!procsData.length) {
+      return <p>暂无数据</p>;
+    }
     return (
       <Row>
         <Col>
