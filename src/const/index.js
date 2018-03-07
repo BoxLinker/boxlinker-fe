@@ -1,12 +1,12 @@
 export const BaseURL = 'https://api.boxlinker.com';
 export const DEV = process.env.NODE_ENV === 'development';
-const ports = {
-  CICD: 8083,
-  VOLUMES: 8889,
-  IMAGES: 8889,
-  USER: 8801,
-  REGISTRY: 8889,
-  SERVICE: 8889,
+const DevURL = {
+  CICD: 'http://localhost:8083',
+  VOLUMES: 'http://localhost:8889',
+  IMAGES: 'http://localhost:8889',
+  USER: 'https://api.boxlinker.com', //8801
+  REGISTRY: 'http://localhost:8889',
+  SERVICE: 'http://localhost:8889',
 };
 
 export const API = {
@@ -83,7 +83,7 @@ export const API = {
 
 function getURL(url, moduler) {
   if (DEV) {
-    return `http://localhost:${ports[moduler]}${url}`;
+    return `${DevURL[moduler]}${url}`;
   }
   return `${BaseURL}${url}`;
 }

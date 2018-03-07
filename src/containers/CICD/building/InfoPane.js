@@ -3,6 +3,7 @@ import { Row, Col, Tag } from 'antd';
 import { getDuration, fromNow } from '../../../utils';
 import { API, BuildColorMap } from '../../../const';
 import bfetch from '../../../bfetch';
+import { getBuildDuration } from '../../../utils';
 
 class Comp extends React.Component {
   static displayName = 'CICDBuilding';
@@ -52,9 +53,7 @@ class Comp extends React.Component {
         </Col>
         <Col span={6}>
           <p>创建于: {fromNow(buildData.created_at)}</p>
-          <p>
-            构建用时: {getDuration(buildData.started_at, buildData.finished_at)}
-          </p>
+          <p>构建用时: {getBuildDuration(buildData)}</p>
           <div>
             状态:{' '}
             <Tag color={BuildColorMap[buildData.status]}>

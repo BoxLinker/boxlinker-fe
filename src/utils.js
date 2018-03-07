@@ -53,4 +53,13 @@ export function getPagination(pagination) {
   };
 }
 
+export function getBuildDuration(data = {}) {
+  const { finished_at, started_at } = data;
+  if (!finished_at || !started_at) {
+    return 'N/A';
+  }
+  const sec = finished_at - started_at;
+  return `${Math.floor(sec / 60)} 分 ${sec % 60} 秒`;
+}
+
 export default {};

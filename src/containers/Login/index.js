@@ -63,16 +63,7 @@ class Comp extends React.Component {
   render() {
     const { loading } = this.state;
     return (
-      <div
-        className="login-pack"
-        // style={{
-        //   position: 'absolute',
-        //   top: '50%',
-        //   left: '50%',
-        //   marginLeft: '-150px',
-        //   marginTop: '-265px',
-        // }}
-      >
+      <div className="login-pack">
         <div
           style={{
             margin: '0 auto',

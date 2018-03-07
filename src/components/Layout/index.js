@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import cookie from 'js-cookie';
 import { push } from 'react-router-redux';
-import { getUserInfoAction } from '../../actions/auth';
+import { getUserInfoAction, logoutAction } from '../../actions/auth';
 import './App.css';
 
 const { Header, Sider, Content } = Layout;
@@ -208,8 +208,7 @@ const Container = connect(
       dispatch(push(path));
     },
     logout: () => {
-      cookie.remove('X-Access-Token');
-      dispatch(push('/login'));
+      logoutAction();
     },
     getUserInfo: () => {
       dispatch(getUserInfoAction());

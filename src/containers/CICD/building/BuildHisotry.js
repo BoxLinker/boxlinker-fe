@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Tag, Input, List } from 'antd';
 
 import { API, BuildColorMap } from '../../../const';
-import { getDuration, fromNow } from '../../../utils';
+import { getBuildDuration, fromNow } from '../../../utils';
 import bfetch from '../../../bfetch';
 
 class HistoryItem extends React.Component {
@@ -41,15 +41,7 @@ class HistoryItem extends React.Component {
     const { loading } = this.state;
     const { buildData, repoData } = this.props;
     const { owner, name } = repoData;
-    const {
-      branch,
-      created_at,
-      started_at,
-      finished_at,
-      status,
-      event,
-      sender,
-    } = buildData;
+    const { branch, created_at, status, event, sender } = buildData;
     return (
       <List.Item
         extra={
@@ -69,7 +61,7 @@ class HistoryItem extends React.Component {
             <div>
               <div>分支: {branch}</div>
               <div>创建于: {fromNow(created_at)}</div>
-              <div>构建用时: {getDuration(started_at, finished_at)}</div>
+              <div>构建用时: {getBuildDuration(buildData)}</div>
               <div>
                 状态: <Tag color={BuildColorMap[status]}>{status}</Tag>
               </div>

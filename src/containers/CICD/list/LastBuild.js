@@ -2,6 +2,7 @@ import React from 'react';
 import { Tag } from 'antd';
 import bFetch from '../../../bfetch';
 import { API, BuildColorMap } from '../../../const';
+import { getBuildDuration } from '../../../utils';
 
 export default class extends React.Component {
   state = {
@@ -25,11 +26,6 @@ export default class extends React.Component {
       console.error(e);
     }
   }
-  getBuildDuration(data) {
-    console.log('data', data);
-    const sec = data.finished_at - data.started_at;
-    return `${Math.floor(sec / 60)} 分 ${sec % 60} 秒`;
-  }
   render() {
     const { data, loading } = this.state;
     if (loading) {
@@ -41,7 +37,7 @@ export default class extends React.Component {
     return (
       <span>
         <Tag color={BuildColorMap[data.status]}>{data.status}</Tag> 用时{' '}
-        {this.getBuildDuration(data)}。
+        {getBuildDuration(data)}。
       </span>
     );
   }

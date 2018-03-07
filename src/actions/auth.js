@@ -34,6 +34,11 @@ export const reg = async data => {
   }
 };
 
+export const logoutAction = () => {
+  cookie.remove('X-Access-Token');
+  window.location.href = '/login';
+};
+
 export const getUserInfoAction = createAction('GET_USERINFO', async () => {
   try {
     const res = await bFetch(API.USER.USERINFO, {
@@ -44,6 +49,7 @@ export const getUserInfoAction = createAction('GET_USERINFO', async () => {
     logger.error('Get UserInfo', {
       err,
     });
+    // logoutAction();
   }
   return null;
 });

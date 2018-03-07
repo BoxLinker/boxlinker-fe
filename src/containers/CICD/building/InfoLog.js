@@ -47,7 +47,7 @@ class ProcLog extends React.Component {
   }
   getLogData() {
     const { logData } = this.state;
-    if (!logData) {
+    if (!logData || !logData.length) {
       return <div>加载中...</div>;
     }
     return logData.map(log => this.getLogComp(log));
@@ -84,7 +84,7 @@ class RunningProcLog extends React.Component {
   }
   getLogData() {
     const { logData } = this.props;
-    if (!logData) {
+    if (!logData || !logData.length) {
       return <div>加载中...</div>;
     }
     return logData.map(log => this.getLogComp(log));
@@ -201,6 +201,15 @@ class Comp extends React.Component {
     if (!procsData.length) {
       return <p>暂无数据</p>;
     }
+    procsData.sort((a, b) => {
+      if (a.pgid < b.pgid) {
+        return -1;
+      } else if (a.pgid === b.pgid) {
+        return 0;
+      } else {
+        return 1;
+      }
+    });
     return (
       <Row>
         <Col>
