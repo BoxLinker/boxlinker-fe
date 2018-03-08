@@ -14,6 +14,8 @@ import {
   Images,
   Login,
   Reg,
+  Forgot,
+  ResetPass,
   User,
   CICD,
   CICDBuilding,
@@ -39,6 +41,8 @@ render(
       <Route path="/" component={Dashboard} onEnter={requireAuth} />
       <Route path="/login" component={Login} />
       <Route path="/reg" component={Reg} />
+      <Route path="/reset-pass" component={ResetPass} />
+      <Route path="/forgot" component={Forgot} />
       <Route path="/user" component={User} />
       <Route path="/services" component={Services} onEnter={requireAuth} />
       <Route

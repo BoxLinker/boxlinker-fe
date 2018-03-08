@@ -16,7 +16,7 @@ const STATUS = {
   Unauthorized: 6,
 };
 
-class Err {
+export class Err {
   type = 'ErrDefault';
   options = {
     message: 'default err',

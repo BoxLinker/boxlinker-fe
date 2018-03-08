@@ -42,3 +42,5 @@ export const CICDBuilding = load(() => import('./CICD/building'));
 
 export const Login = load(() => import('./Login'), { layout: false });
 export const Reg = load(() => import('./Reg'), { layout: false });
+export const Forgot = load(() => import('./Forgot'), { layout: false });
+export const ResetPass = load(() => import('./ResetPass'), { layout: false });

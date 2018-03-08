@@ -34,6 +34,31 @@ export const reg = async data => {
   }
 };
 
+export const forgotAction = async data => {
+  try {
+    await bFetch(API.USER.SEND_RESET_PASS_EMAIL, {
+      method: 'post',
+      body: JSON.stringify(data),
+    });
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const resetPassAction = async (token, data) => {
+  try {
+    await bFetch(API.USER.RESET_PASS, {
+      method: 'post',
+      body: JSON.stringify(data),
+      headers: {
+        'X-Access-Token': token,
+      },
+    });
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const logoutAction = () => {
   cookie.remove('X-Access-Token');
   window.location.href = '/login';
