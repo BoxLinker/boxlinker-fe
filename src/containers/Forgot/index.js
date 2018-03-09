@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { Alert } from 'antd';
+import { Alert, Button } from 'antd';
 import FormView from './form';
 import { forgotAction } from '../../actions/auth';
 import './style.css';
@@ -46,6 +46,16 @@ class Comp extends React.Component {
       return (
         <div>
           <p>发送成功！</p>
+          <Button
+            type="primary"
+            htmlType="button"
+            className="login-form-button"
+            style={{ width: '100%' }}
+            loading={loading}
+            disabled={hasSent}
+          >
+            返回登录
+          </Button>
         </div>
       );
     }
@@ -54,7 +64,6 @@ class Comp extends React.Component {
     );
   }
   render() {
-    const { loading, hasSent } = this.state;
     return (
       <div className="login-pack">
         <div

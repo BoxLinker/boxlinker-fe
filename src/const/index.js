@@ -45,6 +45,8 @@ export const API = {
     LOGIN: getURL('/v1/user/auth/login', 'USER'),
   },
   CICD: {
+    GET_VCS: getURL('/v1/cicd/user/scms', 'CICD'),
+    BIND_VCS: vcs => getURL(`/v1/cicd/authorize/${vcs}`, 'CICD'),
     QUERY_BRANCHES: (scm, owner, name) =>
       getURL(`/v1/cicd/${scm}/repos/${owner}/${name}/branches`, 'CICD'),
     QUERY_BUILDS: (scm, owner, name) =>

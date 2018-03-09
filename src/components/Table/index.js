@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'antd';
+import { Icon } from 'antd';
+import Button from '../Button';
 import bFetch from '../../bfetch';
 
 const NOOP = () => {};
@@ -9,15 +11,19 @@ class Comp extends React.Component {
   static propTypes = {
     columns: PropTypes.arrayOf(PropTypes.object).isRequired,
     url: PropTypes.string.isRequired,
-    rowKey: PropTypes.string.isRequired,
+    rowKey: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
     params: PropTypes.object,
     onLoad: PropTypes.func,
     fetchOptions: PropTypes.object,
+    tools: PropTypes.arrayOf(PropTypes.element),
+    refreshable: PropTypes.bool,
   };
   static defaultProps = {
     params: {},
     onLoad: NOOP,
     fetchOptions: {},
+    tools: [],
+    refreshable: false,
   };
   state = {
     loading: false,
@@ -61,57 +67,51 @@ class Comp extends React.Component {
       });
       this.props.onLoad(e, null);
     }
-    // const res = await bFetch(url, {
-    //   params: {
-    //     currentPage: current,
-    //     pageCount: pageSize,
-    //     ...this.props.params,
-    //   },
-    // })
-    //   .then(res => {
-    //     const { data, pagination } = res.results || {};
-    //     this.setState({
-    //       data,
-    //       pagination: {
-    //         current: pagination.currentPage,
-    //         total: pagination.totalCount,
-    //       },
-    //     });
-    //     return res;
-    //   })
-    //   .catch(e => {
-    //     console.log('err: ', e);
-    //     return e;
-    //   })
-    //   .finally(() => {
-    //     console.log('=>>', arguments);
-    //     this.setState(
-    //       {
-    //         loading: false,
-    //       },
-    //       () => {
-    //         this.props.onLoad();
-    //       },
-    //     );
-    //   });
   }
   handleTableChange = pagination => {
     this.fetch(pagination);
   };
+  getTools() {
+    const { tools, refreshable } = this.props;
+    const { loading } = this.props;
+    const tTools = [].concat(tools);
+    if (!tools.length && !refreshable) {
+      return null;
+    }
+    if (refreshable) {
+      tTools.push(
+        <Button loading={loading} onClick={this.reload}>
+          <Icon type="reload" />
+        </Button>,
+      );
+    }
+
+    return (
+      <p>
+        {tTools.map((item, key) => {
+          // React.cloneElement 可以复制一个组件，以便修改属性
+          return React.cloneElement(item, { key });
+        })}
+      </p>
+    );
+  }
   render() {
     const { columns, rowKey } = this.props;
     const { loading, data, pagination } = this.state;
     return (
-      <Table
-        {...this.props}
-        rowKey={rowKey}
-        loading={loading}
-        bordered
-        dataSource={data}
-        columns={columns}
-        pagination={pagination}
-        onChange={this.handleTableChange}
-      />
+      <div>
+        {this.getTools()}
+        <Table
+          {...this.props}
+          rowKey={rowKey}
+          loading={loading}
+          bordered
+          dataSource={data}
+          columns={columns}
+          pagination={pagination}
+          onChange={this.handleTableChange}
+        />
+      </div>
     );
   }
 }

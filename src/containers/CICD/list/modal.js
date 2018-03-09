@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Tabs, Button } from 'antd';
+import { Modal, Tabs, Icon } from 'antd';
 import Table from '../../../components/Table';
+import Button from '../../../components/Button';
 import { API } from '../../../const';
 
 const { TabPane } = Tabs;
@@ -28,8 +29,10 @@ class GithubTab extends React.Component {
         key: 'status',
         render: (text, record) => (
           <Button
-            onClick={() => {
-              this.props.onAddProject('github', record);
+            url={API.CICD.POST_REPO('github', record.owner, record.name)}
+            method="post"
+            onSuccess={() => {
+              this.props.onAddProject();
             }}
           >
             添加
@@ -47,7 +50,7 @@ class GithubTab extends React.Component {
         <p>
           您还没有绑定 Github, 点击&nbsp;
           <a
-            href="http://localhost:8083/v1/cicd/github/authorize"
+            href={API.CICD.BIND_VCS('github')}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -72,6 +75,7 @@ class GithubTab extends React.Component {
   getList() {
     return (
       <Table
+        refreshable={true}
         size="small"
         ref={ref => {
           this.tableRef = ref;

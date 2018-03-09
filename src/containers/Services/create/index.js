@@ -140,7 +140,7 @@ class Comp extends React.Component {
             <FormItem label="服务名称" {...formItemLayout}>
               {getFieldDecorator('name', {
                 rules: [{ required: true, message: '请填写应用名称!' }],
-                initialValue: 'ci-agent',
+                initialValue: '',
               })(
                 <Input
                   prefix={
@@ -174,8 +174,6 @@ class Comp extends React.Component {
             <FormItem label="镜像" {...formItemLayout}>
               {getFieldDecorator('image', {
                 rules: [{ required: true, message: '请输入镜像!' }],
-                initialValue:
-                  'index.boxlinker.com/boxlinker/boxci-agent:v0.1-dev-6-g934c95a',
               })(<Input placeholder="这里输入镜像名称" />)}
             </FormItem>
           </Col>
@@ -195,15 +193,6 @@ class Comp extends React.Component {
             <FormItem label="挂载宿主机路径" {...formItemLayout}>
               {getFieldDecorator('hostVolumes', {
                 rules: [],
-                initialValue: [
-                  {
-                    key: '0',
-                    name: 'docker',
-                    hostPath: '/var/run/docker.sock',
-                    path: '/var/run/docker.sock',
-                    readonly: true,
-                  },
-                ],
               })(<HostVolumes />)}
             </FormItem>
           </Col>

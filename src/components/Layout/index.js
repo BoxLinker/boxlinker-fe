@@ -8,7 +8,7 @@ import { push } from 'react-router-redux';
 import { getUserInfoAction, logoutAction } from '../../actions/auth';
 import './App.css';
 
-const { Header, Sider, Content } = Layout;
+const { Header, Sider, Content, Footer } = Layout;
 
 class Comp extends React.Component {
   static displayName = 'Layout';
@@ -30,7 +30,6 @@ class Comp extends React.Component {
     switch (key) {
       case 'logout':
         this.props.logout();
-        this.props.navigateTo('/login');
         break;
       default:
         break;
@@ -175,10 +174,12 @@ class Comp extends React.Component {
           className="App-layout"
           style={{ marginLeft: collapsed ? 80 : 200 }}
         >
-          <small>
-            You are running this application in <b>{process.env.NODE_ENV}</b>{' '}
-            mode.
-          </small>
+          {process.env.NODE_ENV === 'development' ? (
+            <small>
+              You are running this application in <b>{process.env.NODE_ENV}</b>{' '}
+              mode.
+            </small>
+          ) : null}
           {this.getBreadcrumb()}
           <Content
             style={{
@@ -189,6 +190,9 @@ class Comp extends React.Component {
           >
             {this.props.children}
           </Content>
+          <Footer style={{ textAlign: 'center' }}>
+            京ICP备18003302号 &copy;2017 BoxLinker
+          </Footer>
         </Layout>
       </Layout>
     );

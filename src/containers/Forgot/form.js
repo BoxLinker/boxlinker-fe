@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Icon, Input, Button } from 'antd';
+import { Link } from 'react-router';
 
 const FormItem = Form.Item;
 
@@ -41,6 +42,7 @@ class NormalLoginForm extends React.Component {
           >
             发送邮件
           </Button>
+          Or <Link to="/login">去登录</Link>
         </FormItem>
       </Form>
     );

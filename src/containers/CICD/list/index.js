@@ -15,9 +15,9 @@ const columns = [
     dataIndex: 'name',
     key: 'name',
     render: (name, record) => (
-      <Link to={`/cicd/${record.scm}/${record.owner}/${name}`}>{`${
-        record.scm
-      }/${record.owner}/${name}`}</Link>
+      <Link to={`/cicd/${record.scm}/${record.owner}/${name}`}>
+        {`${record.scm}/${record.owner}/${name}`}
+      </Link>
     ),
   },
   {
@@ -54,14 +54,9 @@ class Comp extends React.Component {
   closeModal = () => {
     this.setState({ showModal: false });
   };
-  onAddProject = async (vcs, record) => {
+  onAddProject = (vcs, record) => {
     this.closeModal();
-    try {
-      await bFetch(API.CICD.POST_REPO(vcs, record.owner, record.name), {
-        method: 'post',
-      });
-      this.tableRef.reload();
-    } catch (e) {}
+    this.tableRef.reload();
   };
   reload = () => {
     if (this.tableRef) {
@@ -91,7 +86,7 @@ class Comp extends React.Component {
           ref={ref => {
             this.tableRef = ref;
           }}
-          rowKey="name"
+          rowKey={record => `${record.scm}-${record.owner}-${record.name}`}
           url={API.CICD.REPOS('github')}
           params={{ active: true }}
           columns={columns}
