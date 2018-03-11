@@ -1,66 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cookie from 'js-cookie';
 import fetchStream from 'fetch-stream';
 import cookies from 'js-cookie';
+import { Select } from 'antd';
 import moment from 'moment';
-import { API, BaseURL } from '../../../../const';
+import { API } from '../../../../const';
 import './style.css';
 
 const logger = console;
 const MAX_LEN = 50;
-class FetchLog {
-  constructor(options) {
-    this.xhr = new XMLHttpRequest();
-    this.init(options);
-  }
-  isAbort = false;
-  total = 0;
-  init({ containerID, onProgress, onError, onTimeout, timeout }) {
-    const xhr = this.xhr;
-    xhr.open('GET', `${BaseURL}${API.SERVICE.LOG(containerID)}`, true);
-    xhr.timeout = timeout || 30000;
-    xhr.setRequestHeader('X-Access-Token', cookie.get('X-Access-Token'));
-    xhr.onload = e => {
-      logger.log('onload', e.target.responseText);
-    };
-    xhr.ontimeout = () => {
-      if (this.isAbort) {
-        return;
-      }
-      onTimeout();
-    };
-    xhr.onprogress = ({ target: { responseText } }) => {
-      if (this.isAbort) {
-        return;
-      }
-      if (!responseText || responseText === '') {
-        return;
-      }
-      onProgress(responseText.substring(this.total));
-      this.total = responseText.length;
-      console.log('this.total', this.total);
-    };
-    xhr.onerror = ({ target: { status, statusText } }) => {
-      if (this.isAbort) {
-        return;
-      }
-      logger.log('onerror', status, statusText);
-      onError(status, statusText);
-    };
-    this.isAbort = false;
-    xhr.send(null);
-  }
-  abort() {
-    if (!this.xhr && !this.isAbort) {
-      this.xhr.abort();
-    }
-    this.xhr = null;
-    this.isAbort = true;
-  }
-}
-
-const fetchServicePodLog = options => new FetchLog(options);
+const { Option } = Select;
 
 export default class extends React.Component {
   static propTypes = {
@@ -111,7 +60,7 @@ export default class extends React.Component {
     } catch (e) {}
   }
   fetchLog(containerID) {
-    return fetchStream(
+    fetchStream(
       {
         url: `${API.SERVICE.LOG(containerID)}?start_time=${this.startTime}`,
         headers: {
@@ -145,43 +94,34 @@ export default class extends React.Component {
       },
     );
   }
-  start() {
+  getContainerID() {
     const { svcDetail } = this.props;
     if (!svcDetail) {
       console.error('LogPane:> no svcDetail');
-      return;
+      return '';
     }
     logger.log('start fetch log');
     const { pods } = svcDetail;
     if (!pods || pods.length !== 1) {
       console.error('LogPane:> no svcDetail.pods');
-      return;
+      return '';
     }
     const pod = pods[0];
     if (!pod.container_id) {
       console.error('LogPane:> mutilple svcDetail.pods');
-      return;
+      return '';
     }
-    let cid = pod.container_id;
     if (pod.container_id.startsWith('docker://')) {
-      cid = pod.container_id.substring('docker://'.length);
+      return pod.container_id.substring('docker://'.length);
+    }
+    return pod.container_id;
+  }
+  start(cid) {
+    if (!cid) {
+      cid = this.getContainerID();
     }
     this.fetching = true;
     this.logFetcher = this.fetchLog(cid);
-    // const self = this;
-    // this.logFetcher = fetchServicePodLog({
-    //   containerID: cid,
-    //   onProgress: this.moreLog,
-    //   onTimeout() {
-    //     logger.warn('fetch log timeout');
-    //     self.start();
-    //   },
-    //   onError(status, statusText) {
-    //     logger.error('fetch log error', status, statusText);
-    //     self.start();
-    //   },
-    //   timeout: 30000,
-    // });
   }
   stop() {
     this.fetching = false;
@@ -230,7 +170,7 @@ export default class extends React.Component {
       },
     );
   }
-  render() {
+  getLogs() {
     const { rowKey, rowValue } = this.props;
     const { lines } = this.state;
     return (
@@ -246,13 +186,45 @@ export default class extends React.Component {
         }}
       >
         <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
-          {lines.map((line, k) => (
-            <li className="log-item" key={line[rowKey] + k}>
-              <span className="log-item-ts">{line.ts}</span>
-              {line[rowValue]}
-            </li>
-          ))}
+          {!lines || !lines.length ? (
+            <li className="log-item">加载中...</li>
+          ) : (
+            lines.map((line, k) => (
+              <li className="log-item" key={line[rowKey] + k}>
+                <span className="log-item-ts">{line.ts}</span>
+                {line[rowValue]}
+              </li>
+            ))
+          )}
         </ul>
+      </div>
+    );
+  }
+  getPodsSelect() {
+    const { svcDetail } = this.props;
+    const { pods } = svcDetail;
+    if (!pods || !pods.length) {
+      return null;
+    }
+    const defaultPodName = pods[0].name;
+    return (
+      <div style={{ marginBottom: 15 }}>
+        <span style={{ margin: '0 15px 0 0' }}>Pod</span>
+        <Select defaultValue={defaultPodName} style={{ width: 240 }}>
+          {pods.map(pod => (
+            <Option key={pod.container_id} value={pod.container_id}>
+              {pod.name}
+            </Option>
+          ))}
+        </Select>
+      </div>
+    );
+  }
+  render() {
+    return (
+      <div>
+        {this.getPodsSelect()}
+        {this.getLogs()}
       </div>
     );
   }

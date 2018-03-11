@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import MemoryForm from './Memory';
 import ImageForm from './Image';
 import PortsForm from './Ports';
+import HostForm from './Host';
 
 export default class extends React.Component {
   static propTypes = {
@@ -36,6 +37,7 @@ export default class extends React.Component {
       <div>
         <MemoryForm value={svcDetail.memory} onSubmit={this.onMemorySubmit} />
         <ImageForm value={svcDetail.image} onSubmit={this.onImageSubmit} />
+        <HostForm value={svcDetail.host} onSubmit={this.onHostSubmit} />
         <PortsForm value={svcDetail.ports} onSubmit={this.onPortsSubmit} />
       </div>
     );
