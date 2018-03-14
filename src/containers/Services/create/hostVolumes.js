@@ -151,7 +151,7 @@ export default class extends React.Component {
   count = 0;
   componentWillReceiveProps(nextProps) {
     if ('value' in nextProps) {
-      const { value } = nextProps;
+      const { value = [] } = nextProps;
       value.forEach(item => {
         if (!item.key) {
           item.key = `${this.count++}`;

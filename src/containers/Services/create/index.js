@@ -193,6 +193,7 @@ class Comp extends React.Component {
             <FormItem label="挂载宿主机路径" {...formItemLayout}>
               {getFieldDecorator('hostVolumes', {
                 rules: [],
+                initialValue: [],
               })(<HostVolumes />)}
             </FormItem>
           </Col>
