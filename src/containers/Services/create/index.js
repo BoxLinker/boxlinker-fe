@@ -86,6 +86,8 @@ class Comp extends React.Component {
     const result = {};
     try {
       data.cpu = '200m';
+      data.node_selector = { role: 'user' };
+      data.enable_ssl = false;
       result.res = await bFetch(API.SERVICE.CREATE, {
         method: 'post',
         body: JSON.stringify(data),

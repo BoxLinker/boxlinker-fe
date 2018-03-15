@@ -36,7 +36,7 @@ class Comp extends React.Component {
   reload(opt) {
     this.fetch(opt);
   }
-  async fetch({ current, pageSize, params } = {}) {
+  fetch = async ({ current, pageSize, params } = {}) => {
     this.setState({
       loading: true,
     });
@@ -67,7 +67,7 @@ class Comp extends React.Component {
       });
       this.props.onLoad(e, null);
     }
-  }
+  };
   handleTableChange = pagination => {
     this.fetch(pagination);
   };
