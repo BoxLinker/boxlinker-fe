@@ -72,9 +72,15 @@ class GithubTab extends React.Component {
       unauthorized: false,
     });
   };
+  syncRepos = () => {
+    if (this.tableRef) {
+      this.tableRef.reload({ params: { flush: true } });
+    }
+  };
   getList() {
     return (
       <Table
+        tools={[<Button onClick={this.syncRepos}>同步</Button>]}
         refreshable={true}
         size="small"
         ref={ref => {
