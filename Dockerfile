@@ -4,7 +4,7 @@ RUN mkdir -p /app/build
 ADD server.js package.json /app/
 ADD build /app/build
 WORKDIR /app
-RUN npm install --registry=https://registry.npm.taobao.org
+RUN npm install --production --registry=https://registry.npm.taobao.org
 
 CMD [ "node", "server.js" ]
 

@@ -33,9 +33,9 @@ class Comp extends React.Component {
   componentDidMount() {
     this.fetch();
   }
-  reload(opt) {
+  reload = opt => {
     this.fetch(opt);
-  }
+  };
   fetch = async ({ current, pageSize, params } = {}) => {
     this.setState({
       loading: true,
