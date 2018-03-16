@@ -29,10 +29,10 @@ export default class extends React.Component {
   state = {
     loading: false,
   };
-  onClick = async () => {
+  onClick = async e => {
     const { url, method, data, params, onSuccess, onError } = this.props;
     if (!url) {
-      this.props.onClick();
+      this.props.onClick(e);
       return;
     }
     this.setState({

@@ -76,6 +76,8 @@ export const API = {
     REPOS: scm => getURL(`/v1/cicd/${scm}/user/repos`, 'CICD'),
     POST_REPO: (scm, owner, name) =>
       getURL(`/v1/cicd/${scm}/repos/${owner}/${name}`, 'CICD'),
+    DELETE_REPO: (scm, owner, name) =>
+      getURL(`/v1/cicd/${scm}/repos/${owner}/${name}`, 'CICD'),
     GET_BUILD: (scm, owner, name, number) =>
       getURL(`/v1/cicd/${scm}/repos/${owner}/${name}/builds/${number}`, 'CICD'),
     POST_BUILD: (scm, owner, name, number) =>
