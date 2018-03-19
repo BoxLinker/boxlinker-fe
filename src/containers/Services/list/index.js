@@ -1,10 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { Button, Tag } from 'antd';
+import { Tag } from 'antd';
 import { Link } from 'react-router';
+import Button from '../../../components/Button';
 import Table from '../../../components/Table';
 import { API } from '../../../const';
+
+const ButtonGroup = Button.Group;
 
 const columns = [
   {
@@ -49,6 +52,17 @@ const columns = [
         </div>
       )),
   },
+  {
+    title: '操作',
+    dataIndex: 'operate',
+    key: 'operate',
+    render: () => (
+      <ButtonGroup>
+        <Button ghost>开启</Button>
+        <Button ghost>删除</Button>
+      </ButtonGroup>
+    ),
+  },
 ];
 class Comp extends React.Component {
   static displayName = 'Services';
@@ -58,12 +72,17 @@ class Comp extends React.Component {
   render() {
     return (
       <div>
-        <p>
-          <Button type="primary" onClick={this.openCreate}>
-            新建服务
-          </Button>
-        </p>
-        <Table rowKey="name" url={API.SERVICE.QUERY} columns={columns} />
+        <Table
+          refreshable
+          tools={[
+            <Button type="primary" onClick={this.openCreate}>
+              新建服务
+            </Button>,
+          ]}
+          rowKey="name"
+          url={API.SERVICE.QUERY}
+          columns={columns}
+        />
       </div>
     );
   }

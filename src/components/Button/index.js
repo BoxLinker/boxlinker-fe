@@ -17,6 +17,7 @@ const propTypes = {
 };
 
 export default class extends React.Component {
+  static Group = Button.Group;
   static propTypes = propTypes;
   static defaultProps = {
     method: 'get',
