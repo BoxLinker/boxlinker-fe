@@ -8,10 +8,12 @@ class Comp extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func,
     value: PropTypes.string,
+    originHost: PropTypes.string,
   };
   static defaultProps = {
     onSubmit: () => {},
     value: '',
+    originHost: '',
   };
   onSubmit = e => {
     e.preventDefault();
@@ -23,7 +25,7 @@ class Comp extends React.Component {
   };
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { value } = this.props;
+    const { value, originHost } = this.props;
     return (
       <Form layout="inline" onSubmit={this.onSubmit}>
         <FormItem label="绑定域名">
@@ -36,6 +38,9 @@ class Comp extends React.Component {
           <Button type="primary" htmlType="submit">
             保存
           </Button>
+        </FormItem>
+        <FormItem>
+          <span>{originHost}</span>
         </FormItem>
       </Form>
     );
