@@ -14,6 +14,7 @@ const propTypes = {
   onClick: PropTypes.func,
   onSuccess: PropTypes.func,
   onError: PropTypes.func,
+  link: PropTypes.bool,
 };
 
 export default class extends React.Component {
@@ -26,6 +27,7 @@ export default class extends React.Component {
     onClick: NOOP,
     onSuccess: NOOP,
     onError: NOOP,
+    link: false,
   };
   state = {
     loading: false,
@@ -55,13 +57,14 @@ export default class extends React.Component {
     });
   };
   render() {
-    const { children, ...props } = this.props;
+    const { link, children, ...props } = this.props;
     const { loading } = this.state;
     return (
       <Button
         {...omit(props, Object.keys(propTypes))}
         loading={loading}
         onClick={this.onClick}
+        className={link ? 'ant-btn-link' : ''}
       >
         {children}
       </Button>

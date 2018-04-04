@@ -15,6 +15,8 @@ export const API = {
     QUERY: getURL('/v1/application/auth/service', 'SERVICE'),
     GET: name => getURL(`/v1/application/auth/service/${name}`, 'SERVICE'),
     UPDATE: name => getURL(`/v1/application/auth/service/${name}`, 'SERVICE'),
+    UPDATE_HOST: name =>
+      getURL(`/v1/application/auth/service/${name}/host`, 'SERVICE'),
     DELETE: name => getURL(`/v1/application/auth/service/${name}`, 'SERVICE'),
     EXISTS: name =>
       getURL(`/v1/application/auth/service/${name}/exists`, 'SERVICE'),

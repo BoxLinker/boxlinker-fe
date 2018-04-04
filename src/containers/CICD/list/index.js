@@ -25,16 +25,37 @@ class Operation extends React.Component {
           onError={err => {
             message.error(`操作失败 ${err.message()}`);
           }}
+          type="primary"
+          size="small"
         >
           确定
         </Button>
-        <Button>取消</Button>
+        <Button onClick={this.hide} size="small" style={{ float: 'right' }}>
+          取消
+        </Button>
       </div>
     );
   }
+  state = {
+    visible: false,
+  };
+  hide = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+  handleVisibleChange = visible => {
+    this.setState({ visible });
+  };
   render() {
     return (
-      <Popover trigger="click" content={this.getBtns()} title="确定删除吗？">
+      <Popover
+        trigger="click"
+        content={this.getBtns()}
+        title="确定删除吗？"
+        visible={this.state.visible}
+        onVisibleChange={this.handleVisibleChange}
+      >
         <Button>删除</Button>
       </Popover>
     );
